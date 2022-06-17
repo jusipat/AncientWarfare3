@@ -12,10 +12,12 @@ buildscript {
 }
 
 apply plugin: 'forge'
-minecraft{
-    version = "1.7.10-10.13.4.1614"
-    runDir = "eclipse"
+minecraft {
+	version = "1.7.10-10.13.4.1614-1.7.10"
+	runDir = "eclipse"
+	replace "@VERSION@", project.version
 }
+
 version = project.major +"."+ project.minor +"."+  project.build+"-"+ project.releasetype + "-MC" +minecraft.version
 group = "shadowmage"
 archivesBaseName = "ancientwarfare"
