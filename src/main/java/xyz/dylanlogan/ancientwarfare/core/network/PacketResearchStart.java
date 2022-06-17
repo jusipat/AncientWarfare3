@@ -1,0 +1,47 @@
+package xyz.dylanlogan.ancientwarfare.core.network;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import xyz.dylanlogan.ancientwarfare.core.research.ResearchTracker;
+import xyz.dylanlogan.ancientwarfare.core.util.StringTools;
+
+public class PacketResearchStart extends PacketBase {
+
+    String playerName;
+    int toAdd;
+    boolean start;
+
+    public PacketResearchStart(String playerName, int toAdd, boolean start) {
+        this.playerName = playerName;
+        this.toAdd = toAdd;
+        this.start = start;
+    }
+
+    public PacketResearchStart() {
+
+    }
+
+    @Override
+    protected void writeToStream(ByteBuf data) {
+        data.writeInt(toAdd);
+        StringTools.writeString(data, playerName);
+        data.writeBoolean(start);
+    }
+
+    @Override
+    protected void readFromStream(ByteBuf data) {
+        toAdd = data.readInt();
+        playerName = StringTools.readString(data);
+        start = data.readBoolean();
+    }
+
+    @Override
+    protected void execute(EntityPlayer player) {
+        if (start) {
+            ResearchTracker.INSTANCE.startResearch(player.worldObj, playerName, toAdd);
+        } else {
+            ResearchTracker.INSTANCE.finishResearch(player.worldObj, playerName, toAdd);
+        }
+    }
+
+}
