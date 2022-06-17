@@ -25,9 +25,6 @@ archivesBaseName = "ancientwarfare"
 import org.apache.tools.ant.filters.ReplaceTokens
 
 task updateVersion(type:Copy){
-    ant.propertyfile(file: 'gradle.properties') {
-        entry(key: 'build', type: 'int', operation: '+', value: 001)
-    }
     from(sourceSets.main.java.srcDirs){
         exclude 'mcmod.info'
     }
