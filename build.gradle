@@ -19,7 +19,7 @@ minecraft {
 }
 
 version = project.major +"."+ project.minor +"."+  project.build+"-"+ project.releasetype + "-MC" +minecraft.version
-group = "shadowmage"
+group = "dylanlogan"
 archivesBaseName = "ancientwarfare"
 
 import org.apache.tools.ant.filters.ReplaceTokens
