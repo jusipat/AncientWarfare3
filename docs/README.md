@@ -63,7 +63,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A continuation of Ancient Warfare 2 that contains bugfixes and debloating.
+A continuation of Ancient Warfare 2 that contains bugfixes and debloating. This is intended for the Munduscraft Modpack.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
