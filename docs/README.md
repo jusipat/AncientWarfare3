@@ -5,9 +5,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -64,9 +61,6 @@
 ## About The Project
 
 A continuation of Ancient Warfare 2 that contains bugfixes and debloating. This is intended for the Munduscraft Modpack.
-***Join our discord server!***
-[![Discord](https://img.shields.io/badge/Discord-gray?style=social&logo=discord&link=https://discord.gg/fSH22pgFeX)](https://discord.gg/fSH22pgFeX)
-
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
