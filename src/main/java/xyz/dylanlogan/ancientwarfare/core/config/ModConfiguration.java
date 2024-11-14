@@ -31,7 +31,7 @@ public abstract class ModConfiguration {
         this(getConfigFor(modid));
     }
 
-    private void load() {
+    public void load() {
         initializeCategories();
         initializeValues();
         save();
