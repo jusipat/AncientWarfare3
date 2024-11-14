@@ -33,21 +33,21 @@ import net.minecraft.world.World;
  * @author Shadowmage
  */
 public interface IMissileHitCallback {
-    /**
-     * callback for when a fired missile impacts a position
-     *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     */
-    void onMissileImpact(World world, double x, double y, double z);
+	/**
+	 * callback for when a fired missile impacts a position
+	 *
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	void onMissileImpact(World world, double x, double y, double z);
 
-    /**
-     * callback for when a fired missile impacts an entity
-     *
-     * @param world
-     * @param entity
-     */
-    void onMissileImpactEntity(World world, Entity entity);
+	/**
+	 * callback for when a fired missile impacts an entity
+	 *
+	 * @param world
+	 * @param entity
+	 */
+	void onMissileImpactEntity(World world, Entity entity);
 }

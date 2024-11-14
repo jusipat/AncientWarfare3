@@ -9,3 +9,81 @@
 /.metadata
 /.idea
 *.iml
+/run/saves/New World/playerdata/31c4910d-9b69-4725-8969-9ed53ac8a7dc.dat
+/run/saves/New World/stats/31c4910d-9b69-4725-8969-9ed53ac8a7dc.json
+/run/config/ancientwarfare/AncientWarfare.cfg
+/run/config/ancientwarfare/AncientWarfareAutomation.cfg
+/run/config/ancientwarfare/AncientWarfareModeler.cfg
+/run/config/ancientwarfare/AncientWarfareNpc.cfg
+/run/config/ancientwarfare/AncientWarfareNpcEquipment.cfg
+/run/config/ancientwarfare/AncientWarfareNpcFactionStandings.cfg
+/run/config/ancientwarfare/AncientWarfareNpcFood.cfg
+/run/config/ancientwarfare/AncientWarfareNpcPath.cfg
+/run/config/ancientwarfare/AncientWarfareNpcTargeting.cfg
+/run/config/ancientwarfare/AncientWarfareNpcValues.cfg
+/run/config/ancientwarfare/AncientWarfareStructures.cfg
+/run/natives/lwjgl2/avutil-ttv-51.dll
+/run/saves/New World/data/AWFactionData.dat
+/run/saves/New World/data/AWResearchData.dat
+/run/saves/New World/data/AWStructureMap.dat
+/run/saves/New World/data/AWTownMap.dat
+/run/saves/New World/NEI/banneditems.cfg
+/run/saves/NEI/global/bookmarks.ini
+/run/config/NEI/client.cfg
+/run/saves/NEI/client.dat
+/run/config/CodeChickenCore.cfg
+/run/config/CodeChickenLib.cfg
+/run/config/NEI/collapsibleitems.cfg
+/run/saves/New World/NEI/players/Developer.dat
+/run/config/NEI/enableautofocus.cfg
+/run/logs/fml-client-latest.log
+/run/logs/fml-junk-earlystartup.log
+/run/saves/New World/DIM1/forcedchunks.dat
+/run/saves/New World/DIM-1/forcedchunks.dat
+/run/saves/New World/forcedchunks.dat
+/run/config/forge.cfg
+/run/config/forgeChunkLoading.cfg
+/run/config/NEI/guidfilters.cfg
+/run/config/NEI/handlerordering.csv
+/run/config/NEI/heighthackhandlers.cfg
+/run/config/NEI/hiddenhandlers.cfg
+/run/config/NEI/hiddenitems.cfg
+/run/natives/lwjgl2/jinput-dx8.dll
+/run/natives/lwjgl2/jinput-dx8_64.dll
+/run/natives/lwjgl2/jinput-raw.dll
+/run/natives/lwjgl2/jinput-raw_64.dll
+/run/natives/lwjgl2/jinput-wintab.dll
+/run/logs/latest.log
+/run/saves/New World/level.dat
+/run/saves/New World/level.dat_mcr
+/run/saves/New World/level.dat_old
+/run/natives/lwjgl2/libjinput-linux.so
+/run/natives/lwjgl2/libjinput-linux64.so
+/run/natives/lwjgl2/libjinput-osx.jnilib
+/run/natives/lwjgl2/libmfxsw64.dll
+/run/natives/lwjgl2/libmp3lame-ttv.dll
+/run/natives/lwjgl2/lwjgl.dll
+/run/natives/lwjgl2/lwjgl64.dll
+/run/saves/New World/data/Mineshaft.dat
+/run/saves/NEI/local/New World/NEI.cfg
+/run/saves/NEI/local/New World/NEI.dat
+/run/natives/lwjgl2/OpenAL32.dll
+/run/natives/lwjgl2/OpenAL64.dll
+/run/options.txt
+/run/saves/New World/region/r.0.0.mca
+/run/saves/New World/region/r.0.-1.mca
+/run/saves/New World/region/r.-1.0.mca
+/run/saves/New World/region/r.-1.-1.mca
+/run/saves/New World/region/r.-2.0.mca
+/run/saves/New World/region/r.-2.-1.mca
+/run/config/NEI/serialhandlers.cfg
+/run/saves/New World/NEI/server.cfg
+/run/saves/New World/session.lock
+/run/config/splash.properties
+/run/natives/lwjgl2/swresample-ttv-0.dll
+/run/natives/lwjgl2/twitchsdk.dll
+/run/usernamecache.json
+/run/saves/New World/data/Village.dat
+/run/saves/New World/data/villages.dat
+/run/saves/New World/DIM1/data/villages.dat
+/run/saves/New World/DIM-1/data/villages.dat
