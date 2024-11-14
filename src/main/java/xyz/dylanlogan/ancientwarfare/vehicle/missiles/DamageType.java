@@ -1,11 +1,7 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.missiles;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
 
 import javax.annotation.Nullable;
 
@@ -27,11 +23,10 @@ public class DamageType extends DamageSource {
 		super(type);
 		this.ent = source;
 	}
-
 	@Nullable
 	@Override
-	public Entity getTrueSource() {
-		return ent;
+	public Entity getSourceOfDamage() {
+		return super.getSourceOfDamage();
 	}
 
 	public static DamageSource causeEntityMissileDamage(Entity attacker, boolean fire, boolean expl) {
@@ -46,12 +41,12 @@ public class DamageType extends DamageSource {
 		return t;
 	}
 
-	@Override
-	public ITextComponent getDeathMessage(EntityLivingBase par1EntityLivingBase) {
-		EntityLivingBase entitylivingbase1 = par1EntityLivingBase.getAttackingEntity();
-		String s = "death.attack." + this.damageType;
-		String s1 = s + ".player";
-		return entitylivingbase1 != null && I18n.canTranslate(s1) ? new TextComponentTranslation(s1, par1EntityLivingBase.getDisplayName(),
-				entitylivingbase1.getDisplayName()) : new TextComponentTranslation(s, par1EntityLivingBase.getDisplayName());
-	}
+//	@Override
+//	public ITextComponent getDeathMessage(EntityLivingBase par1EntityLivingBase) {
+//		EntityLivingBase entitylivingbase1 = par1EntityLivingBase.getAttackingEntity();
+//		String s = "death.attack." + this.damageType;
+//		String s1 = s + ".player";
+//		return entitylivingbase1 != null && I18n.canTranslate(s1) ? new TextComponentTranslation(s1, par1EntityLivingBase.getDisplayName(),
+//				entitylivingbase1.getDisplayName()) : new TextComponentTranslation(s, par1EntityLivingBase.getDisplayName());
+//	}
 }
