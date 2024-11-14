@@ -11,6 +11,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import xyz.dylanlogan.ancientwarfare.Tags;
 import xyz.dylanlogan.ancientwarfare.core.block.AWCoreBlockLoader;
 import xyz.dylanlogan.ancientwarfare.core.command.CommandResearch;
 import xyz.dylanlogan.ancientwarfare.core.config.AWCoreStatics;
@@ -25,13 +26,10 @@ import xyz.dylanlogan.ancientwarfare.core.proxy.CommonProxyBase;
 import xyz.dylanlogan.ancientwarfare.core.research.ResearchGoal;
 import xyz.dylanlogan.ancientwarfare.core.research.ResearchTracker;
 
-@Mod
-        (
-                name = "Ancient Warfare Core",
-                modid = AncientWarfareCore.modID,
-                version = "@VERSION@",
-                guiFactory = "xyz.dylanlogan.ancientwarfare.core.gui.options.OptionsGuiFactory"
-        )
+@Mod(version = Tags.VERSION, modid = AncientWarfareCore.modID,
+        name = "Ancient Warfare Core", acceptedMinecraftVersions = "[1.7.10]",
+        guiFactory = "xyz.dylanlogan.ancientwarfare.core.gui.options.OptionsGuiFactory")
+
 public class AncientWarfareCore {
 
     public static final String modID = "AncientWarfare";
