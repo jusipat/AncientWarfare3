@@ -1,8 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.vehicle.VehicleVarHelpers.BatteringRamVarHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
@@ -84,7 +84,7 @@ public class VehicleTypeBatteringRam extends VehicleType {
 
 	public static BlockPos[] getEffectedPositions(VehicleBase vehicle) {
 		BlockPos[] positions = new BlockPos[7];
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		float bx = (float) (vehicle.posX + offset.x);
 		float by = (float) (vehicle.posY + offset.y);
 		float bz = (float) (vehicle.posZ + offset.z);

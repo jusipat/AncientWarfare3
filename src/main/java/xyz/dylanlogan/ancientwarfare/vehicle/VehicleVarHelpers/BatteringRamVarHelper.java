@@ -1,9 +1,9 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.VehicleVarHelpers;
 
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.AxisAlignedBB;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
 import xyz.dylanlogan.ancientwarfare.structure.entity.EntityGate;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;

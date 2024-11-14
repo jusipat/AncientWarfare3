@@ -1,8 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity;
 
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -13,32 +13,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.items.CapabilityItemHandler;
-import xyz.dylanlogan.ancientwarfare.core.owner.IOwnable;
-import xyz.dylanlogan.ancientwarfare.core.owner.Owner;
+import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
-import xyz.dylanlogan.ancientwarfare.core.util.MathUtils;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.npc.config.AWNPCStatics;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
-import xyz.dylanlogan.ancientwarfare.npc.entity.faction.NpcFactionSiegeEngineer;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.VehicleVarHelpers.DummyVehicleHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
@@ -282,7 +263,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
         super.onCollideWithPlayer(par1EntityPlayer);
-        if (!world.isRemote && par1EntityPlayer instanceof EntityPlayerMP && par1EntityPlayer.posY > posY && ((EntityPlayerMP) par1EntityPlayer).collidedVertically) {
+        if (!worldObj.isRemote && par1EntityPlayer instanceof EntityPlayerMP && par1EntityPlayer.posY > posY && ((EntityPlayerMP) par1EntityPlayer).collidedVertically) {
             EntityPlayerMP player = (EntityPlayerMP) par1EntityPlayer;
 /*			TODO handle collision with players to allow them flying and disallow once they stop colliding
 			probably a collection of players in collision with this entity, on update check if they have collided in the last 10? ticks and if not disallow flying
@@ -422,7 +403,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
      *
      * @return
      */
-    public Vec3d getMissileOffset() {
+    public Vector3d getMissileOffset() {
         float x1 = this.vehicleType.getTurretPosX();
         float y1 = this.vehicleType.getTurretPosY();
         float z1 = this.vehicleType.getTurretPosZ();
@@ -504,7 +485,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
 
     protected void onInsideBlock(IBlockState state, BlockPos pos) {
         if (state.getBlock() == Blocks.WATERLILY) {
-            world.destroyBlock(new BlockPos(pos), true);
+            worldObj.destroyBlock(new BlockPos(pos), true);
         }
     }
 
@@ -621,22 +602,22 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     }
 
     private void handleDismount(EntityLivingBase rider) {
-        int xMin = MathHelper.floor(this.posX - this.width / 2);
-        int zMin = MathHelper.floor(this.posZ - this.width / 2);
-        int yMin = MathHelper.floor(posY) - 2;
+        int xMin = MathHelper.floor_double(this.posX - this.width / 2);
+        int zMin = MathHelper.floor_double(this.posZ - this.width / 2);
+        int yMin = MathHelper.floor_double(posY) - 2;
 
         if (rider instanceof EntityPlayerMP) {
             ((EntityPlayerMP) rider).capabilities.allowFlying = false;
         }
-        rider.dismountRidingEntity();
+        rider.dismountEntity(rider);
 
         searchLabel:
         for (int y = yMin; y <= yMin + 3; y++) {
             for (int x = xMin; x <= xMin + (int) width; x++) {
                 for (int z = zMin; z <= zMin + (int) width; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
-                    IBlockState state = world.getBlockState(pos);
-                    if (state.isSideSolid(world, pos, EnumFacing.UP) || state.getMaterial() == Material.WATER) {
+                    IBlockState state = worldObj.getBlockState(pos);
+                    if (state.isSideSolid(worldObj, pos, EnumFacing.UP) || state.getMaterial() == Material.water) {
                         if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up().up())) {
                             rider.setPositionAndUpdate(x + 0.5d, y + 1, z + 0.5d);
                             break searchLabel;
@@ -749,12 +730,12 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
      * spits out inventory into world, and packs the vehicle into an item, also spat into the world
      */
     public void packVehicle() {
-        if (!this.world.isRemote) {
-            InventoryTools.dropItemInWorld(world, getItemForVehicle(), posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.ammoInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.armorInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.upgradeInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.storageInventory, posX, posY, posZ);
+        if (!this.worldObj.isRemote) {
+            InventoryTools.dropItemInWorld(worldObj, getItemForVehicle(), posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.upgradeInventory, posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.storageInventory, posX, posY, posZ);
             this.setDead();
         }
     }
