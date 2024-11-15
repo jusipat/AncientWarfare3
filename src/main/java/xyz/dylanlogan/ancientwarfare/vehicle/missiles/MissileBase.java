@@ -35,8 +35,9 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 
 	private boolean inGround = false;
 	private boolean hasImpacted = false;
-	private BlockPos persistentBlockPos = BlockPos.ORIGIN;
-	private IBlockState persistentBlock = Blocks.air.getDefaultState();
+	private ChunkCoordinates persistentBlockPos = new ChunkCoordinates(0, 0, 0);
+	//private BlockPos persistentBlockPos = BlockPos.ORIGIN;
+	private int persistentBlock; // block metadata (old BlockState)
 
 	/**
 	 * initial velocities, used by rocket for acceleration factor
@@ -175,7 +176,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 		if (!impacted && ammoType.entityProximity() > 0) {
 			float entProx = ammoType.entityProximity();
 			float foundDist = 0;
-			List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(posX - entProx, posY - entProx, posZ - entProx, posX + entProx, posY + entProx, posZ + entProx));
+			List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(posX - entProx, posY - entProx, posZ - entProx, posX + entProx, posY + entProx, posZ + entProx));
 			if (!entities.isEmpty()) {
 				Iterator it = entities.iterator();
 				Entity ent;
@@ -183,7 +184,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 					ent = (Entity) it.next();
 					if (ent != null && ent.getClass() != MissileBase.class)//don't collide with missiles
 					{
-						foundDist = this.getDistance(ent);
+						foundDist = this.getDistanceToEntity(ent);
 						if (foundDist < entProx) {
 							this.onImpactEntity(ent, (float) posX, (float) posY, (float) posZ);
 							break;
@@ -254,9 +255,9 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 					this.onImpactWorld(hitPosition);
 					this.hasImpacted = true;
 					if (!this.ammoType.isPenetrating()) {
-						this.motionX = (double) ((float) (hitPosition.hitVec.x - this.posX));
-						this.motionY = (double) ((float) (hitPosition.hitVec.y - this.posY));
-						this.motionZ = (double) ((float) (hitPosition.hitVec.z - this.posZ));
+						this.motionX = (double) ((float) (hitPosition.hitVec.xCoord - this.posX));
+						this.motionY = (double) ((float) (hitPosition.hitVec.yCoord - this.posY));
+						this.motionZ = (double) ((float) (hitPosition.hitVec.zCoord - this.posZ));
 						float var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 						this.posX -= this.motionX / (double) var20 * 0.05000000074505806D;
 						this.posY -= this.motionY / (double) var20 * 0.05000000074505806D;
@@ -293,8 +294,8 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 				this.motionX += mX;
 				this.motionY += mY;
 				this.motionZ += mZ;
-				if (this.world.isRemote) {
-					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+				if (this.worldObj.isRemote) {
+					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 				}
 			} else {
 				this.motionY -= (double) this.ammoType.getGravityFactor();
@@ -307,7 +308,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	private void onUpdateArrowRotation() {
-		double motionSpeed = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+		double motionSpeed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
 		this.rotationYaw = Trig.toDegrees((float) Math.atan2(this.motionX, this.motionZ)) - 90;
 		this.rotationPitch = Trig.toDegrees((float) Math.atan2(this.motionY, (double) motionSpeed)) - 90;
 		while (this.rotationPitch - this.prevRotationPitch < -180.0F) {
