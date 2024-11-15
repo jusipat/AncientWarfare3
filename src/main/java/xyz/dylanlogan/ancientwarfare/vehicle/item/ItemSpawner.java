@@ -12,7 +12,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.MovingObjectPosition;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -76,9 +76,9 @@ public class ItemSpawner extends ItemBaseVehicle {
 		if (tag.hasKey(HEALTH_TAG)) {
 			vehicle.setHealth(tag.getFloat(HEALTH_TAG));
 		}
-		RayTraceResult rayTrace = rayTrace(world, player, true);
+		MovingObjectPosition rayTrace = rayTrace(world, player, true);
 		//noinspection ConstantConditions
-		if (rayTrace == null || rayTrace.typeOfHit != RayTraceResult.Type.BLOCK) {
+		if (rayTrace == null || rayTrace.typeOfHit != MovingObjectPosition.Type.BLOCK) {
 			return true;
 		}
 		spawnVehicle(world, player, vehicle, rayTrace);
@@ -95,7 +95,7 @@ public class ItemSpawner extends ItemBaseVehicle {
 		}
 	}
 
-	private void spawnVehicle(World world, EntityPlayer player, VehicleBase vehicle, RayTraceResult rayTrace) {
+	private void spawnVehicle(World world, EntityPlayer player, VehicleBase vehicle, MovingObjectPosition rayTrace) {
 		Vec3d hitVec = rayTrace.hitVec;
 		if (rayTrace.sideHit.getAxis().isHorizontal()) {
 			Vec3i dirVec = rayTrace.sideHit.getDirectionVec();

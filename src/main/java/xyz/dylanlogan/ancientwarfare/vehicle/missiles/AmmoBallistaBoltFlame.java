@@ -38,7 +38,7 @@ public class AmmoBallistaBoltFlame extends Ammo {
 		if (!world.isRemote) {
 			// using World.playSound instead of Entity.playSound, because Entity.playSound plays the sound to everyone nearby except(!) this player
 			//ent.playSound(AWVehicleSounds.BALLISTA_BOLT_HIT_ENTITY, 1, 1);
-			world.playSound(null, x, y, z, AWVehicleSounds.BALLISTA_BOLT_HIT_ENTITY, SoundCategory.ANIMALS, 2, 1);
+			//world.playSound(null, x, y, z, AWVehicleSounds.BALLISTA_BOLT_HIT_ENTITY, SoundCategory.ANIMALS, 2, 1);
 			ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, true, false), getEntityDamage());
 			ent.setFire(4);
 		}

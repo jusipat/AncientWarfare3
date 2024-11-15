@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.MovingObjectPosition;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
@@ -157,17 +157,17 @@ public class VehicleInputHandler {
 
 	private static final float MAX_RANGE = 140;
 
-	private static RayTraceResult getPlayerLookTargetClient(EntityPlayer player, Entity excludedEntity) {
+	private static MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, Entity excludedEntity) {
 		Vec3d playerEyesPos = RayTracer.getCorrectedHeadVec(player);
 		Vec3d lookVector = player.getLook(0);
 		Vec3d endVector = playerEyesPos.addVector(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE);
-		RayTraceResult blockHit = player.world.rayTraceBlocks(playerEyesPos, endVector);
+		MovingObjectPosition blockHit = player.world.rayTraceBlocks(playerEyesPos, endVector);
 
 		Optional<Tuple<Double, Entity>> closestEntityFound = getClosestCollidedEntity(excludedEntity, playerEyesPos, lookVector, endVector);
 
 		if (closestEntityFound.isPresent() && (blockHit == null || closestEntityFound.get().getFirst() < blockHit.hitVec.distanceTo(playerEyesPos))) {
 			Entity hitEntity = closestEntityFound.get().getSecond();
-			blockHit = new RayTraceResult(hitEntity, new Vec3d(hitEntity.posX, hitEntity.posY + hitEntity.height * 0.65d, hitEntity.posZ));
+			blockHit = new MovingObjectPosition(hitEntity, new Vec3d(hitEntity.posX, hitEntity.posY + hitEntity.height * 0.65d, hitEntity.posZ));
 		}
 		return blockHit;
 	}
@@ -187,9 +187,9 @@ public class VehicleInputHandler {
 	private static double getDistanceToCollidedEntity(Entity entity, Vec3d startVector, Vec3d endVector) {
 		float borderSize = entity.getCollisionBorderSize();
 		AxisAlignedBB entBB = entity.getEntityBoundingBox().grow((double) borderSize, (double) borderSize, (double) borderSize);
-		RayTraceResult rayTraceResult = entBB.calculateIntercept(startVector, endVector);
+		MovingObjectPosition MovingObjectPosition = entBB.calculateIntercept(startVector, endVector);
 
-		return rayTraceResult != null ? startVector.distanceTo(rayTraceResult.hitVec) : Double.MAX_VALUE;
+		return MovingObjectPosition != null ? startVector.distanceTo(MovingObjectPosition.hitVec) : Double.MAX_VALUE;
 	}
 
 	@SubscribeEvent
@@ -213,7 +213,7 @@ public class VehicleInputHandler {
 			return;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
-		RayTraceResult pos = getPlayerLookTargetClient(mc.player, vehicle);
+		MovingObjectPosition pos = getPlayerLookTargetClient(mc.player, vehicle);
 		if (pos != null) {
 			vehicle.firingHelper.handleAimInput(pos.hitVec);
 		}

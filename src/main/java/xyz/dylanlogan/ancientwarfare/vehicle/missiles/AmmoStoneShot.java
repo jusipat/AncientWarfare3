@@ -25,13 +25,13 @@ public class AmmoStoneShot extends Ammo {
 
 	@Override
 	public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit) {
-		BlockPos origin = new BlockPos(x, y, z);
+		BlockPos origin = new BlockPos((int) x, (int) y, (int) z);
 
 		float maxHardness = 5 + (ammoWeight * 0.2f + ammoWeight * 0.8f * world.rand.nextFloat()) * 0.6f;
 
 		breakAroundOnLevel(world, origin, origin, maxHardness);
-		breakAroundOnLevel(world, origin, origin.up(), maxHardness);
-		breakAroundOnLevel(world, origin, origin.down(), maxHardness);
+		breakAroundOnLevel(world, origin, (BlockPos) origin.up(), maxHardness);
+		breakAroundOnLevel(world, origin, (BlockPos) origin.down(), maxHardness);
 	}
 
 	@Override

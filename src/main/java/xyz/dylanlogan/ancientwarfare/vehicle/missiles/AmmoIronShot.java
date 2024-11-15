@@ -26,12 +26,12 @@ public class AmmoIronShot extends Ammo {
 			return;
 		}
 
-		BlockPos origin = new BlockPos(x, y, z);
+		BlockPos origin = new BlockPos((int) x, (int) y, (int) z);
 		float maxHardness = 5 + (ammoWeight * 0.2f + ammoWeight * 0.8f * world.rand.nextFloat());
 
 		breakAroundOnLevel(world, origin, origin, maxHardness);
-		breakAroundOnLevel(world, origin, origin.up(), maxHardness);
-		breakAroundOnLevel(world, origin, origin.down(), maxHardness);
+		breakAroundOnLevel(world, origin, (BlockPos) origin.up(), maxHardness);
+		breakAroundOnLevel(world, origin, (BlockPos) origin.down(), maxHardness);
 	}
 
 	@Override

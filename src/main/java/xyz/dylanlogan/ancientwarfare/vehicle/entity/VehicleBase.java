@@ -16,6 +16,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.joml.Vector3d;
+import xyz.dylanlogan.ancientwarfare.core.interfaces.IOwnable;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.npc.config.AWNPCStatics;
@@ -32,6 +33,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleMoveHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleUpgradeHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.inventory.VehicleInventory;
 import xyz.dylanlogan.ancientwarfare.vehicle.missiles.AmmoHwachaRocket;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 import xyz.dylanlogan.ancientwarfare.vehicle.pathing.Navigator;
 import xyz.dylanlogan.ancientwarfare.vehicle.pathing.Node;
 import xyz.dylanlogan.ancientwarfare.vehicle.pathing.PathWorldAccessEntity;
@@ -163,7 +165,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     }
 
     @Override
-    public ItemStack getPickedResult(RayTraceResult target) {
+    public ItemStack getPickedResult(MovingObjectPosition target) {
         return this.vehicleType.getStackForLevel(vehicleMaterialLevel);
     }
 
