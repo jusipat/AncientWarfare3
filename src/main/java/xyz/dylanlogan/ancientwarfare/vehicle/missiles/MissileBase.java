@@ -11,9 +11,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IMissileHitCallback;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
@@ -165,8 +167,8 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 		if (ammoType.groundProximity() > 0) {
 			while (groundDiff <= ammoType.groundProximity()) {
 				groundDiff++;
-				if (!worldObj.isAirBlock(new BlockPos(x, y - groundDiff, z))) {
-					this.onImpactWorld(new MovingObjectPosition(new Vector3d(x, y, z), EnumFacing.DOWN, new BlockPos(x, y, z))); //TODO correct MovingObjectPosition created? Test
+				if (!worldObj.isAirBlock(x, y - groundDiff, z)) {
+					this.onImpactWorld(new MovingObjectPosition(x, y, z, 0, Vec3.createVectorHelper(x, y, z))); //TODO correct MovingObjectPosition created? Test
 					impacted = true;
 					break;
 				}
@@ -196,23 +198,25 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	private void onMovementTick() {
-		if (this.inGround && persistentBlock != worldObj.getBlockState(persistentBlockPos)) {
+		if (this.inGround && persistentBlock != worldObj.getBlockMetadata(persistentBlockPos)) {
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;
 			this.inGround = false;
 		}
 		if (!this.inGround) {
-			Vector3d positionVector = new Vector3d(this.posX, this.posY, this.posZ);
-			Vector3d moveVector = new Vector3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-			MovingObjectPosition hitPosition = this.worldObj.rayTraceBlocks(positionVector, moveVector, false, true, false);
+			Vec3 positionVector;
+			positionVector = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			Vec3 moveVector;
+			moveVector = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			MovingObjectPosition hitPosition = this.worldObj.rayTraceBlocks(positionVector, moveVector, false);
 			Entity hitEntity = null;
 			boolean testEntities = true;
 			if (this.worldObj.isRemote) {
 				testEntities = false;
 			}
 			if (testEntities) {
-				List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ).grow(1.0D, 1.0D, 1.0D));
+				List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().offset(this.motionX, this.motionY, this.motionZ).offset(1.0D, 1.0D, 1.0D)); // .grow replaced by .offset
 				double closestHit = 0.0D;
 				float borderSize;
 
@@ -220,15 +224,15 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 					Entity curEnt = (Entity) nearbyEntities.get(i);
 					if (curEnt.canBeCollidedWith()) {
 						if (this.launcher != null) {
-							if (curEnt == this.launcher || curEnt == this.launcher.getControllingPassenger() || curEnt == this.shooterLiving || curEnt == this.shooter) {
+							if (curEnt == this.launcher || curEnt == this.launcher.riddenByEntity || curEnt == this.shooterLiving || curEnt == this.shooter) {
 								continue;
 							}
 						}
 						borderSize = 0.3F;
-						AxisAlignedBB var12 = curEnt.getEntityBoundingBox().grow((double) borderSize, (double) borderSize, (double) borderSize);
+						AxisAlignedBB var12 = curEnt.boundingBox.expand( borderSize, borderSize, borderSize);
 						MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
 						if (checkHit != null) {
-							double hitDistance = positionVector.distanceTo(checkHit.hitVec);
+							double hitDistance = positionVector.distance((Vector3dc) checkHit.hitVec);
 							if (hitDistance < closestHit || closestHit == 0.0D) {
 								hitEntity = curEnt;
 								closestHit = hitDistance;
@@ -266,8 +270,11 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 						if (!this.ammoType.isPersistent() && !this.worldObj.isRemote) {
 							this.setDead();
 						} else if (this.ammoType.isPersistent()) {
-							persistentBlockPos = hitPosition.getBlockPos();
-							persistentBlock = worldObj.get(persistentBlockPos);
+							TileEntity te = worldObj.getTileEntity(hitPosition.blockX, hitPosition.blockY, hitPosition.blockZ);
+							persistentBlockPos.posX = te.xCoord;
+							persistentBlockPos.posY = te.yCoord;
+							persistentBlockPos.posZ = te.zCoord;
+							persistentBlock = te.blockMetadata;
 						}
 					} else {
 						this.motionX *= 0.65f;
@@ -399,7 +406,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 		this.rocketBurnTime = pb.readInt();
 		boolean hasLauncher = pb.readBoolean();
 		if (hasLauncher) {
-			launcher = world.getEntityByID(pb.readInt());
+			launcher = worldObj.getEntityByID(pb.readInt());
 		}
 	}
 }
