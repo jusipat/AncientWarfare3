@@ -5,15 +5,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.INBTSerializable;
+import scala.Function2;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
-import xyz.dylanlogan.ancientwarfare.core.util.Function2;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
 import xyz.dylanlogan.ancientwarfare.npc.entity.faction.NpcFaction;
-import xyz.dylanlogan.ancientwarfare.npc.entity.vehicle.NpcSiegeEngineer;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAmmoSelect;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAmmoUpdate;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketSingleAmmoUpdate;
@@ -49,7 +48,7 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 	 * SERVER ONLY relays changes to clients to update a single ammo type, also handles updating underlying inventory...
 	 */
 	void decreaseCurrentAmmo() {
-		if (vehicle.world.isRemote) {
+		if (vehicle.worldObj.isRemote) {
 			return;
 		}
 		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
@@ -158,7 +157,7 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	public void updateAmmoCounts() {
-		if (vehicle.world.isRemote) {
+		if (vehicle.worldObj.isRemote) {
 			return;
 		}
 
@@ -235,7 +234,7 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 	private void deserializeAmmo(NBTTagCompound tag) {
 		NBTTagList ammo = tag.getTagList("list", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < ammo.tagCount(); i++) {
-			NBTTagCompound entryTag = (NBTTagCompound) ammo.get(i);
+			NBTTagCompound entryTag = ammo.getCompoundTagAt(i);
 			String type = entryTag.getString("type");
 			int count = entryTag.getInteger("count");
 			updateAmmoCount(type, count);

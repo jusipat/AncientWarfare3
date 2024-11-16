@@ -4,10 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
-import xyz.dylanlogan.ancientwarfare.vehicle.missiles.AmmoClusterShot;
-import xyz.dylanlogan.ancientwarfare.vehicle.missiles.AmmoExplosiveShot;
-import xyz.dylanlogan.ancientwarfare.vehicle.missiles.AmmoNapalmShot;
-import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
+import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemAmmo;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.*;
 
 import java.util.HashMap;
 import java.util.Map;

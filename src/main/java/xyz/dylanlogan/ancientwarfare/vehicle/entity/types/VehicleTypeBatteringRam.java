@@ -68,17 +68,17 @@ public class VehicleTypeBatteringRam extends VehicleType {
 	public ResourceLocation getTextureForMaterialLevel(int level) {
 		switch (level) {
 			case 0:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/battering_ram_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/battering_ram_1.png");
 			case 1:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/battering_ram_2.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/battering_ram_2.png");
 			case 2:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/battering_ram_3.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/battering_ram_3.png");
 			case 3:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/battering_ram_4.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/battering_ram_4.png");
 			case 4:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/battering_ram_5.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/battering_ram_5.png");
 			default:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/battering_ram_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/battering_ram_1.png");
 		}
 	}
 
@@ -88,7 +88,7 @@ public class VehicleTypeBatteringRam extends VehicleType {
 		float bx = (float) (vehicle.posX + offset.x);
 		float by = (float) (vehicle.posY + offset.y);
 		float bz = (float) (vehicle.posZ + offset.z);
-		BlockPos blockHit = new BlockPos(bx, by, bz);
+		BlockPos blockHit = new BlockPos((int) bx, (int) by, (int) bz); // todo: fix lossy cast
 
 		positions[0] = blockHit;
 		positions[1] = new BlockPos(blockHit.getX() - 1, blockHit.getY(), blockHit.getZ());
@@ -102,6 +102,6 @@ public class VehicleTypeBatteringRam extends VehicleType {
 
 	@Override
 	public void playFiringSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.BATTERING_RAM_LAUNCH, 2, 1);
+		//vehicleBase.playSound(AWVehicleSounds.BATTERING_RAM_LAUNCH, 2, 1); todo: readd sounds
 	}
 }

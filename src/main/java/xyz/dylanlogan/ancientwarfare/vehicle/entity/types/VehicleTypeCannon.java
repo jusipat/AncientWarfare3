@@ -1,5 +1,6 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
+import net.minecraft.client.audio.SoundList;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
@@ -80,17 +81,17 @@ public class VehicleTypeCannon extends VehicleType {
 	public ResourceLocation getTextureForMaterialLevel(int level) {
 		switch (level) {
 			case 0:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/cannon_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/cannon_1.png");
 			case 1:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/cannon_2.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/cannon_2.png");
 			case 2:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/cannon_3.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/cannon_3.png");
 			case 3:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/cannon_4.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/cannon_4.png");
 			case 4:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/cannon_5.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/cannon_5.png");
 			default:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/cannon_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/cannon_1.png");
 		}
 	}
 
@@ -121,17 +122,17 @@ public class VehicleTypeCannon extends VehicleType {
 
 		@Override
 		public void onFiringUpdate() {
-			if (firingTicks == 0 && !vehicle.world.isRemote) {
+			if (firingTicks == 0 && !vehicle.worldObj.isRemote) {
 				vehicle.playSound(SoundEvents.ENTITY_FIREWORK_LAUNCH, 0.50F, .25F);
 				vehicle.playSound(SoundEvents.ENTITY_TNT_PRIMED, 1.0F, 0.5F);
 			}
 			firingTicks++;
-			if (vehicle.world.isRemote) {
+			if (vehicle.worldObj.isRemote) {
 				//TODO offset
-				vehicle.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, vehicle.posX, vehicle.posY + 1.2d, vehicle.posZ, 0.0D, 0.05D, 0.0D);
+				vehicle.worldObj.spawnParticle("smoke", vehicle.posX, vehicle.posY + 1.2d, vehicle.posZ, 0.0D, 0.05D, 0.0D);
 			}
 			if (firingTicks > 10) {
-				if (!vehicle.world.isRemote) {
+				if (!vehicle.worldObj.isRemote) {
 					vehicle.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.f, 1.f);
 				}
 				vehicle.firingHelper.startLaunching();

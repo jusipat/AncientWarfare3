@@ -2,6 +2,7 @@ package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
@@ -86,17 +87,17 @@ public class VehicleTypeHwacha extends VehicleType {
 	public ResourceLocation getTextureForMaterialLevel(int level) {
 		switch (level) {
 			case 0:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/hwacha_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/hwacha_1.png");
 			case 1:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/hwacha_2.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/hwacha_2.png");
 			case 2:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/hwacha_3.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/hwacha_3.png");
 			case 3:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/hwacha_4.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/hwacha_4.png");
 			case 4:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/hwacha_5.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/hwacha_5.png");
 			default:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/hwacha_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/hwacha_1.png");
 		}
 	}
 
@@ -119,11 +120,6 @@ public class VehicleTypeHwacha extends VehicleType {
 		}
 
 		@Override
-		public void deserializeNBT(NBTTagCompound tag) {
-			//noop
-		}
-
-		@Override
 		public void onFiringUpdate() {
 			vehicle.firingHelper.startLaunching();
 		}
@@ -139,7 +135,7 @@ public class VehicleTypeHwacha extends VehicleType {
 			if (delayTick >= 5) {
 				delayTick = 0;
 				calcMissileOffset(missileFired);
-				if (!vehicle.world.isRemote && vehicle.ammoHelper.getCurrentAmmoCount() > 0) {
+				if (!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount() > 0) {
 					vehicle.playSound(SoundEvents.ENTITY_FIREWORK_LAUNCH, 1.0F, 0.5F);
 				}
 				vehicle.firingHelper.spawnMissile(missileOffsetX, missileOffsetY, missileOffsetZ);
@@ -162,7 +158,7 @@ public class VehicleTypeHwacha extends VehicleType {
 			float targetY = ((float) currentRow) * 0.0625f * 2.f;
 			float targetZ = 0.f;
 			float targetAngle = 0.f + vehicle.rotationYaw;
-			float len = MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
+			float len = MathHelper.sqrt_float(targetX * targetX + targetZ * targetZ);
 			missileOffsetX = Trig.cosDegrees(targetAngle) * len;
 			if (targetX < 0) {
 				missileOffsetX *= -1;

@@ -1,12 +1,12 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IVehicleType;
@@ -14,6 +14,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleMovementType;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.IVehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleItems;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 import xyz.dylanlogan.ancientwarfare.vehicle.upgrades.IVehicleUpgradeType;
 
 import javax.annotation.Nullable;

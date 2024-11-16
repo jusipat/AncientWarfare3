@@ -11,7 +11,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 public class AWVehicleStatics extends ModConfiguration {
 
 	@SuppressWarnings("unused")
-	@EventBusSubscriber(modid = AncientWarfareVehicles.MOD_ID)
+	@EventBusSubscriber
 	private static class EventHandler {
 		/**
 		 * Inject the new values and save to the config file when the config has been changed from the GUI.
@@ -20,7 +20,7 @@ public class AWVehicleStatics extends ModConfiguration {
 		 */
 		@SubscribeEvent
 		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-			if (event.getModID().equals(AncientWarfareVehicles.MOD_ID)) {
+			if (event.modID.equals(AncientWarfareVehicles.MOD_ID)) {
 				ConfigManager.sync(AncientWarfareVehicles.MOD_ID, Config.Type.INSTANCE);
 			}
 		}

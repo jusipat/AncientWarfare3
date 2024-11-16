@@ -113,17 +113,17 @@ public class VehicleTypeBoatCatapult extends VehicleType {
 	public ResourceLocation getTextureForMaterialLevel(int level) {
 		switch (level) {
 			case 0:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/boat_catapult_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/boat_catapult_1.png");
 			case 1:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/boat_catapult_2.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/boat_catapult_2.png");
 			case 2:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/boat_catapult_3.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/boat_catapult_3.png");
 			case 3:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/boat_catapult_4.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/boat_catapult_4.png");
 			case 4:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/boat_catapult_5.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/boat_catapult_5.png");
 			default:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/boat_catapult_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/boat_catapult_1.png");
 		}
 	}
 
@@ -134,11 +134,13 @@ public class VehicleTypeBoatCatapult extends VehicleType {
 
 	@Override
 	public void playFiringSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.CATAPULT_LAUNCH, 6, 1);
+
+		//vehicleBase.playSound(AWVehicleSounds.CATAPULT_LAUNCH, 6, 1); todo: readd sounds
 	}
 
 	@Override
 	public void playReloadSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.CATAPULT_RELOAD, 1, 1);
+
+		//vehicleBase.playSound(AWVehicleSounds.CATAPULT_RELOAD, 1, 1); todo: readd sounds
 	}
 }

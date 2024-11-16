@@ -81,11 +81,13 @@ public abstract class VehicleTypeBallista extends VehicleType {
 
 	@Override
 	public void playReloadSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.BALLISTA_RELOAD, 1, 1);
+
+		//vehicleBase.playSound(AWVehicleSounds.BALLISTA_RELOAD, 1, 1); // todo: reimp sounds
 	}
 
 	@Override
 	public void playFiringSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.BALLISTA_LAUNCH, 6, 1);
+
+		//vehicleBase.playSound(AWVehicleSounds.BALLISTA_LAUNCH, 6, 1);
 	}
 }

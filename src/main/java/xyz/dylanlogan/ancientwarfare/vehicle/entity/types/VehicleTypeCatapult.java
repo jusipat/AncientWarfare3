@@ -118,12 +118,14 @@ public class VehicleTypeCatapult extends VehicleType {
 
 	@Override
 	public void playFiringSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.CATAPULT_LAUNCH, 6, 1);
+
+		//vehicleBase.playSound(AWVehicleSounds.CATAPULT_LAUNCH, 6, 1); todo: readd sounds
 	}
 
 	@Override
 	public void playReloadSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.CATAPULT_RELOAD, 1, 1);
+		vehicleBase.playSound(
+				//AWVehicleSounds.CATAPULT_RELOAD, 1, 1); todo: readd sounds
 	}
 
 	@Override
