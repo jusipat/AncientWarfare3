@@ -1,22 +1,18 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.input;
 
-import codechicken.lib.raytracer.RayTracer;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MovingObjectPosition;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
@@ -27,7 +23,6 @@ import org.lwjgl.input.Keyboard;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @SideOnly(Side.CLIENT)
@@ -141,14 +136,14 @@ public class VehicleInputHandler {
 		}
 
 		if (!vehicle.vehicleType.getValidAmmoTypes().isEmpty()) {
-			NetworkHandler.INSTANCE.openGui(Minecraft.getMinecraft().player, NetworkHandler.GUI_VEHICLE_AMMO_SELECTION, vehicle.getEntityId());
+			NetworkHandler.INSTANCE.openGui(Minecraft.getMinecraft().thePlayer, NetworkHandler.GUI_VEHICLE_AMMO_SELECTION, vehicle.getEntityId());
 		}
 	}
 
 	private static void handleFireAction(VehicleBase vehicle) {
 		String configName = vehicle.vehicleType.getConfigName();
 		if (!vehicle.isAmmoLoaded() && !(configName.equals("battering_ram") || configName.equals("boat_transport") || configName.equals("chest_cart"))) {
-			Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
+			Minecraft.getMinecraft().thePlayer.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
 		}
 		if (vehicle.isAimable()) {
 			vehicle.firingHelper.handleFireInput();
@@ -158,10 +153,10 @@ public class VehicleInputHandler {
 	private static final float MAX_RANGE = 140;
 
 	private static MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, Entity excludedEntity) {
-		Vec3d playerEyesPos = RayTracer.getCorrectedHeadVec(player);
-		Vec3d lookVector = player.getLook(0);
-		Vec3d endVector = playerEyesPos.addVector(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE);
-		MovingObjectPosition blockHit = player.world.rayTraceBlocks(playerEyesPos, endVector);
+		Vector3d playerEyesPos = RayTracer.getCorrectedHeadVec(player);
+		Vector3d lookVector = player.getLook(0);
+		Vector3d endVector = playerEyesPos.add(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE);
+		MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerEyesPos, endVector);
 
 		Optional<Tuple<Double, Entity>> closestEntityFound = getClosestCollidedEntity(excludedEntity, playerEyesPos, lookVector, endVector);
 
@@ -172,7 +167,7 @@ public class VehicleInputHandler {
 		return blockHit;
 	}
 
-	private static Optional<Tuple<Double, Entity>> getClosestCollidedEntity(Entity excludedEntity, Vec3d playerEyesPos, Vec3d lookVector, Vec3d endVector) {
+	private static Optional<Tuple<Double, Entity>> getClosestCollidedEntity(Entity excludedEntity, Vector3d playerEyesPos, Vector3d lookVector, Vector3d endVector) {
 		Minecraft mc = Minecraft.getMinecraft();
 
 		//noinspection ConstantConditions
@@ -199,8 +194,8 @@ public class VehicleInputHandler {
 		}
 
 		Minecraft mc = Minecraft.getMinecraft();
-		if (mc.player != null && mc.player.getRidingEntity() instanceof VehicleBase) {
-			VehicleBase vehicle = (VehicleBase) mc.player.getRidingEntity();
+		if (mc.thePlayer != null && mc.thePlayer.ridingEntity instanceof VehicleBase) {
+			VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
 			handleTickInput(vehicle);
 			if (AWVehicleStatics.clientSettings.enableMouseAim) {
 				handleMouseAimUpdate(vehicle);
@@ -213,7 +208,7 @@ public class VehicleInputHandler {
 			return;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
-		MovingObjectPosition pos = getPlayerLookTargetClient(mc.player, vehicle);
+		MovingObjectPosition pos = getPlayerLookTargetClient(mc.thePlayer, vehicle);
 		if (pos != null) {
 			vehicle.firingHelper.handleAimInput(pos.hitVec);
 		}

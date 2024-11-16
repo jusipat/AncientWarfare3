@@ -22,17 +22,16 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.util.INBTSerializable;
+import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
-import xyz.dylanlogan.ancientwarfare.core.util.MathUtils;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
-import xyz.dylanlogan.ancientwarfare.npc.entity.vehicle.ITarget;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleMovementType;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAimUpdate;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketFireUpdate;
 
@@ -110,7 +109,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	 * spawn a missile of current missile type, with current firing paramaters, with additional raw x, y, z offsets
 	 */
 	public void spawnMissile(float ox, float oy, float oz) {
-		if (!vehicle.world.isRemote) {
+		if (!vehicle.worldObj.isRemote) {
 			IAmmo ammo = vehicle.ammoHelper.getCurrentAmmoType();
 			if (ammo == null) {
 				return;
@@ -118,7 +117,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 			if (vehicle.ammoHelper.getCurrentAmmoCount() > 0) {
 				vehicle.ammoHelper.decreaseCurrentAmmo();
 
-				Vec3d off = vehicle.getMissileOffset();
+				Vector3d off = vehicle.getMissileOffset();
 				float x = (float) (vehicle.posX + off.x + ox);
 				float y = (float) (vehicle.posY + off.y + oy);
 				float z = (float) (vehicle.posZ + off.z + oz);
@@ -159,7 +158,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 						missile.motionZ += vehicle.motionZ;
 					}
 					if (missile != null) {
-						vehicle.world.spawnEntity(missile);
+						vehicle.worldObj.spawnEntityInWorld(missile);
 					}
 				}
 			}
@@ -169,7 +168,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	MissileBase getMissile2(float x, float y, float z, float yaw, float pitch, float velocity) {
 		IAmmo ammo = vehicle.ammoHelper.getCurrentAmmoType();
 		if (ammo != null) {
-			MissileBase missile = new MissileBase(vehicle.world);
+			MissileBase missile = new MissileBase(vehicle.worldObj);
 			if (ammo.hasSecondaryAmmo()) {
 				ammo = ammo.getSecondaryAmmoType();
 			}
@@ -197,7 +196,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 		if (this.isLaunching) {
 			vehicle.onLaunchingUpdate();
 		}
-		if (vehicle.world.isRemote) {
+		if (vehicle.worldObj.isRemote) {
 			if (!vehicle.canAimPitch()) {
 				this.clientTurretPitch = vehicle.localTurretPitch;
 			}
@@ -305,12 +304,12 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	public void handleFireUpdate() {
-		if (reloadingTicks <= 0 || vehicle.world.isRemote) {
+		if (reloadingTicks <= 0 || vehicle.worldObj.isRemote) {
 
 			boolean shouldFire = vehicle.ammoHelper.getCurrentAmmoCount() > 0 || vehicle.ammoHelper.doesntUseAmmo();
 			if (shouldFire) {
 
-				if (!vehicle.world.isRemote) {
+				if (!vehicle.worldObj.isRemote) {
 					NetworkHandler.sendToAllTracking(vehicle, new PacketFireUpdate(vehicle));
 				}
 				this.initiateLaunchSequence();
@@ -333,7 +332,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 			sendReply = true;
 			vehicle.localLaunchPower = power.get();
 		}
-		if (!vehicle.world.isRemote && sendReply) {
+		if (!vehicle.worldObj.isRemote && sendReply) {
 			NetworkHandler.sendToAllTracking(vehicle, new PacketAimUpdate(vehicle, pitch, yaw, power));
 		}
 	}
@@ -396,22 +395,22 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	/**
 	 * CLIENT SIDE--used client side to update client desired pitch and yaw and send these to server/other clients...
 	 */
-	public void handleAimInput(Vec3d target) {
+	public void handleAimInput(Vector3d target) {
 		boolean updated = false;
 		boolean updatePitch = false;
 		boolean updatePower = false;
 		boolean updateYaw = false;
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		float x = (float) (vehicle.posX + offset.x);
 		float y = (float) (vehicle.posY + offset.y);
 		float z = (float) (vehicle.posZ + offset.z);
 		float tx = (float) (target.x - x);
 		float ty = (float) (target.y - y);
 		float tz = (float) (target.z - z);
-		float range = MathHelper.sqrt(tx * tx + tz * tz);
+		float range = MathHelper.sqrt_float(tx * tx + tz * tz);
 		if (vehicle.canAimPitch()) {
 			Tuple<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
-			if (angles.getFirst().isNaN() || angles.getSecond().isNaN()) {
+			if (angles.getFirst().isNan() || angles.getSecond().isNaN()) {
 			} else if (Trig.isAngleBetween(angles.getSecond(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
 				if (!MathUtils.epsilonEquals(this.clientTurretPitch, angles.getSecond())) {
 					this.clientTurretPitch = angles.getSecond();
@@ -476,7 +475,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 		boolean updatePitch = false;
 		boolean updatePower = false;
 		boolean updateYaw = false;
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		float x = (float) (vehicle.posX + offset.x);
 		float y = (float) (vehicle.posY + offset.y);
 		float z = (float) (vehicle.posZ + offset.z);
@@ -518,7 +517,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 				updateYaw = true;
 			}
 		}
-		if (updated && !vehicle.world.isRemote) {
+		if (updated && !vehicle.worldObj.isRemote) {
 			Optional<Float> turretPitch = updatePitch ? Optional.of(vehicle.localTurretDestPitch) : Optional.empty();
 			Optional<Float> turretYaw = updateYaw ? Optional.of(vehicle.localTurretDestRot) : Optional.empty();
 			Optional<Float> power = updatePower ? Optional.of(vehicle.localLaunchPower) : Optional.empty();
@@ -527,7 +526,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	private float getAimYaw(double targetX, double targetZ) {
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		float vecX = (float) (vehicle.posX + (vehicle.canTurretTurn() ? offset.x : 0) - targetX);
 		float vecZ = (float) (vehicle.posZ + (vehicle.canTurretTurn() ? offset.z : 0) - targetZ);
 		//noinspection SuspiciousNameCombination
@@ -578,7 +577,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 			return true;
 		}
 
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		float targetX = (float) target.getBoundigBox().minX - (float) (vehicle.posX + offset.x);
 		float targetY = (float) target.getBoundigBox().minY - (float) (vehicle.posY + offset.y);
 		float targetZ = (float) target.getBoundigBox().minZ - (float) (vehicle.posZ + offset.z);
@@ -609,7 +608,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 		if (!vehicle.canAimPower()) {
 			return true;
 		}
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		float x = (float) (vehicle.posX + offset.x);
 		float y = (float) (vehicle.posY + offset.y);
 		float z = (float) (vehicle.posZ + offset.z);

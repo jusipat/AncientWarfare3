@@ -123,8 +123,8 @@ public class ContainerVehicleInventory extends ContainerVehicle {
 						xPos = 8 + x * 18;
 						yPos = storageY + curRow * 18;
 					}
-					storageSlots[slotNum].xPos = xPos;
-					storageSlots[slotNum].yPos = yPos;
+					storageSlots[slotNum].xDisplayPosition = xPos;
+					storageSlots[slotNum].yDisplayPosition = yPos;
 				}
 			}
 			if (y >= row && y < row + 3) {
@@ -189,7 +189,7 @@ public class ContainerVehicleInventory extends ContainerVehicle {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return super.canInteractWith(player) && player != null && player.getDistance(vehicle) < 8.d;
+		return super.canInteractWith(player) && player != null && player.getDistance(vehicle.posX, vehicle.posY, vehicle.posZ) < 8.d;
 	}
 
 }

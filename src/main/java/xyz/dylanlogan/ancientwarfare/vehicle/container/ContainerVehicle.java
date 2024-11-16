@@ -9,6 +9,6 @@ public class ContainerVehicle extends ContainerBase {
 
 	public ContainerVehicle(EntityPlayer player, int entityId, int dummy1, int dummy2) {
 		super(player);
-		this.vehicle = (VehicleBase) player.world.getEntityByID(entityId);
+		this.vehicle = (VehicleBase) player.worldObj.getEntityByID(entityId);
 	}
 }
