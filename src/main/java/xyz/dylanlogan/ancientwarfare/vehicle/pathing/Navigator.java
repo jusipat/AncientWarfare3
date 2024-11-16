@@ -1,18 +1,16 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.pathing;
 
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.MathHelper;
+import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.core.util.WorldTools;
 import xyz.dylanlogan.ancientwarfare.structure.entity.EntityGate;
-import xyz.dylanlogan.ancientwarfare.structure.init.AWStructureBlocks;
 import xyz.dylanlogan.ancientwarfare.structure.tile.TEGateProxy;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IPathableEntity;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -36,10 +34,10 @@ public class Navigator implements IPathableCallback {
 
 	protected EntityGate gate = null;
 	private boolean hasDoor = false;
-	private BlockPos doorPos = BlockPos.ORIGIN;
+	private BlockPos doorPos = new BlockPos(0,0,0);
 	private int doorOpenTicks = 0;
 	private int doorCheckTicks = 0;
-	private Vec3d stuckCheckPosition = Vec3d.ZERO;
+	private Vector3d stuckCheckPosition;
 	private int stuckCheckTicks = 40;
 	private int stuckCheckTicksMax = 40;
 
@@ -56,8 +54,8 @@ public class Navigator implements IPathableCallback {
 		this.entity = owner.getEntity();
 		this.world = owner.worldAccess;
 		this.path = new EntityPath();
-		finalTarget.reassign(MathHelper.floor(entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ));
-		this.stuckCheckPosition = new Vec3d(entity.posX, entity.posY, entity.posZ);
+		finalTarget.reassign(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ));
+		this.stuckCheckPosition = new Vector3d(entity.posX, entity.posY, entity.posZ);
 		this.testCrawler = new PathFinderCrawler();
 	}
 
@@ -69,13 +67,13 @@ public class Navigator implements IPathableCallback {
 
 	public void setMoveToTarget(BlockPos pos) {
 		//TODO 1.6.4 AW has logic in npcbase that uses this - readd?
-		if (!entity.world.isBlockLoaded(pos)) {
+		if (!entity.worldObj.isBlockLoaded(pos)) {
 			return;
 		}
 		this.sendToClients(pos);
-		int ex = MathHelper.floor(entity.posX);
-		int ey = MathHelper.floor(entity.posY);
-		int ez = MathHelper.floor(entity.posZ);
+		int ex = MathHelper.floor_double(entity.posX);
+		int ey = MathHelper.floor_double(entity.posY);
+		int ez = MathHelper.floor_double(entity.posZ);
 		if (entity.posY % 1.f > 0.75 && !world.isWalkable(ex, ey, ez)) {
 			ey++;
 		}
@@ -133,7 +131,7 @@ public class Navigator implements IPathableCallback {
 				this.clearPath();
 				this.currentTarget = null;
 			}
-			stuckCheckPosition = new Vec3d(entity.posX, entity.posY, entity.posZ);
+			stuckCheckPosition = new Vector3d(entity.posX, entity.posY, entity.posZ);
 		} else {
 			this.stuckCheckTicks--;
 		}

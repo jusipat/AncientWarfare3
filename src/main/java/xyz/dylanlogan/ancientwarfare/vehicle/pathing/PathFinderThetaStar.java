@@ -21,7 +21,7 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.pathing;
 
-import net.minecraft.util.math.BlockPos;
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

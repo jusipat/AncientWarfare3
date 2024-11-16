@@ -21,8 +21,8 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.pathing;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
+import net.minecraft.util.MathHelper;
 
 public class Node implements Comparable {
 
@@ -129,14 +129,14 @@ public class Node implements Comparable {
 		float x = this.x - node.x;
 		float y = this.y - node.y;
 		float z = this.z - node.z;
-		return MathHelper.sqrt(x * x + y * y + z * z);
+		return MathHelper.sqrt_float(x * x + y * y + z * z);
 	}
 
 	public float getDistanceFrom(int x, int y, int z) {
 		float x1 = this.x - x;
 		float y1 = this.y - y;
 		float z1 = this.z - z;
-		return MathHelper.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+		return MathHelper.sqrt_float(x1 * x1 + y1 * y1 + z1 * z1);
 	}
 
 	public float getPathLength() {

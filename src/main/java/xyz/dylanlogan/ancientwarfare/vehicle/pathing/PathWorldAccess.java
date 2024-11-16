@@ -1,18 +1,16 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.pathing;
 
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.util.WorldTools;
-import xyz.dylanlogan.ancientwarfare.structure.init.AWStructureBlocks;
 import xyz.dylanlogan.ancientwarfare.structure.tile.TEGateProxy;
 
 public class PathWorldAccess {
@@ -42,7 +40,7 @@ public class PathWorldAccess {
 
 	public int getTravelCost(BlockPos pos) {
 		Block block = getBlock(pos);
-		if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {//can't swim check
+		if (block == Blocks.water || block == Blocks.flowing_water) {//can't swim check
 			if (!canGoOnLand) {
 				return 10;
 			}
@@ -63,12 +61,12 @@ public class PathWorldAccess {
 		BlockPos pos = new BlockPos(x, y, z);
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+		if (block == Blocks.water || block == Blocks.flowing_water) {
 			return true;
-		} else if (block == Blocks.TRAPDOOR) {
+		} else if (block == Blocks.trapdoor) {
 			return state.getValue(BlockTrapDoor.OPEN);
 		}
-		if (block != Blocks.AIR) {
+		if (block != Blocks.air) {
 			AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
 			if (bb == null) {
 				return true;
@@ -88,7 +86,7 @@ public class PathWorldAccess {
 		boolean cube = !checkBlockBounds(x, y, z);
 		boolean cube2 = !checkBlockBounds(x, y - 1, z);
 		boolean cube3 = !checkBlockBounds(x, y + 1, z);
-		if (isFence(blockDown) || (isDoor(pos.down()) && isDoor(pos)) || (block == Blocks.CACTUS || blockDown == Blocks.CACTUS || blockUp == Blocks.CACTUS)) {
+		if (isFence(blockDown) || (isDoor(pos.down()) && isDoor(pos)) || (block == Blocks.cactus || blockDown == Blocks.cactus || blockUp == Blocks.cactus)) {
 			return false;
 		}
 		if (canGoOnLand) {
@@ -103,12 +101,12 @@ public class PathWorldAccess {
 				return true;
 			}
 		}
-		return canSwim && isWater(block) && blockUp == Blocks.AIR;
+		return canSwim && isWater(block) && blockUp == Blocks.air;
 	}
 
 	public boolean isPartialBlock(BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() != Blocks.AIR) {
+		if (state.getBlock() != Blocks.air) {
 			AxisAlignedBB bb = state.getCollisionBoundingBox(world, pos);
 			if (bb == null) {
 				return false;
@@ -122,7 +120,7 @@ public class PathWorldAccess {
 
 	private boolean canSupport(Block block, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		if (block == Blocks.TRAPDOOR) {
+		if (block == Blocks.trapdoor) {
 			return !state.getValue(BlockTrapDoor.OPEN) && state.getValue(BlockTrapDoor.HALF) == BlockTrapDoor.DoorHalf.BOTTOM;
 		}
 		AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
@@ -130,7 +128,7 @@ public class PathWorldAccess {
 	}
 
 	private boolean isFence(Block block) {
-		return block instanceof BlockFence || block instanceof BlockFenceGate || block == Blocks.COBBLESTONE_WALL;
+		return block instanceof BlockFence || block instanceof BlockFenceGate || block == Blocks.cobblestone_wall;
 	}
 
 	public boolean isWalkable(int x, int y, int z) {
@@ -138,7 +136,7 @@ public class PathWorldAccess {
 	}
 
 	private boolean isWater(Block block) {
-		return block == Blocks.WATER || block == Blocks.FLOWING_WATER;
+		return block == Blocks.water || block == Blocks.flowing_water;
 	}
 
 	public boolean isDoor(BlockPos pos) {
@@ -148,11 +146,11 @@ public class PathWorldAccess {
 			return WorldTools.getTile(world, pos, TEGateProxy.class)
 					.map(proxy -> proxy.getOwner().map(p -> p.getGateType().canSoldierActivate()).orElse(false)).orElse(true);
 		}
-		return (block instanceof BlockDoor && state.getMaterial() == Material.WOOD) || block instanceof BlockFenceGate;
+		return (block instanceof BlockDoor && state.getMaterial() == Material.wood) || block instanceof BlockFenceGate;
 	}
 
 	private boolean isLadder(Block block) {
-		return block == Blocks.LADDER || block == Blocks.VINE;
+		return block == Blocks.ladder || block == Blocks.vine;
 	}
 
 	protected boolean isLadder(BlockPos pos) {

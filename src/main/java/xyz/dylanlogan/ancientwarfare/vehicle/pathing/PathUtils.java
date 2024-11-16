@@ -21,7 +21,7 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.pathing;
 
-import net.minecraft.util.math.BlockPos;
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 
 import java.util.ArrayList;
@@ -420,7 +420,7 @@ public class PathUtils {
 		float err = dx - dz;
 		float e2;
 		for (int i = 0; i < dx + dz; i++) {
-			blocks.add(new BlockPos(x0, 0, z0));
+			blocks.add(new BlockPos((int) x0, 0, (int) z0)); // todo: fix lossy casts
 			//    Config.logDebug("hit: "+x0+","+z0);
 			if (x0 == x1 && z0 == z1) {
 				break;//finished
@@ -481,7 +481,7 @@ public class PathUtils {
 		int e1;
 		int e2;
 		for (int i = 0; i < dx + dz; i++) {
-			blocks.add(new BlockPos(x0, y0, z0));
+			blocks.add(new BlockPos((int) x0, (int) y0, (int) z0)); // todo: fix lossy casts
 			//    Config.logDebug("hit: "+x0+","+y0+","+z0);
 			e1 = e + dz;
 			e2 = e - dx;
@@ -493,7 +493,7 @@ public class PathUtils {
 				e = e2;
 			}
 		}
-		blocks.add(new BlockPos(x0, y0, z0));
+		blocks.add(new BlockPos((int) x0, (int) y0, (int) z0)); // todo: fix lossy casts
 		//  Config.logDebug("hit: "+x0+","+y0+","+z0);
 		return blocks;
 	}
