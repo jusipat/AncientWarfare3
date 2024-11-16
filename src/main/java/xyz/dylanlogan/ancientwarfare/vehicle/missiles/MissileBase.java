@@ -7,15 +7,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IMissileHitCallback;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
@@ -145,7 +142,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	public void onUpdate() {
 		this.ticksExisted++;
 		super.onUpdate();
-		this.onMovementTick();
+		this.onMovementTick((int) this.posX, (int) this.posY, (int) this.posZ); // todo: this probably wont work
 		if (!this.worldObj.isRemote) {
 			if (this.ticksExisted > 6000)//5 min timer max for missiles...
 			{
@@ -197,8 +194,8 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 		}
 	}
 
-	private void onMovementTick() {
-		if (this.inGround && persistentBlock != worldObj.getBlockMetadata(persistentBlockPos)) {
+	private void onMovementTick(int x, int y, int z) {
+		if (this.inGround && worldObj.getBlock(x,y,z) != worldObj.getBlock(persistentBlockPos.posX, persistentBlockPos.posY, persistentBlockPos.posZ)) {
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;
@@ -232,7 +229,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 						AxisAlignedBB var12 = curEnt.boundingBox.expand( borderSize, borderSize, borderSize);
 						MovingObjectPosition checkHit = var12.calculateIntercept(positionVector, moveVector);
 						if (checkHit != null) {
-							double hitDistance = positionVector.distance((Vector3dc) checkHit.hitVec);
+							double hitDistance = positionVector.distanceTo(checkHit.hitVec);
 							if (hitDistance < closestHit || closestHit == 0.0D) {
 								hitEntity = curEnt;
 								closestHit = hitDistance;
@@ -302,7 +299,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 				this.motionY += mY;
 				this.motionZ += mZ;
 				if (this.worldObj.isRemote) {
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+					this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 				}
 			} else {
 				this.motionY -= (double) this.ammoType.getGravityFactor();
@@ -336,7 +333,7 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	@Override
-	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
+	public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
 		this.setPosition(x, y, z);
 	}
 
