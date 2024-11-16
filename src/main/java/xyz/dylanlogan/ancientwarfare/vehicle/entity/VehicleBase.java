@@ -18,6 +18,7 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.interfaces.IOwnable;
+import xyz.dylanlogan.ancientwarfare.core.owner.Owner;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.npc.config.AWNPCStatics;
@@ -394,7 +395,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         motY *= 20.f;
         float gravity = 9.81f;
         float t = motY / gravity;
-        float tQ = MathHelper.sqrt(((motY * motY) / (gravity * gravity)) - ((2 * y) / gravity));
+        float tQ = MathHelper.sqrt_float(((motY * motY) / (gravity * gravity)) - ((2 * y) / gravity));
         float tPlus = t + tQ;
         float tMinus = t - tQ;
         t = tPlus > tMinus ? tPlus : tMinus;
@@ -414,7 +415,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         float len = 0;
         if (x1 != 0 || z1 != 0) {
             angle = Trig.toDegrees((float) Math.atan2(z1, x1));
-            len = MathHelper.sqrt(x1 * x1 + z1 * z1);
+            len = MathHelper.sqrt_float(x1 * x1 + z1 * z1);
             angle += this.rotationYaw;
             x1 = Trig.cosDegrees(angle) * len;
             z1 = -Trig.sinDegrees(angle) * len;
@@ -425,7 +426,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         float z = this.getForwardsMissileOffset();
         if (x != 0 || z != 0 || y != 0) {
             angle = Trig.toDegrees((float) Math.atan2(z, x));
-            len = MathHelper.sqrt(x * x + z * z + y * y);
+            len = MathHelper.sqrt_float(x * x + z * z + y * y);
             angle += this.localTurretRotation;
             x = Trig.cosDegrees(angle) * Trig.sinDegrees(localTurretPitch + rotationPitch) * len;
             z = -Trig.sinDegrees(angle) * Trig.sinDegrees(localTurretPitch + rotationPitch) * len;
@@ -434,7 +435,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         x += x1;
         z += z1;
         y += y1;
-        return new Vec3d(x, y, z);
+        return new Vector3d(x, y, z);
     }
 
     /**
@@ -452,7 +453,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         this.firingVarsHelper.onReloadUpdate();
     }
 
-    @Override
+    @Override // this isnt in 1.7
     protected void doBlockCollisions() {
         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
         BlockPos.PooledMutableBlockPos posMin = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.minX + 0.001D, axisalignedbb.minY + 0.001D, axisalignedbb.minZ + 0.001D);
@@ -487,7 +488,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     }
 
     protected void onInsideBlock(IBlockState state, BlockPos pos) {
-        if (state.getBlock() == Blocks.WATERLILY) {
+        if (state.() == Blocks.waterlily) {
             worldObj.destroyBlock(new BlockPos(pos), true);
         }
     }
@@ -519,7 +520,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
 
     @Override
     public void setDead() {
-        if (!this.world.isRemote && !this.isDead && this.getHealth() <= 0) {
+        if (!this.worldObj.isRemote && !this.isDead && this.getHealth() <= 0) {
             InventoryTools.dropItemsInWorld(world, inventory.ammoInventory, posX, posY, posZ);
             InventoryTools.dropItemsInWorld(world, inventory.armorInventory, posX, posY, posZ);
             InventoryTools.dropItemsInWorld(world, inventory.upgradeInventory, posX, posY, posZ);
@@ -537,7 +538,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (this.world.isRemote) {
+        if (this.worldObj.isRemote) {
             this.onUpdateClient();
         } else {
             this.onUpdateServer();
@@ -560,7 +561,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
             this.hurtInvulTicks--;
         }
         if (this.assignedRider != null) {
-            if (assignedRider.isDead || assignedRider.getRidingEntity() != this || !assignedRider.isRiding() || assignedRider.getRidingEntity() != this || (this.getDistanceSq(assignedRider) > (AWNPCStatics.npcActionRange * AWNPCStatics.npcActionRange))) {
+            if (assignedRider.isDead || assignedRider.ridingEntity != this || !assignedRider.isRiding() || assignedRider.ridingEntity != this || (this.getDistanceSq(assignedRider) > (AWNPCStatics.npcActionRange * AWNPCStatics.npcActionRange))) {
                 //TODO config setting for vehicle search range
                 this.assignedRider = null;
             }
@@ -621,7 +622,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
                     BlockPos pos = new BlockPos(x, y, z);
                     IBlockState state = worldObj.getBlockState(pos);
                     if (state.isSideSolid(worldObj, pos, EnumFacing.UP) || state.getMaterial() == Material.water) {
-                        if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up().up())) {
+                        if (worldObj.isAirBlock(pos.up()) && worldObj.isAirBlock(pos.up().up())) {
                             rider.setPositionAndUpdate(x + 0.5d, y + 1, z + 0.5d);
                             break searchLabel;
                         }
@@ -772,7 +773,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         {
             double xDiff = entity.posX - this.posX;
             double zDiff = entity.posZ - this.posZ;
-            double entityDistance = MathHelper.absMax(xDiff, zDiff);
+            double entityDistance = MathHelper.abs_max(xDiff, zDiff);
 
             if (entityDistance >= 0.009999999776482582D) {
                 entityDistance = Math.sqrt(entityDistance);
@@ -829,7 +830,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if (this.isSettingUp) {
-            if (!player.world.isRemote) {
+            if (!player.worldObj.isRemote) {
                 player.sendMessage(new TextComponentString("Vehicle is currently being set-up.  It has " + setupTicks + " ticks remaining."));
             }
             return false;
@@ -840,11 +841,6 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public String toString() {
         return String.format("%s::%s @ %.2f, %.2f, %.2f  -- y:%.2f p:%.2f -- m: %.2f, %.2f, %.2f", this.vehicleType.getDisplayName(), this.getEntityId(), this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch, this.motionX, this.motionY, this.motionZ);
-    }
-
-    @Override
-    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
-
     }
 
     @Override
@@ -860,12 +856,6 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public boolean shouldRiderSit() {
         return this.vehicleType.shouldRiderSit();
-    }
-
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return getEntityBoundingBox();
     }
 
     @Override
