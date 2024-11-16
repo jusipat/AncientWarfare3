@@ -1,6 +1,7 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity;
 
 import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
+import com.gtnewhorizon.gtnhlib.client.renderer.util.MathUtil;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
@@ -48,9 +49,12 @@ import java.util.List;
 
 public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, IMissileHitCallback, IPathableEntity, IOwnable {
 
-    private static final DataParameter<Float> VEHICLE_HEALTH = EntityDataManager.createKey(VehicleBase.class, DataSerializers.FLOAT);
-    private static final DataParameter<Byte> FORWARD_INPUT = EntityDataManager.createKey(VehicleBase.class, DataSerializers.BYTE);
-    private static final DataParameter<Byte> STRAFE_INPUT = EntityDataManager.createKey(VehicleBase.class, DataSerializers.BYTE);
+    //private static final DataParameter<Float> VEHICLE_HEALTH = EntityDataManager.createKey(VehicleBase.class, DataSerializers.FLOAT);
+    //private static final DataParameter<Byte> FORWARD_INPUT = EntityDataManager.createKey(VehicleBase.class, DataSerializers.BYTE);
+    //private static final DataParameter<Byte> STRAFE_INPUT = EntityDataManager.createKey(VehicleBase.class, DataSerializers.BYTE);
+    public static final int VEHICLE_HEALTH = 0;
+    public static final int FORWARD_INPUT = 0;
+    public static final int STRAFE_INPUT = 0;
 
     /**
      * these are the current max stats.  set from setVehicleType().
@@ -161,9 +165,9 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
 
     @Override
     protected void entityInit() {
-        dataManager.register(VEHICLE_HEALTH, 100f);
-        dataManager.register(FORWARD_INPUT, (byte) 0);
-        dataManager.register(STRAFE_INPUT, (byte) 0);
+        this.dataWatcher.addObject(VEHICLE_HEALTH,100f);
+        this.dataWatcher.addObject(FORWARD_INPUT, (byte) 0);
+        this.dataWatcher.addObject(STRAFE_INPUT, (byte) 0);
     }
 
     @Override
@@ -183,15 +187,15 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         if (health > this.baseHealth) {
             health = this.baseHealth;
         }
-        dataManager.set(VEHICLE_HEALTH, health);
+        this.dataWatcher.set(VEHICLE_HEALTH, health);
     }
 
     public boolean canTurretTurn() {
-        return !MathUtils.epsilonEquals(baseTurretRotationMax, 0);
+        return !MathUtil.epsilonEquals(baseTurretRotationMax, 0);
     }
 
     public float getHealth() {
-        return dataManager.get(VEHICLE_HEALTH);
+        return this.dataWatcher.getWatchableObjectFloat(VEHICLE_HEALTH);
     }
 
     public void setVehicleType(IVehicleType vehicle, int materialLevel) {
@@ -487,9 +491,10 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         currentPos.release();
     }
 
-    protected void onInsideBlock(IBlockState state, BlockPos pos) {
-        if (state.() == Blocks.waterlily) {
-            worldObj.destroyBlock(new BlockPos(pos), true);
+    protected void onInsideBlock(int x, int y, int z) {
+        if (worldObj.getBlock(x, y, z) == Blocks.waterlily) {
+            int data = worldObj.getBlockMetadata(x, y, z);
+            worldObj.destroyBlockInWorldPartially(data,x,y,z, -1);
         }
     }
 
@@ -521,10 +526,10 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void setDead() {
         if (!this.worldObj.isRemote && !this.isDead && this.getHealth() <= 0) {
-            InventoryTools.dropItemsInWorld(world, inventory.ammoInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.armorInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.upgradeInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(world, inventory.storageInventory, posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.upgradeInventory, posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.storageInventory, posX, posY, posZ);
         }
         super.setDead();
     }
@@ -620,7 +625,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
             for (int x = xMin; x <= xMin + (int) width; x++) {
                 for (int z = zMin; z <= zMin + (int) width; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
-                    IBlockState state = worldObj.getBlockState(pos);
+                    int state = worldObj.getBlockMetadata(pos.x, pos.y, pos.z);
                     if (state.isSideSolid(worldObj, pos, EnumFacing.UP) || state.getMaterial() == Material.water) {
                         if (worldObj.isAirBlock(pos.up()) && worldObj.isAirBlock(pos.up().up())) {
                             rider.setPositionAndUpdate(x + 0.5d, y + 1, z + 0.5d);
@@ -753,7 +758,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
             hurtInvulTicks = 10;
         }
 
-        if (this.world.isRemote) {
+        if (this.worldObj.isRemote) {
             hitAnimationTicks = 20;
             return false;
         }
@@ -978,15 +983,15 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
      */
     @Override
     public void onMissileImpact(World world, double x, double y, double z) {
-        if (getRidingEntity() instanceof IMissileHitCallback) {
-            ((IMissileHitCallback) getRidingEntity()).onMissileImpact(world, x, y, z);
+        if (ridingEntity instanceof IMissileHitCallback) {
+            ((IMissileHitCallback) ridingEntity).onMissileImpact(world, x, y, z);
         }
     }
 
     @Override
     public void onMissileImpactEntity(World world, Entity entity) {
-        if (getRidingEntity() instanceof IMissileHitCallback) {
-            ((IMissileHitCallback) getRidingEntity()).onMissileImpactEntity(world, entity);
+        if (ridingEntity instanceof IMissileHitCallback) {
+            ((IMissileHitCallback) ridingEntity).onMissileImpactEntity(world, entity);
         }
     }
 

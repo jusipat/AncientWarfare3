@@ -23,7 +23,6 @@ package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -58,17 +57,17 @@ public abstract class VehicleFiringVarsHelper implements INBTSerializable<NBTTag
 	}
 
 	public boolean interact(EntityPlayer player) {
-		if (player.world.isRemote) {
+		if (player.worldObj.isRemote) {
 			return true;
 		}
-		if (!player.isSneaking() && !vehicle.isBeingRidden()) {
-			player.startRiding(vehicle);
+		if (!player.isSneaking() && vehicle.riddenByEntity == null) { // vehicle not being ridden
+			player.mountEntity(vehicle);
 			return true;
 		} else if (player.isSneaking()) {
 			NetworkHandler.INSTANCE.openGui(player, NetworkHandler.GUI_VEHICLE_INVENTORY, vehicle.getEntityId());
-		} else if (vehicle.isBeingRidden() && vehicle.getPassengers().get(0) instanceof NpcBase) {
-			NpcBase npc = (NpcBase) vehicle.getPassengers().get(0);
-			npc.dismountRidingEntity();
+		} else if (vehicle.riddenByEntity == player && vehicle.getControllingPassenger() instanceof NpcBase) {
+			NpcBase npc = (NpcBase) vehicle.getControllingPassenger(); //vehicle.getPassengers().get(0);
+			npc.dismountEntity(npc);
 		}
 		return true;
 	}
