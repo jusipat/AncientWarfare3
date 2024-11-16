@@ -1,10 +1,14 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
 import com.google.common.collect.Lists;
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
@@ -97,7 +101,7 @@ public class VehicleMoveHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	public void onUpdate() {
-		if (vehicle.world.isRemote) {
+		if (vehicle.worldObj.isRemote) {
 			onUpdateClient();
 		} else {
 			if (this.vehicle.getControllingPassenger() == null) {
@@ -161,7 +165,7 @@ public class VehicleMoveHelper implements INBTSerializable<NBTTagCompound> {
 		}
 		vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw) * -forwardMotion;
 		vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw) * -forwardMotion;
-		this.vehicle.move(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+		this.vehicle(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 		this.wasOnGround = vehicle.onGround;
 		if (vehicle.collidedHorizontally) {
 			forwardMotion *= 0.65f;
@@ -268,8 +272,8 @@ public class VehicleMoveHelper implements INBTSerializable<NBTTagCompound> {
 		AxisAlignedBB bb;
 		int submergedBits = 0;
 		for (int i = 0; i < 5; i++) {
-			bb = new AxisAlignedBB(vehicle.getEntityBoundingBox().minX, vehicle.getEntityBoundingBox().minY + (i * bitHeight), vehicle.getEntityBoundingBox().minZ, vehicle.getEntityBoundingBox().maxX, vehicle.getEntityBoundingBox().minY + ((1 + i) * bitHeight), vehicle.getEntityBoundingBox().maxZ);
-			if (vehicle.world.isMaterialInBB(bb, Material.WATER)) {
+			bb = AxisAlignedBB.getBoundingBox(vehicle.getBoundingBox().minX, vehicle.getBoundingBox().minY + (i * bitHeight), vehicle.getBoundingBox().minZ, vehicle.getBoundingBox().maxX, vehicle.getBoundingBox().minY + ((1 + i) * bitHeight), vehicle.getBoundingBox().maxZ);
+			if (vehicle.worldObj.isMaterialInBB(bb, Material.water)) {
 				submergedBits++;
 			} else {
 				break;
@@ -289,28 +293,28 @@ public class VehicleMoveHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	protected void tearUpGrass() {
-		if (vehicle.world.isRemote || !vehicle.onGround || !AWVehicleStatics.generalSettings.vehiclesTearUpGrass) {
+		if (vehicle.worldObj.isRemote || !vehicle.onGround || !AWVehicleStatics.generalSettings.vehiclesTearUpGrass) {
 			return;
 		}
 		for (int var24 = 0; var24 < 4; ++var24) {
-			int x = MathHelper.floor(vehicle.posX + ((double) (var24 % 2) - 0.5D) * 0.8D);
-			int y = MathHelper.floor(vehicle.posY);
-			int z = MathHelper.floor(vehicle.posZ + ((double) (var24 / 2) - 0.5D) * 0.8D);
+			int x = MathHelper.floor_double(vehicle.posX + ((double) (var24 % 2) - 0.5D) * 0.8D);
+			int y = MathHelper.floor_double(vehicle.posY);
+			int z = MathHelper.floor_double(vehicle.posZ + ((double) (var24 / 2) - 0.5D) * 0.8D);
 			//check top/upper blocks(riding through)
 			BlockPos breakPos = new BlockPos(x, y, z);
-			IBlockState state = vehicle.world.getBlockState(breakPos);
+			int state = vehicle.worldObj.getBlockMetadata(breakPos.x, breakPos.y, breakPos.z);
 			if (isTrampable(state)) {
-				BlockTools.breakBlockAndDrop(vehicle.world, breakPos);
+				BlockTools.breakBlockAndDrop(vehicle.worldObj, null, breakPos.getX(), breakPos.getY(), breakPos.getZ());
 			}
 			//check lower blocks (riding on)
-			if (vehicle.world.getBlockState(breakPos.down()).getBlock() == Blocks.GRASS) {
-				vehicle.world.setBlockState(breakPos.down(), Blocks.DIRT.getDefaultState(), 3);
+			if (vehicle.worldObj.getBlockState(breakPos.down()).getBlock() == Blocks.grass) {
+				vehicle.worldObj.setBlockState(breakPos.down(), Blocks.dirt, 3);
 			}
 		}
 	}
 
-	private boolean isTrampable(IBlockState state) {
-		return state.getBlock() instanceof IPlantable || trampableBlocks.contains(state.getBlock());
+	private boolean isTrampable(World world, int x, int y, int z) {
+		return world.getBlock(x,y,z) instanceof IPlantable || trampableBlocks.contains(world.getBlock(x,y,z));
 	}
 
 	protected static List<Block> trampableBlocks = Lists.newArrayList(Blocks.SNOW, Blocks.DEADBUSH, Blocks.TALLGRASS, Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM);
