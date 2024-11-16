@@ -1,6 +1,7 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity;
 
 import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.crash.CrashReport;
@@ -1047,6 +1048,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void setOwner(EntityPlayer player) {
         owner = new Owner(player);
+    }
+
+    @Override
+    public String getOwnerName() {
+        return "";
     }
 
     @Override
