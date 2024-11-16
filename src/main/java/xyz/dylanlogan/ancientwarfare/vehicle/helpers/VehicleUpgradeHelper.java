@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.INBTSerializable;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -43,7 +42,7 @@ public class VehicleUpgradeHelper implements INBTSerializable<NBTTagCompound> {
 	 * SERVER ONLY
 	 */
 	public void updateUpgrades() {
-		if (vehicle.world.isRemote) {
+		if (vehicle.worldObj.isRemote) {
 			return;
 		}
 		upgrades = vehicle.inventory.getInventoryUpgrades();
@@ -172,7 +171,7 @@ public class VehicleUpgradeHelper implements INBTSerializable<NBTTagCompound> {
 	public float getScaledDamage(DamageSource src, float amt) {
 		if (src == DamageType.explosiveMissile || src.isExplosion()) {
 			return amt * (1 - (vehicle.currentExplosionResist * 0.01f));
-		} else if (src == DamageType.fireMissile || src == DamageSource.IN_FIRE || src == DamageSource.LAVA || src == DamageSource.ON_FIRE || src.isFireDamage()) {
+		} else if (src == DamageType.fireMissile || src == DamageSource.inFire || src == DamageSource.lava || src == DamageSource.onFire || src.isFireDamage()) {
 			return amt * (1 - (vehicle.currentFireResist * 0.01f));
 		}
 		return amt * (1 - (vehicle.currentGenericResist * 0.01f));

@@ -187,11 +187,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         if (health > this.baseHealth) {
             health = this.baseHealth;
         }
-        this.dataWatcher.set(VEHICLE_HEALTH, health);
+        this.dataWatcher.updateObject(VEHICLE_HEALTH, health);
     }
 
     public boolean canTurretTurn() {
-        return !MathUtil.epsilonEquals(baseTurretRotationMax, 0);
+        return Math.abs(baseTurretRotationMax - 0) > 1e-9; // replaced epsilonEquals method in MathUtils
     }
 
     public float getHealth() {
@@ -464,7 +464,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         BlockPos.PooledMutableBlockPos posMax = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.maxX - 0.001D, axisalignedbb.maxY - 0.001D, axisalignedbb.maxZ - 0.001D);
         BlockPos.PooledMutableBlockPos currentPos = BlockPos.PooledMutableBlockPos.retain();
 
-        if (world.isAreaLoaded(posMin, posMax)) {
+        if (worldObj.isAreaLoaded(posMin, posMax)) {
             for (int i = posMin.getX(); i <= posMax.getX(); ++i) {
                 for (int j = posMin.getY(); j <= posMax.getY(); ++j) {
                     for (int k = posMin.getZ(); k <= posMax.getZ(); ++k) {
@@ -661,22 +661,22 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         this.currentTurretPitchSpeed = prevPitch - this.localTurretPitch;
     }
 
-    @Override
-    protected void addPassenger(Entity passenger) {
-        super.addPassenger(passenger);
-        if (passenger instanceof NpcFactionSiegeEngineer) {
-            currentTurretPitchMin = vehicleType.getBasePitchMin() - 4 * 3;
-            currentTurretPitchMax = vehicleType.getBasePitchMax() + 4 * 3;
-        }
-    }
-
-    @Override
-    protected void removePassenger(Entity passenger) {
-        super.removePassenger(passenger);
-        if (passenger instanceof NpcFactionSiegeEngineer) {
-            upgradeHelper.updateUpgradeStats();
-        }
-    }
+//    @Override
+//    protected void addPassenger(Entity passenger) {
+//        super.addPassenger(passenger);
+//        if (passenger instanceof NpcFactionSiegeEngineer) {
+//            currentTurretPitchMin = vehicleType.getBasePitchMin() - 4 * 3;
+//            currentTurretPitchMax = vehicleType.getBasePitchMax() + 4 * 3;
+//        }
+//    }
+//
+//    @Override
+//    protected void removePassenger(Entity passenger) {
+//        super.removePassenger(passenger);
+//        if (passenger instanceof NpcFactionSiegeEngineer) {
+//            upgradeHelper.updateUpgradeStats();
+//        }
+//    }
 
     private void updateTurretRotation() {
         float prevYaw = this.localTurretRotation;
@@ -807,10 +807,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     }
 
     @Override
-    public void updatePassenger(Entity passenger) {
+    public void updateRiderPosition() {
         double posX = this.posX;
         double posY = this.posY + this.getRiderVerticalOffset();
         double posZ = this.posZ;
+        Entity passenger = this.ridingEntity;
 
         float yaw = this.vehicleType.moveRiderWithTurret() ? localTurretRotation : rotationYaw;
         posX += Trig.sinDegrees(yaw) * -this.getRiderForwardOffset();
@@ -832,16 +833,16 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         }
     }
 
-    @Override
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        if (this.isSettingUp) {
-            if (!player.worldObj.isRemote) {
-                player.sendMessage(new TextComponentString("Vehicle is currently being set-up.  It has " + setupTicks + " ticks remaining."));
-            }
-            return false;
-        }
-        return this.firingVarsHelper.interact(player);
-    }
+//    @Override
+//    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+//        if (this.isSettingUp) {
+//            if (!player.worldObj.isRemote) {
+//                player.sendMessage(new TextComponentString("Vehicle is currently being set-up.  It has " + setupTicks + " ticks remaining."));
+//            }
+//            return false;
+//        }
+//        return this.firingVarsHelper.interact(player);
+//    }
 
     @Override
     public String toString() {
