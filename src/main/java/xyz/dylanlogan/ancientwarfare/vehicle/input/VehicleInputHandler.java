@@ -1,5 +1,6 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.input;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -9,8 +10,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
@@ -131,7 +134,7 @@ public class VehicleInputHandler {
 
 	private static void handleAmmoSelectAction(VehicleBase vehicle) {
 		if (!vehicle.isAmmoLoaded()) {
-			Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
+			Minecraft.getMinecraft().thePlayer.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
 			return;
 		}
 
@@ -171,7 +174,7 @@ public class VehicleInputHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 
 		//noinspection ConstantConditions
-		List<Entity> possibleHitEntities = mc.world.getEntitiesWithinAABBExcludingEntity(mc.getRenderViewEntity(),
+		List<Entity> possibleHitEntities = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.getRenderViewEntity(),
 				mc.getRenderViewEntity().getEntityBoundingBox().expand(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE)
 						.grow(1, 1, 1));
 		return possibleHitEntities.stream().filter(e -> e != excludedEntity && e.canBeCollidedWith())
@@ -179,7 +182,7 @@ public class VehicleInputHandler {
 				.sorted(Comparator.comparing(Tuple::getFirst)).findFirst();
 	}
 
-	private static double getDistanceToCollidedEntity(Entity entity, Vec3d startVector, Vec3d endVector) {
+	private static double getDistanceToCollidedEntity(Entity entity, Vec3 startVector, Vec3 endVector) {
 		float borderSize = entity.getCollisionBorderSize();
 		AxisAlignedBB entBB = entity.getEntityBoundingBox().grow((double) borderSize, (double) borderSize, (double) borderSize);
 		MovingObjectPosition MovingObjectPosition = entBB.calculateIntercept(startVector, endVector);

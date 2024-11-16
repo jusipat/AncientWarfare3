@@ -24,6 +24,7 @@ package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.Vec3;
 import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
@@ -66,7 +67,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	/**
 	 * used on final launch, to calc final angle from 'approximate' firing arm/turret angle
 	 */
-	public Vec3d targetPos = null;
+	public Vector3d targetPos = null;
 
 	/**
 	 * is this vehicle in the process of launching a missile ? (animation, etc)
@@ -362,7 +363,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 			} else if (pitchTest > vehicle.currentTurretPitchMax) {
 				pitchTest = vehicle.currentTurretPitchMax;
 			}
-			if (!MathUtils.epsilonEquals(pitchTest, this.clientTurretPitch)) {
+			if (!(Math.abs(pitchTest - this.clientTurretPitch) > 1e-9)) {
 				pitchUpdated = true;
 				this.clientTurretPitch = pitchTest;
 			}
@@ -373,7 +374,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 			} else if (powerTest > getAdjustedMaxMissileVelocity()) {
 				powerTest = getAdjustedMaxMissileVelocity();
 			}
-			if (!MathUtils.epsilonEquals(clientLaunchSpeed, powerTest)) {
+			if (!(Math.abs(clientLaunchSpeed - powerTest) > 1e-5f)) {
 				powerUpdated = true;
 				this.clientLaunchSpeed = powerTest;
 			}
@@ -395,7 +396,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	/**
 	 * CLIENT SIDE--used client side to update client desired pitch and yaw and send these to server/other clients...
 	 */
-	public void handleAimInput(Vector3d target) {
+	public void handleAimInput(Vec3 target) {
 		boolean updated = false;
 		boolean updatePitch = false;
 		boolean updatePower = false;
@@ -409,16 +410,17 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 		float tz = (float) (target.z - z);
 		float range = MathHelper.sqrt_float(tx * tx + tz * tz);
 		if (vehicle.canAimPitch()) {
-			Tuple<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
+			Tuple angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
 			if (angles.getFirst().isNan() || angles.getSecond().isNaN()) {
 			} else if (Trig.isAngleBetween(angles.getSecond(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
-				if (!MathUtils.epsilonEquals(this.clientTurretPitch, angles.getSecond())) {
+				if ((Math.abs(this.clientTurretPitch - angles.getSecond()) > 1e-5f)) {
 					this.clientTurretPitch = angles.getSecond();
 					updated = true;
 					updatePitch = true;
 				}
 			} else if (Trig.isAngleBetween(angles.getFirst(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
-				if (!MathUtils.epsilonEquals(clientTurretPitch, angles.getFirst())) {
+
+				if ((Math.abs(this.clientTurretPitch - angles.getFirst()) > 1e-5f))) {
 					this.clientTurretPitch = angles.getFirst();
 					updated = true;
 					updatePitch = true;

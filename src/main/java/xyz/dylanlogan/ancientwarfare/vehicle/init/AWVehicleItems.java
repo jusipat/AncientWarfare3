@@ -1,12 +1,10 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.init;
 
+import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 import xyz.dylanlogan.ancientwarfare.core.item.ItemBase;
-import xyz.dylanlogan.ancientwarfare.core.util.InjectionTools;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemMisc;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemSpawner;
@@ -15,10 +13,8 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.VehicleRegistry;
 
-import static net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-
-@ObjectHolder(AncientWarfareVehicles.MOD_ID)
-@Mod.EventBusSubscriber(modid = AncientWarfareVehicles.MOD_ID)
+@GameRegistry.ObjectHolder(AncientWarfareVehicles.MOD_ID)
+@EventBusSubscriber
 public class AWVehicleItems {
 	private AWVehicleItems() {}
 

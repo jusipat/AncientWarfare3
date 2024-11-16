@@ -130,7 +130,7 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 	public void updateSelectedAmmo(String ammoRegistryName) {
 		if (!ammoRegistryName.equals(currentAmmoType == null ? "" : currentAmmoType.toString())) {
 			this.currentAmmoType = new ResourceLocation(ammoRegistryName);
-			if (!vehicle.world.isRemote) {
+			if (!vehicle.worldObj.isRemote) {
 				NetworkHandler.sendToAllTracking(vehicle, new PacketAmmoSelect(vehicle, ammoRegistryName));
 			}
 			float maxPower = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
@@ -138,7 +138,7 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 				vehicle.localLaunchPower = maxPower;
 			} else if (vehicle.localLaunchPower > maxPower) {
 				vehicle.localLaunchPower = maxPower;
-				if (vehicle.world.isRemote && vehicle.firingHelper.clientLaunchSpeed > maxPower) {
+				if (vehicle.worldObj.isRemote && vehicle.firingHelper.clientLaunchSpeed > maxPower) {
 					vehicle.firingHelper.clientLaunchSpeed = maxPower;
 				}
 			}
