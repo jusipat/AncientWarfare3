@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 
 public class ArmourStackHandler {
 	private final ItemStack[] stacks; // Array to hold armor slots
@@ -45,7 +45,7 @@ public class ArmourStackHandler {
 	}
 
 	public boolean isItemValid(ItemStack stack) {
-		return ArmorRegistry.getArmorForStack(stack)
+		return ArmourRegistry.getArmorForStack(stack)
 				.map(armor -> vehicle.vehicleType.isArmorValid(armor))
 				.orElse(false);
 	}

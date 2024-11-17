@@ -50,7 +50,7 @@ public class GuiVehicleInventory extends GuiContainerBase<ContainerVehicleInvent
 	@Override
 	public void initElements() {
 		//TODO lang translations
-		if (getContainer().vehicle.inventory.storageInventory.getSlots() > 0) {
+		if (getContainer().vehicle.inventory.getStorageInventory().getSlots() > 0) {
 			addGuiElement(new Label(8, getContainer().storageY - 10, "Storage"));
 		}
 		addGuiElement(new Label(8, getContainer().extrasY - 10, "Ammo"));
@@ -73,7 +73,7 @@ public class GuiVehicleInventory extends GuiContainerBase<ContainerVehicleInvent
 		};
 		addGuiElement(pack);
 
-		if (getContainer().vehicle.inventory.storageInventory.getSlots() > 0) {
+		if (getContainer().vehicle.inventory.getStorageInventory().getSlots() > 0) {
 			Button minus = new Button(171, getContainer().storageY - 1, 16, 16, "-") {
 				@Override
 				protected void onPressed() {

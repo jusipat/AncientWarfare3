@@ -156,9 +156,9 @@ public class VehicleInputHandler {
 	private static final float MAX_RANGE = 140;
 
 	private static MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, Entity excludedEntity) {
-		Vector3d playerEyesPos = RayTracer.getCorrectedHeadVec(player);
-		Vector3d lookVector = player.getLook(0);
-		Vector3d endVector = playerEyesPos.add(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE);
+		Vec3 playerEyesPos = RayTracer.getCorrectedHeadVec(player);
+		Vec3 lookVector = player.getLook(0);
+		Vec3 endVector = playerEyesPos.add(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE);
 		MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerEyesPos, endVector);
 
 		Optional<Tuple<Double, Entity>> closestEntityFound = getClosestCollidedEntity(excludedEntity, playerEyesPos, lookVector, endVector);

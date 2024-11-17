@@ -3,7 +3,6 @@ package xyz.dylanlogan.ancientwarfare.vehicle.registry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.VehicleArmorIron;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.VehicleArmorObsidian;
@@ -14,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class ArmorRegistry {
-	private ArmorRegistry() {}
+public class ArmourRegistry {
+	private ArmourRegistry() {}
 
 	public static IVehicleArmor armorStone;
 	public static IVehicleArmor armorIron;

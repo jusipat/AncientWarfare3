@@ -30,7 +30,7 @@ public class ContainerVehicleInventory extends ContainerVehicle {
 		int yPos;
 
 		storageY = 4 + 10 + 20;
-		int invHeight = (vehicle.inventory.storageInventory.getSlots() / 9 + (vehicle.inventory.storageInventory.getSlots() % 9 == 0 ? 0 : 1)) * 18;
+		int invHeight = (vehicle.inventory.getStorageInventory().getSlots() / 9 + (vehicle.inventory.getStorageInventory().getSlots() % 9 == 0 ? 0 : 1)) * 18;
 		invHeight = invHeight > 3 * 18 ? 3 * 18 : invHeight;
 		extrasY = storageY + (invHeight == 0 ? 0 : 10) + invHeight;
 		playerY = extrasY + 4 + 10 + 2 * 18;
