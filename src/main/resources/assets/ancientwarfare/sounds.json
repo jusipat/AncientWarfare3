@@ -4,5 +4,19 @@
 "bard.tune3": {"category": "neutral", "sounds": [{"name": "npc/bard/master-122", "stream": false}]},
 "bard.tune4": {"category": "neutral", "sounds": [{"name": "npc/bard/suonatore_di_liuto", "stream": false}]},
 "bard.tune5": {"category": "neutral", "sounds": [{"name": "npc/bard/teller-130-1", "stream": false}]},
-"bard.tune6": {"category": "neutral", "sounds": [{"name": "npc/bard/teller-130-2", "stream": false}]}
+"bard.tune6": {"category": "neutral", "sounds": [{"name": "npc/bard/teller-130-2", "stream": false}]},
+"ballista_bolt_hit_entity": {"category": "player", "sounds": ["ballista_bolt_hit_entity"]},
+"ballista_bolt_hit_ground": {"category": "player", "sounds": ["ballista_bolt_hit_ground"]},
+"ballista_launch": {"category": "player", "sounds": ["ballista_launch"]},
+"ballista_reload": {"category": "player", "sounds": ["ballista_reload"]},
+"battering_ram_launch": {"category": "player", "sounds": ["battering_ram_launch"]},
+"battering_ram_hit_wood": {"category": "player", "sounds": ["battering_ram_hit_wood"]},
+"battering_ram_hit_iron": {"category": "player", "sounds": ["battering_ram_hit_iron"]},
+"battering_ram_hit_stone": {"category": "player", "sounds": ["battering_ram_hit_stone"]},
+"catapult_launch": {"category": "player", "sounds": ["catapult_launch"]},
+"catapult_reload": {"category": "player", "sounds": ["catapult_reload"]},
+"giant_trebuchet_launch": {"category": "player", "sounds": ["giant_trebuchet_launch"]},
+"trebuchet_launch": {"category": "player", "sounds": ["trebuchet_launch"]},
+"trebuchet_reload": {"category": "player", "sounds": ["trebuchet_reload"]},
+"vehicle_moving": {"category": "player", "sounds": ["vehicle_moving"]}
 }
