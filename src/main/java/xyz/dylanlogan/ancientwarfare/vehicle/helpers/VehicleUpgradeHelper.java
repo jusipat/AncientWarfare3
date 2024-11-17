@@ -1,10 +1,13 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.util.Constants;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
@@ -19,7 +22,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.upgrades.IVehicleUpgradeType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VehicleUpgradeHelper implements INBTSerializable<NBTTagCompound> {
+public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 
 	/**
 	 * currently installed upgrades, will be iterated through linearly to call upgrade.applyEffects, multiple upgrades may have cumulative effects
@@ -177,24 +180,24 @@ public class VehicleUpgradeHelper implements INBTSerializable<NBTTagCompound> {
 		return amt * (1 - (vehicle.currentGenericResist * 0.01f));
 	}
 
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-
-		serializeUpgrades(tag);
-		serializeInstalledArmors(tag);
-
-		return tag;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		deserializeUpgrades(tag);
-		deserializeInstalledArmor(tag);
-	}
-
 	public boolean hasUpgrade(IVehicleUpgradeType upgrade) {
 		return this.upgrades.contains(upgrade);
 	}
 
+	@Override
+	public void saveNBTData(NBTTagCompound tag) {
+		serializeUpgrades(tag);
+		serializeInstalledArmors(tag);
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		deserializeUpgrades(tag);
+		deserializeInstalledArmor(tag);
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
+	}
 }

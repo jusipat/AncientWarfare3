@@ -22,12 +22,12 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 
-public abstract class VehicleFiringVarsHelper implements INBTSerializable<NBTTagCompound> {
+public abstract class VehicleFiringVarsHelper implements IExtendedEntityProperties {
 
 	protected VehicleBase vehicle;
 

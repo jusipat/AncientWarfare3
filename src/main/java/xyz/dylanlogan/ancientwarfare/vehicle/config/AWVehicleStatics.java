@@ -21,7 +21,7 @@ public class AWVehicleStatics extends ModConfiguration {
 		@SubscribeEvent
 		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.modID.equals(AncientWarfareVehicles.MOD_ID)) {
-				ConfigManager.sync(AncientWarfareVehicles.MOD_ID, Config.Type.INSTANCE);
+				//ConfigManager.sync(AncientWarfareVehicles.MOD_ID, Config.Type.INSTANCE); todo: implement
 			}
 		}
 	}

@@ -21,14 +21,18 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
+import xyz.dylanlogan.ancientwarfare.vehicle.entity.ITarget;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleMovementType;
 import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
@@ -44,7 +48,7 @@ import java.util.Random;
  *
  * @author Shadowmage
  */
-public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
+public class VehicleFiringHelper implements IExtendedEntityProperties {
 
 	private static final int TRAJECTORY_ITERATIONS_CLIENT = 20;
 
@@ -420,7 +424,7 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 				}
 			} else if (Trig.isAngleBetween(angles.getFirst(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
 
-				if ((Math.abs(this.clientTurretPitch - angles.getFirst()) > 1e-5f))) {
+				if ((Math.abs(this.clientTurretPitch - angles.getFirst()) > 1e-5f)) {
 					this.clientTurretPitch = angles.getFirst();
 					updated = true;
 					updatePitch = true;
@@ -535,24 +539,6 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 		return Trig.wrapTo360(Trig.toDegrees((float) Math.atan2(vecX, vecZ)));
 	}
 
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger("rt", reloadingTicks);
-		tag.setBoolean("f", this.isFiring);
-		tag.setBoolean("r", this.isReloading);
-		tag.setBoolean("l", this.isLaunching);
-		return tag;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		this.reloadingTicks = tag.getInteger("rt");
-		this.isFiring = tag.getBoolean("f");
-		this.isReloading = tag.getBoolean("r");
-		this.isLaunching = tag.getBoolean("l");
-	}
-
 	private static final float NEGLIGIBLE_ANGLE_DIFFERENCE = 0.35f;
 
 	public boolean isAimedAt(ITarget target) {
@@ -560,8 +546,8 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	private boolean isYawPointedAt(ITarget target) {
-		float minYaw = getAimYaw(target.getBoundigBox().minX, target.getBoundigBox().minZ);
-		float maxYaw = getAimYaw(target.getBoundigBox().maxX, target.getBoundigBox().maxZ);
+		float minYaw = getAimYaw(target.getBoundingBox().minX, target.getBoundingBox().minZ);
+		float maxYaw = getAimYaw(target.getBoundingBox().maxX, target.getBoundingBox().maxZ);
 
 		if (minYaw > maxYaw) {
 			float temp = minYaw;
@@ -580,9 +566,9 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 		}
 
 		Vector3d offset = vehicle.getMissileOffset();
-		float targetX = (float) target.getBoundigBox().minX - (float) (vehicle.posX + offset.x);
-		float targetY = (float) target.getBoundigBox().minY - (float) (vehicle.posY + offset.y);
-		float targetZ = (float) target.getBoundigBox().minZ - (float) (vehicle.posZ + offset.z);
+		float targetX = (float) target.getBoundingBox().minX - (float) (vehicle.posX + offset.x);
+		float targetY = (float) target.getBoundingBox().minY - (float) (vehicle.posY + offset.y);
+		float targetZ = (float) target.getBoundingBox().minZ - (float) (vehicle.posZ + offset.z);
 
 		Tuple<Float, Float> anglesMin = Trig.getLaunchAngleToHit(targetX, targetY, targetZ, vehicle.localLaunchPower);
 		//noinspection SimplifiableIfStatement
@@ -591,9 +577,9 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 			return true;
 		}
 
-		targetX = (float) target.getBoundigBox().maxX - (float) (vehicle.posX + offset.x);
-		targetY = (float) target.getBoundigBox().maxY - (float) (vehicle.posY + offset.y);
-		targetZ = (float) target.getBoundigBox().maxZ - (float) (vehicle.posZ + offset.z);
+		targetX = (float) target.getBoundingBox().maxX - (float) (vehicle.posX + offset.x);
+		targetY = (float) target.getBoundingBox().maxY - (float) (vehicle.posY + offset.y);
+		targetZ = (float) target.getBoundingBox().maxZ - (float) (vehicle.posZ + offset.z);
 
 		Tuple<Float, Float> anglesMax = Trig.getLaunchAngleToHit(targetX, targetY, targetZ, vehicle.localLaunchPower);
 		//noinspection SimplifiableIfStatement
@@ -617,16 +603,16 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 
 		float minDistY;
 		float maxDistY;
-		if (Math.abs(target.getBoundigBox().minY - y) < Math.abs(target.getBoundigBox().maxY - y)) {
-			minDistY = (float) (target.getBoundigBox().minY - y);
-			maxDistY = (float) (target.getBoundigBox().maxY - y);
+		if (Math.abs(target.getBoundingBox().minY - y) < Math.abs(target.getBoundingBox().maxY - y)) {
+			minDistY = (float) (target.getBoundingBox().minY - y);
+			maxDistY = (float) (target.getBoundingBox().maxY - y);
 		} else {
-			minDistY = (float) (target.getBoundigBox().maxY - y);
-			maxDistY = (float) (target.getBoundigBox().minY - y);
+			minDistY = (float) (target.getBoundingBox().maxY - y);
+			maxDistY = (float) (target.getBoundingBox().minY - y);
 		}
 
-		float powerMin = getPowerFor((float) target.getBoundigBox().minX - x, minDistY, (float) target.getBoundigBox().minZ - z);
-		float powerMax = getPowerFor((float) target.getBoundigBox().maxX - x, maxDistY, (float) target.getBoundigBox().maxZ - z);
+		float powerMin = getPowerFor((float) target.getBoundingBox().minX - x, minDistY, (float) target.getBoundingBox().minZ - z);
+		float powerMax = getPowerFor((float) target.getBoundingBox().maxX - x, maxDistY, (float) target.getBoundingBox().maxZ - z);
 
 		if (powerMin > powerMax) {
 			float temp = powerMin;
@@ -644,5 +630,26 @@ public class VehicleFiringHelper implements INBTSerializable<NBTTagCompound> {
 
 	public float getAimYaw(ITarget target) {
 		return getAimYaw(target.getX(), target.getZ());
+	}
+
+	@Override
+	public void saveNBTData(NBTTagCompound tag) {
+		tag.setInteger("rt", reloadingTicks);
+		tag.setBoolean("f", this.isFiring);
+		tag.setBoolean("r", this.isReloading);
+		tag.setBoolean("l", this.isLaunching);
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		this.reloadingTicks = tag.getInteger("rt");
+		this.isFiring = tag.getBoolean("f");
+		this.isReloading = tag.getBoolean("r");
+		this.isLaunching = tag.getBoolean("l");
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
 	}
 }

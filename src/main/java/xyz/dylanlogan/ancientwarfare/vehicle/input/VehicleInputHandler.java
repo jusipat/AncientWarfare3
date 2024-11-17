@@ -165,7 +165,7 @@ public class VehicleInputHandler {
 
 		if (closestEntityFound.isPresent() && (blockHit == null || closestEntityFound.get().getFirst() < blockHit.hitVec.distanceTo(playerEyesPos))) {
 			Entity hitEntity = closestEntityFound.get().getSecond();
-			blockHit = new MovingObjectPosition(hitEntity, new Vec3d(hitEntity.posX, hitEntity.posY + hitEntity.height * 0.65d, hitEntity.posZ));
+			blockHit = new MovingObjectPosition(hitEntity, new Vec3.createVectorHelper(hitEntity.posX, hitEntity.posY + hitEntity.height * 0.65d, hitEntity.posZ));
 		}
 		return blockHit;
 	}

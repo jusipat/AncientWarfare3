@@ -581,21 +581,21 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
      */
     private void onUpdateClient() {
         if (getControllingPassenger() instanceof NpcBase) {
-            this.updatePassenger(getControllingPassenger());
+            // this.updatePassenger(getControllingPassenger()); todo: Not in 1.7
         }
     }
 
-    @Override
-    public boolean startRiding(Entity entity, boolean force) {
-        if (super.startRiding(entity, force)) {
-            if (entity instanceof EntityPlayerMP) {
-                EntityPlayerMP player = (EntityPlayerMP) entity;
-                player.capabilities.allowFlying = true;
-            }
-            return true;
-        }
-        return false;
-    }
+    //    @Override
+//    public boolean startRiding(Entity entity, boolean force) {
+//        if (super.startRiding(entity, force)) {
+//            if (entity instanceof EntityPlayerMP) {
+//                EntityPlayerMP player = (EntityPlayerMP) entity;
+//                player.capabilities.allowFlying = true;
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
     /**
      * server-side updates...
@@ -1032,14 +1032,14 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         }
     }
 
-    @Nullable
-    @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) inventory.storageInventory;
-        }
-        return super.getCapability(capability, facing);
-    }
+//    @Nullable todo: doesn't exist in 1.7
+//    @Override
+//    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+//        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+//            return (T) inventory.storageInventory;
+//        }
+//        return super.getCapability(capability, facing);
+//    }
 
     @Override
     public void setOwner(EntityPlayer player) {
@@ -1067,11 +1067,19 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        //moving passengers to the same position as vehicle on save otherwise they can end up in a different chunk and MC will kill them on load
-        getPassengers().forEach(e -> e.setPosition(posX, posY, posZ));
-        return super.writeToNBT(compound);
+    public void writeToNBT(NBTTagCompound compound) {
+        // only one rider in 1.7.10
+        //getPassengers().forEach(e -> e.setPosition(posX, posY, posZ));
+        this.ridingEntity.setPosition(posX, posY, posZ);
+        super.writeToNBT(compound);
     }
+
+    //    @Override
+//    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+//        //moving passengers to the same position as vehicle on save otherwise they can end up in a different chunk and MC will kill them on load
+//        getPassengers().forEach(e -> e.setPosition(posX, posY, posZ));
+//        return super.writeToNBT(compound);
+//    }
 
     public boolean isAmmoLoaded() {
         return vehicleType.getValidAmmoTypes().stream().anyMatch(a -> ammoHelper.getCountOf(a) > 0);

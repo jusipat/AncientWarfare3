@@ -4,29 +4,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
 
-public class AmmoStackHandler {
-	private final ItemStack[] stacks;
+public class ArmourStackHandler {
+	private final ItemStack[] stacks; // Array to hold armor slots
 	private final VehicleBase vehicle;
 
-	public AmmoStackHandler(VehicleBase vehicle, int size) {
+	public ArmourStackHandler(VehicleBase vehicle, int size) {
 		this.stacks = new ItemStack[size]; // Initialize empty inventory
 		this.vehicle = vehicle;
 	}
 
-	// Get the stack in a specific slot
 	public ItemStack getStackInSlot(int slot) {
 		return stacks[slot];
 	}
 
 	public void setStackInSlot(int slot, ItemStack stack) {
 		stacks[slot] = stack;
-		onContentsChanged(slot); // Trigger update logic
+		onContentsChanged(slot);
 	}
 
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		if (!isValidAmmo(stack)) {
+		if (!isItemValid(stack)) {
 			return stack;
 		}
 
@@ -34,29 +33,31 @@ public class AmmoStackHandler {
 			return null;
 		}
 
-		ItemStack current = stacks[slot];
-		if (current == null) {
+		if (stacks[slot] == null) {
 			stacks[slot] = stack.copy();
 			stack.stackSize = 0;
-		} else if (ItemStack.areItemStackTagsEqual(current, stack)) {
-			int transferable = Math.min(stack.stackSize, current.getMaxStackSize() - current.stackSize);
-			current.stackSize += transferable;
-			stack.stackSize -= transferable;
+		} else {
+			return stack;
 		}
 
 		onContentsChanged(slot);
-		return stack.stackSize > 0 ? stack : null;
+		return null;
 	}
 
-	private boolean isValidAmmo(ItemStack stack) {
-		return AmmoRegistry.getAmmoForStack(stack)
-				.map(ammo -> vehicle.vehicleType.isAmmoValidForInventory(ammo))
+	public boolean isItemValid(ItemStack stack) {
+		return ArmorRegistry.getArmorForStack(stack)
+				.map(armor -> vehicle.vehicleType.isArmorValid(armor))
 				.orElse(false);
 	}
 
+	public int getSlotLimit(int slot) {
+		return 1;
+	}
+
+	// Callback for when inventory changes
 	protected void onContentsChanged(int slot) {
 		if (!vehicle.worldObj.isRemote) {
-			vehicle.ammoHelper.updateAmmoCounts();
+			vehicle.upgradeHelper.updateUpgrades();
 		}
 	}
 
@@ -70,12 +71,11 @@ public class AmmoStackHandler {
 				list.appendTag(stackTag);
 			}
 		}
-		compound.setTag("Items", list);
+		compound.setTag("ArmorItems", list);
 	}
 
-	// Load inventory from NBT
 	public void loadFromNBT(NBTTagCompound compound) {
-		NBTTagList list = compound.getTagList("Items", 10); // 10 = NBTTagCompound
+		NBTTagList list = compound.getTagList("ArmorItems", 10); // 10 = NBTTagCompound
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound stackTag = list.getCompoundTagAt(i);
 			int slot = stackTag.getInteger("Slot");

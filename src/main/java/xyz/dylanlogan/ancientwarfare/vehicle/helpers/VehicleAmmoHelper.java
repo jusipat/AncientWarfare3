@@ -1,9 +1,12 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.helpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.util.Constants;
 import scala.Function2;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
@@ -26,7 +29,7 @@ import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
 
-public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
+public class VehicleAmmoHelper implements IExtendedEntityProperties {
 
 	private static final String CURRENT_AMMO_TYPE_TAG = "currentAmmoType";
 	private VehicleBase vehicle;
@@ -88,9 +91,9 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 		this.ammoEntries.put(ammo.getRegistryName(), ent);
 	}
 
-	public void setNextAmmo() {
-		getAvailable(this::getHigherWrapped).ifPresent(this::setCurrentAmmo);
-	}
+//	public void setNextAmmo() {
+//		getAvailable(this::getHigherWrapped).ifPresent(this::setCurrentAmmo);
+//	}
 
 	private <K, V> Map.Entry<K, V> getHigherWrapped(NavigableMap<K, V> map, K key) {
 		Map.Entry<K, V> entry = map.higherEntry(key);
@@ -119,9 +122,9 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 		return entry == null ? map.lastEntry() : entry;
 	}
 
-	public void setPreviousAmmo() {
-		getAvailable(this::getLowerWrapped).ifPresent(this::setCurrentAmmo);
-	}
+//	public void setPreviousAmmo() {
+//		getAvailable(this::getLowerWrapped).ifPresent(this::setCurrentAmmo);
+//	}
 
 	public void handleClientAmmoSelection(ResourceLocation ammoRegistryName) {
 		NetworkHandler.sendToServer(new PacketAmmoSelect(vehicle, ammoRegistryName.toString()));
@@ -191,16 +194,6 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 		return null;
 	}
 
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		if (currentAmmoType != null) {
-			tag.setString(CURRENT_AMMO_TYPE_TAG, currentAmmoType.toString());
-		}
-		serializeAmmo(tag);
-		return tag;
-	}
-
 	private NBTTagCompound serializeAmmo(NBTTagCompound tag) {
 		NBTTagList tagList = new NBTTagList();
 		for (VehicleAmmoEntry ent : this.ammoEntries.values()) {
@@ -211,17 +204,6 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 		}
 		tag.setTag("list", tagList);
 		return tag;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		for (VehicleAmmoEntry ent : this.ammoEntries.values()) {
-			ent.ammoCount = 0;
-		}
-		if (tag.hasKey(CURRENT_AMMO_TYPE_TAG)) {
-			currentAmmoType = new ResourceLocation(tag.getString(CURRENT_AMMO_TYPE_TAG));
-		}
-		deserializeAmmo(tag);
 	}
 
 	public void updateAmmo(NBTTagCompound tag) {
@@ -241,4 +223,27 @@ public class VehicleAmmoHelper implements INBTSerializable<NBTTagCompound> {
 		}
 	}
 
+	@Override
+	public void saveNBTData(NBTTagCompound tag) {
+		if (currentAmmoType != null) {
+			tag.setString(CURRENT_AMMO_TYPE_TAG, currentAmmoType.toString());
+		}
+		serializeAmmo(tag);
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		for (VehicleAmmoEntry ent : this.ammoEntries.values()) {
+			ent.ammoCount = 0;
+		}
+		if (tag.hasKey(CURRENT_AMMO_TYPE_TAG)) {
+			currentAmmoType = new ResourceLocation(tag.getString(CURRENT_AMMO_TYPE_TAG));
+		}
+		deserializeAmmo(tag);
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
+	}
 }

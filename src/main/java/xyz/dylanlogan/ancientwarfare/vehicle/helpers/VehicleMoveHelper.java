@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.IPlantable;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
@@ -21,7 +23,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketVehicleMove;
 
 import java.util.List;
 
-public class VehicleMoveHelper implements INBTSerializable<NBTTagCompound> {
+public class VehicleMoveHelper implements IExtendedEntityProperties {
 
 	private static final int VEHICLE_MOVE_UPDATE_FREQUENCY = 3;
 
@@ -356,22 +358,25 @@ public class VehicleMoveHelper implements INBTSerializable<NBTTagCompound> {
 	}
 
 	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
+	public void saveNBTData(NBTTagCompound tag) {
 		tag.setByte("fi", forwardInput);
 		tag.setByte("si", turnInput);
 		tag.setByte("pi", powerInput);
 		tag.setByte("ri", rotationInput);
 		tag.setFloat("tr", throttle);
-		return tag;
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
+	public void loadNBTData(NBTTagCompound tag) {
 		this.forwardInput = tag.getByte("fi");
 		this.turnInput = tag.getByte("si");
 		this.powerInput = tag.getByte("pi");
 		this.rotationInput = tag.getByte("ri");
 		this.throttle = tag.getFloat("tr");
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
 	}
 }

@@ -1,9 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.input;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.settings.IKeyConflictContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 
 @SideOnly(Side.CLIENT)
@@ -16,7 +15,7 @@ public class VehicleKeyConflictContext implements IKeyConflictContext {
 	@Override
 	public boolean isActive() {
 		Minecraft mc = Minecraft.getMinecraft();
-		return mc.currentScreen == null && mc.player != null && mc.world != null && mc.player.getRidingEntity() instanceof VehicleBase;
+		return mc.currentScreen == null && mc.thePlayer != null && mc.theWorld != null && mc.thePlayer.ridingEntity instanceof VehicleBase;
 	}
 
 	@Override
