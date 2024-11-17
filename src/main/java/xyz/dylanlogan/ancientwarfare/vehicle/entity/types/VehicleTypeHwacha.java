@@ -1,10 +1,10 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
@@ -12,7 +12,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 public class VehicleTypeHwacha extends VehicleType {
@@ -37,9 +37,9 @@ public class VehicleTypeHwacha extends VehicleType {
 		this.ammoBySoldierRank.put(1, AmmoRegistry.ammoRocket);
 		this.ammoBySoldierRank.put(2, AmmoRegistry.ammoRocket);
 
-		this.validArmors.add(ArmorRegistry.armorStone);
-		this.validArmors.add(ArmorRegistry.armorIron);
-		this.validArmors.add(ArmorRegistry.armorObsidian);
+		this.validArmors.add(ArmourRegistry.armorStone);
+		this.validArmors.add(ArmourRegistry.armorIron);
+		this.validArmors.add(ArmourRegistry.armorObsidian);
 
 		this.validUpgrades.add(UpgradeRegistry.aimUpgrade);
 		this.validUpgrades.add(UpgradeRegistry.pitchDownUpgrade);
@@ -115,11 +115,6 @@ public class VehicleTypeHwacha extends VehicleType {
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT() {
-			return new NBTTagCompound();
-		}
-
-		@Override
 		public void onFiringUpdate() {
 			vehicle.firingHelper.startLaunching();
 		}
@@ -136,7 +131,7 @@ public class VehicleTypeHwacha extends VehicleType {
 				delayTick = 0;
 				calcMissileOffset(missileFired);
 				if (!vehicle.worldObj.isRemote && vehicle.ammoHelper.getCurrentAmmoCount() > 0) {
-					vehicle.playSound(SoundEvents.ENTITY_FIREWORK_LAUNCH, 1.0F, 0.5F);
+					vehicle.playSound("fireworks.launch", 1.0F, 0.5F);
 				}
 				vehicle.firingHelper.spawnMissile(missileOffsetX, missileOffsetY, missileOffsetZ);
 				this.missileFired++;
@@ -212,6 +207,21 @@ public class VehicleTypeHwacha extends VehicleType {
 		@Override
 		public float getVar8() {
 			return 0;
+		}
+
+		@Override
+		public void saveNBTData(NBTTagCompound compound) {
+
+		}
+
+		@Override
+		public void loadNBTData(NBTTagCompound compound) {
+
+		}
+
+		@Override
+		public void init(Entity entity, World world) {
+
 		}
 	}
 }

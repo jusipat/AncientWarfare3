@@ -2,7 +2,10 @@ package xyz.dylanlogan.ancientwarfare.vehicle.render;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.render.missile.RenderArrow;
 import xyz.dylanlogan.ancientwarfare.vehicle.render.missile.RenderShot;
@@ -77,15 +80,20 @@ public class RenderMissile extends Render<MissileBase> {
 		missileRenders.put(AmmoRegistry.ammoBallIronShot, shotRender);
 	}
 
-	@Override
-	public void doRender(MissileBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		Render<MissileBase> render = missileRenders.get(entity.ammoType);
-		render.doRender(entity, x, y, z, entityYaw, partialTicks);
-	}
-
 	@Nullable
 	@Override
 	protected ResourceLocation getEntityTexture(MissileBase entity) {
 		return entity.getTexture();
+	}
+
+	@Override
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {
+		Render render = missileRenders.get(entity.ammoTyle);
+		render.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
+	}
+
+	@Override
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+		return null;
 	}
 }

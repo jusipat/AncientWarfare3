@@ -1,23 +1,23 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.item;
 
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.registry.GameRegistry;
 import xyz.dylanlogan.ancientwarfare.core.item.ItemBase;
-import xyz.dylanlogan.ancientwarfare.npc.AncientWarfareNPC;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 
-public abstract class ItemBaseVehicle extends ItemBase implements IClientRegister {
+public abstract class ItemBaseVehicle extends ItemBase {
 	public ItemBaseVehicle(String regName) {
 		super();
-		setCreativeTab(AncientWarfareVehicles.TAB);
+		setUnlocalizedName(regName); // Set the item's internal name
+		setCreativeTab(AncientWarfareVehicles.TAB); // Set the creative tab
 
-		AncientWarfareNPC.proxy.addClientRegister(this);
+		// Register item with GameRegistry
+		GameRegistry.registerItem(this, regName);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerClient() {
-		ModelLoaderHelper.registerItem(this, "vehicle");
-	}
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public void registerClient() {
+//		ModelLoaderHelper.registerItem(this, "vehicle");
+//	}
 }

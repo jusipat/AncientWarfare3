@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleSounds;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 public class VehicleTypeBatteringRam extends VehicleType {
@@ -19,9 +19,9 @@ public class VehicleTypeBatteringRam extends VehicleType {
 		this.configName = "battering_ram";
 		this.baseHealth = AWVehicleStatics.vehicleStats.vehicleBatteringRamHealth;
 		this.vehicleMaterial = VehicleMaterial.materialWood;
-		this.validArmors.add(ArmorRegistry.armorStone);
-		this.validArmors.add(ArmorRegistry.armorIron);
-		this.validArmors.add(ArmorRegistry.armorObsidian);
+		this.validArmors.add(ArmourRegistry.armorStone);
+		this.validArmors.add(ArmourRegistry.armorIron);
+		this.validArmors.add(ArmourRegistry.armorObsidian);
 
 		this.validUpgrades.add(UpgradeRegistry.speedUpgrade);
 		this.validUpgrades.add(UpgradeRegistry.reloadUpgrade);

@@ -7,7 +7,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleSounds;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 import java.util.Random;
@@ -42,9 +42,9 @@ public abstract class VehicleTypeBallista extends VehicleType {
 		validUpgrades.add(UpgradeRegistry.reloadUpgrade);
 		validUpgrades.add(UpgradeRegistry.aimUpgrade);
 
-		validArmors.add(ArmorRegistry.armorStone);
-		validArmors.add(ArmorRegistry.armorObsidian);
-		validArmors.add(ArmorRegistry.armorIron);
+		validArmors.add(ArmourRegistry.armorStone);
+		validArmors.add(ArmourRegistry.armorObsidian);
+		validArmors.add(ArmourRegistry.armorIron);
 
 		storageBaySize = 0;
 		accuracy = 0.98f;

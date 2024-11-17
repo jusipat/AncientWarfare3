@@ -1,17 +1,16 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
-import net.minecraft.client.audio.SoundList;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 public class VehicleTypeCannon extends VehicleType {
@@ -50,9 +49,9 @@ public class VehicleTypeCannon extends VehicleType {
 		validUpgrades.add(UpgradeRegistry.reloadUpgrade);
 		validUpgrades.add(UpgradeRegistry.aimUpgrade);
 
-		validArmors.add(ArmorRegistry.armorStone);
-		validArmors.add(ArmorRegistry.armorIron);
-		validArmors.add(ArmorRegistry.armorObsidian);
+		validArmors.add(ArmourRegistry.armorStone);
+		validArmors.add(ArmourRegistry.armorIron);
+		validArmors.add(ArmourRegistry.armorObsidian);
 
 		turretVerticalOffset = 11.5f * 0.0625f;
 		storageBaySize = 0;
@@ -109,22 +108,25 @@ public class VehicleTypeCannon extends VehicleType {
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT() {
-			NBTTagCompound tag = new NBTTagCompound();
+		public void saveNBTData(NBTTagCompound tag) {
 			tag.setInteger("fT", firingTicks);
-			return tag;
 		}
 
 		@Override
-		public void deserializeNBT(NBTTagCompound tag) {
-			//noop
+		public void loadNBTData(NBTTagCompound compound) {
+
+		}
+
+		@Override
+		public void init(Entity entity, World world) {
+
 		}
 
 		@Override
 		public void onFiringUpdate() {
 			if (firingTicks == 0 && !vehicle.worldObj.isRemote) {
-				vehicle.playSound(SoundEvents.ENTITY_FIREWORK_LAUNCH, 0.50F, .25F);
-				vehicle.playSound(SoundEvents.ENTITY_TNT_PRIMED, 1.0F, 0.5F);
+				vehicle.playSound("fireworks.launch", 0.50F, .25F);
+				vehicle.playSound("game.tnt.primed", 1.0F, 0.5F);
 			}
 			firingTicks++;
 			if (vehicle.worldObj.isRemote) {
@@ -133,7 +135,7 @@ public class VehicleTypeCannon extends VehicleType {
 			}
 			if (firingTicks > 10) {
 				if (!vehicle.worldObj.isRemote) {
-					vehicle.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.f, 1.f);
+					vehicle.playSound("random.explode", 1.f, 1.f);
 				}
 				vehicle.firingHelper.startLaunching();
 				firingTicks = 0;

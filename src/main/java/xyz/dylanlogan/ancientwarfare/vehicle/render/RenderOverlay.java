@@ -1,15 +1,16 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.render;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleMovementType;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 
 import java.awt.*;
@@ -19,7 +20,7 @@ public class RenderOverlay extends Gui {
 		Minecraft mc = Minecraft.getMinecraft();
 		FontRenderer fontRenderer = mc.fontRenderer;
 
-		VehicleBase vehicle = (VehicleBase) mc.player.getRidingEntity();
+		VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
 		int white = Color.WHITE.getRGB();
 		int red = Color.RED.getRGB();
 		//noinspection ConstantConditions
@@ -56,7 +57,7 @@ public class RenderOverlay extends Gui {
 			return;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
-		if (event.phase == TickEvent.Phase.END && mc.currentScreen == null && mc.player != null && mc.player.getRidingEntity() instanceof VehicleBase) {
+		if (event.phase == TickEvent.Phase.END && mc.currentScreen == null && mc.thePlayer != null && mc.thePlayer.ridingEntity instanceof VehicleBase) {
 			this.renderVehicleOverlay();
 		}
 	}

@@ -1,30 +1,20 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.item;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MovingObjectPosition;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.shadowmage.ancientwarfare.core.AncientWarfareCore;
-import net.shadowmage.ancientwarfare.vehicle.AncientWarfareVehicles;
-import net.shadowmage.ancientwarfare.vehicle.config.AWVehicleStatics;
-import net.shadowmage.ancientwarfare.vehicle.entity.IVehicleType;
-import net.shadowmage.ancientwarfare.vehicle.entity.VehicleBase;
-import net.shadowmage.ancientwarfare.vehicle.entity.types.VehicleType;
+import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
+import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
+import xyz.dylanlogan.ancientwarfare.vehicle.entity.IVehicleType;
+import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
+import xyz.dylanlogan.ancientwarfare.vehicle.entity.types.VehicleType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -150,7 +140,7 @@ public class ItemSpawner extends ItemBaseVehicle {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerClient() {
-		ResourceLocation baseLocation = new ResourceLocation(AncientWarfareCore.MOD_ID, "vehicle/" + getRegistryName().getResourcePath());
+		ResourceLocation baseLocation = new ResourceLocation(AncientWarfareCore.modID, "vehicle/" + getRegistryName().getResourcePath());
 		String modelPropString = "variant=%s";
 
 		ModelLoader.setCustomMeshDefinition(this, stack -> {

@@ -15,7 +15,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.missiles.DamageType;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketUpgradeUpdate;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketVehicleBase;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.upgrades.IVehicleUpgradeType;
 
@@ -114,7 +114,7 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 		NBTTagList armorTypes = tag.getTagList("armors", Constants.NBT.TAG_STRING);
 		String[] armorRegistryNames = new String[armorTypes.tagCount()];
 		for (int i = 0; i < armorRegistryNames.length; i++) {
-			armorRegistryNames[i] = ((NBTTagString) armorTypes.get(i)).getString();
+			armorRegistryNames[i] = armorTypes.getStringTagAt(i);
 		}
 		deserializeInstalledArmor(armorRegistryNames);
 	}
@@ -122,7 +122,7 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 	private void deserializeInstalledArmor(String[] armorRegistryNames) {
 		installedArmor.clear();
 		for (String armorRegistryName : armorRegistryNames) {
-			ArmorRegistry.getArmorType(new ResourceLocation(armorRegistryName)).ifPresent(armor -> installedArmor.add(armor));
+			ArmourRegistry.getArmorType(new ResourceLocation(armorRegistryName)).ifPresent(armor -> installedArmor.add(armor));
 		}
 	}
 
@@ -130,7 +130,7 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 		NBTTagList upgradeTypes = tag.getTagList("upgrades", Constants.NBT.TAG_STRING);
 		String[] upgradeRegistryNames = new String[upgradeTypes.tagCount()];
 		for (int i = 0; i < upgradeRegistryNames.length; i++) {
-			upgradeRegistryNames[i] = ((NBTTagString) upgradeTypes.get(i)).getString();
+			upgradeRegistryNames[i] = upgradeTypes.getStringTagAt(i);
 		}
 		deserializeUpgrades(upgradeRegistryNames);
 	}

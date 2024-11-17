@@ -9,7 +9,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemMisc;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemSpawner;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.VehicleRegistry;
 
@@ -50,7 +50,7 @@ public class AWVehicleItems {
 		registry.register(new ItemMisc("major_alloy", ItemMisc.VehicleItemType.VEHICLE_COMPONENT));
 
 		AmmoRegistry.registerAmmo(registry);
-		ArmorRegistry.registerArmorTypes(registry);
+		ArmourRegistry.registerArmorTypes(registry);
 		UpgradeRegistry.registerUpgrades(registry);
 		VehicleRegistry.registerVehicles();
 	}

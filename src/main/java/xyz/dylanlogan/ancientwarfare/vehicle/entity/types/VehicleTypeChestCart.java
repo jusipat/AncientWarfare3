@@ -7,7 +7,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 public class VehicleTypeChestCart extends VehicleType {
@@ -19,9 +19,9 @@ public class VehicleTypeChestCart extends VehicleType {
 		this.vehicleMaterial = VehicleMaterial.materialWood;
 		this.materialCount = 3;
 		baseHealth = AWVehicleStatics.vehicleStats.vehicleChestCartHealth;
-		this.validArmors.add(ArmorRegistry.armorStone);
-		this.validArmors.add(ArmorRegistry.armorObsidian);
-		this.validArmors.add(ArmorRegistry.armorIron);
+		this.validArmors.add(ArmourRegistry.armorStone);
+		this.validArmors.add(ArmourRegistry.armorObsidian);
+		this.validArmors.add(ArmourRegistry.armorIron);
 		this.validUpgrades.add(UpgradeRegistry.speedUpgrade);
 		this.width = 2.7f;
 		this.height = 1.8f;

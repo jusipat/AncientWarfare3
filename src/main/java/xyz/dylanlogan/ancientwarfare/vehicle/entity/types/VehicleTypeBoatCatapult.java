@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleSounds;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 public class VehicleTypeBoatCatapult extends VehicleType {
@@ -56,9 +56,9 @@ public class VehicleTypeBoatCatapult extends VehicleType {
 		ammoBySoldierRank.put(1, AmmoRegistry.ammoStoneShot10);
 		ammoBySoldierRank.put(2, AmmoRegistry.ammoStoneShot10);
 
-		validArmors.add(ArmorRegistry.armorStone);
-		validArmors.add(ArmorRegistry.armorObsidian);
-		validArmors.add(ArmorRegistry.armorIron);
+		validArmors.add(ArmourRegistry.armorStone);
+		validArmors.add(ArmourRegistry.armorObsidian);
+		validArmors.add(ArmourRegistry.armorIron);
 
 		validUpgrades.add(UpgradeRegistry.aimUpgrade);
 		validUpgrades.add(UpgradeRegistry.pitchDownUpgrade);

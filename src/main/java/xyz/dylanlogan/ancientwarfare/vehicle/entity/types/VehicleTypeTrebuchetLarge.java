@@ -1,7 +1,9 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -9,7 +11,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.materials.VehicleMaterial;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleSounds;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
-import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmorRegistry;
+import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 
 public class VehicleTypeTrebuchetLarge extends VehicleType {
@@ -52,9 +54,9 @@ public class VehicleTypeTrebuchetLarge extends VehicleType {
 		ammoBySoldierRank.put(1, AmmoRegistry.ammoStoneShot30);
 		ammoBySoldierRank.put(2, AmmoRegistry.ammoStoneShot30);
 
-		validArmors.add(ArmorRegistry.armorStone);
-		validArmors.add(ArmorRegistry.armorIron);
-		validArmors.add(ArmorRegistry.armorObsidian);
+		validArmors.add(ArmourRegistry.armorStone);
+		validArmors.add(ArmourRegistry.armorIron);
+		validArmors.add(ArmourRegistry.armorObsidian);
 
 		validUpgrades.add(UpgradeRegistry.pitchDownUpgrade);
 		validUpgrades.add(UpgradeRegistry.pitchUpUpgrade);
@@ -140,17 +142,15 @@ public class VehicleTypeTrebuchetLarge extends VehicleType {
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT() {
-			NBTTagCompound tag = new NBTTagCompound();
+		public void saveNBTData(NBTTagCompound tag) {
 			tag.setFloat("aA", armAngle);
 			tag.setFloat("aS", armSpeed);
 			tag.setFloat("sA", stringAngle);
 			tag.setFloat("sS", stringSpeed);
-			return tag;
 		}
 
 		@Override
-		public void deserializeNBT(NBTTagCompound tag) {
+		public void loadNBTData(NBTTagCompound tag) {
 			armAngle = tag.getFloat("aA");
 			armSpeed = tag.getFloat("aS");
 			stringAngle = tag.getFloat("sA");
@@ -241,6 +241,11 @@ public class VehicleTypeTrebuchetLarge extends VehicleType {
 		@Override
 		public float getVar8() {
 			return 0;
+		}
+
+		@Override
+		public void init(Entity entity, World world) {
+
 		}
 	}
 }

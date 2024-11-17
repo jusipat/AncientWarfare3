@@ -1,9 +1,9 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.registry;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemUpgrade;
 import xyz.dylanlogan.ancientwarfare.vehicle.upgrades.IVehicleUpgradeType;
 import xyz.dylanlogan.ancientwarfare.vehicle.upgrades.VehicleUpgradeAim;
@@ -61,12 +61,14 @@ public class UpgradeRegistry {
 		pitchDownUpgrade = registerUpgrade(new VehicleUpgradePitchDown(), registry);
 	}
 
-	private static IVehicleUpgradeType registerUpgrade(IVehicleUpgradeType upgrade, IForgeRegistry<Item> registry) {
-		upgradeInstances.put(upgrade.getRegistryName(), upgrade);
-		ItemUpgrade item = new ItemUpgrade(upgrade.getRegistryName());
-		registry.register(item);
+	private static IVehicleUpgradeType registerUpgrade(IVehicleUpgradeType upgrade, String registryName) {
+		upgradeInstances.put(registryName, upgrade);
+		ItemUpgrade item = new ItemUpgrade(registryName);
+		item.setUnlocalizedName(registryName); // Set the unlocalized name for the item
+		GameRegistry.registerItem(item, registryName); // Register the item with GameRegistry
 		return upgrade;
 	}
+
 
 	public static Optional<IVehicleUpgradeType> getUpgrade(ResourceLocation type) {
 		return Optional.ofNullable(upgradeInstances.get(type));

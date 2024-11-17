@@ -2,12 +2,10 @@ package xyz.dylanlogan.ancientwarfare.vehicle.missiles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
-import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleSounds;
 
 public class AmmoBallistaBoltIron extends Ammo {
 

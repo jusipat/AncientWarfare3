@@ -1,10 +1,11 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.render.missile;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 
 import javax.annotation.Nullable;
 
@@ -31,10 +32,4 @@ public abstract class RenderMissileBase extends Render<MissileBase> {
 	}
 
 	public abstract void renderMissile(MissileBase missile, IAmmo ammo, double x, double y, double z, float yaw, float tick);
-
-	@Nullable
-	@Override
-	protected ResourceLocation getEntityTexture(MissileBase entity) {
-		return entity.getTexture();
-	}
 }

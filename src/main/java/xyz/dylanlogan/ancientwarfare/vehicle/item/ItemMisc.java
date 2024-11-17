@@ -1,15 +1,12 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.item;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.shadowmage.ancientwarfare.core.AncientWarfareCore;
-import net.shadowmage.ancientwarfare.core.util.ModelLoaderHelper;
+import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,7 +29,7 @@ public class ItemMisc extends ItemBaseVehicle {
 	@SideOnly(Side.CLIENT)
 
 	public void registerClient() {
-		ModelLoaderHelper.registerItem(this, (i, m) -> new ModelResourceLocation(new ResourceLocation(AncientWarfareCore.MOD_ID, "vehicle/misc"), "variant=" + getRegistryName().getResourcePath()));
+		ModelLoaderHelper.registerItem(this, (i, m) -> new ModelResourceLocation(new ResourceLocation(AncientWarfareCore.modID, "vehicle/misc"), "variant=" + getRegistryName().getResourcePath()));
 	}
 
 	public enum VehicleItemType {
