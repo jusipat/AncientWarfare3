@@ -5,6 +5,7 @@ import xyz.dylanlogan.ancientwarfare.core.entity.AWEntityRegistry;
 import xyz.dylanlogan.ancientwarfare.core.entity.AWEntityRegistry.EntityDeclaration;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 
 public class AWVehicleEntities {
 

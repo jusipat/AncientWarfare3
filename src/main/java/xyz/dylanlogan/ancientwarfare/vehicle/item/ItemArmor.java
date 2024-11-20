@@ -19,15 +19,15 @@ public class ItemArmor extends ItemBaseVehicle {
 		tooltipName = "item." + registryName.getResourcePath() + ".tooltip";
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format(tooltipName));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerClient() {
-		ModelLoaderHelper.registerItem(this, (i, m) -> new ModelResourceLocation(new ResourceLocation(AncientWarfareCore.modID, "vehicle/armor"), "variant=" + getRegistryName().getResourcePath()));
-	}
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
+//		tooltip.add(I18n.format(tooltipName));
+//	}
+//
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public void registerClient() {
+//		ModelLoaderHelper.registerItem(this, (i, m) -> new ModelResourceLocation(new ResourceLocation(AncientWarfareCore.modID, "vehicle/armor"), "variant=" + getRegistryName().getResourcePath()));
+//	}
 }
