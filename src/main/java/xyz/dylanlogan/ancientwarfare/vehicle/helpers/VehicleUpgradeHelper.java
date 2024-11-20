@@ -122,9 +122,13 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 	private void deserializeInstalledArmor(String[] armorRegistryNames) {
 		installedArmor.clear();
 		for (String armorRegistryName : armorRegistryNames) {
-			ArmourRegistry.getArmorType(new ResourceLocation(armorRegistryName)).ifPresent(armor -> installedArmor.add(armor));
+			IVehicleArmor armor = ArmourRegistry.getArmorType(armorRegistryName);
+			if (armor != null) {
+				installedArmor.add(armor);
+			}
 		}
 	}
+
 
 	private void deserializeUpgrades(NBTTagCompound tag) {
 		NBTTagList upgradeTypes = tag.getTagList("upgrades", Constants.NBT.TAG_STRING);
@@ -138,7 +142,10 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 	private void deserializeUpgrades(String[] upgradeRegistryNames) {
 		upgrades.clear();
 		for (String upgradeRegistryName : upgradeRegistryNames) {
-			UpgradeRegistry.getUpgrade(new ResourceLocation(upgradeRegistryName)).ifPresent(upgrades::add);
+			IVehicleUpgradeType upgrade = UpgradeRegistry.getUpgrade(upgradeRegistryName);
+			if (upgrade != null) {
+				upgrades.add(upgrade);
+			}
 		}
 	}
 

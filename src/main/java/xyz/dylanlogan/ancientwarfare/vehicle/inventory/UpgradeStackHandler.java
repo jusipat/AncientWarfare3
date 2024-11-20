@@ -46,6 +46,10 @@ public class UpgradeStackHandler {
 		return 1;
 	}
 
+	public int getSlots() {
+		return stacks.length;
+	}
+
 	public ItemStack getStackInSlot(int slot) {
 		return (slot < 0 || slot >= stacks.length) ? null : stacks[slot];
 	}

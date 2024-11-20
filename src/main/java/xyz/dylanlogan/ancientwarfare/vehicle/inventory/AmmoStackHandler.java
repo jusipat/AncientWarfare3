@@ -20,6 +20,10 @@ public class AmmoStackHandler {
 		return stacks[slot];
 	}
 
+	public int getSlots() {
+		return stacks.length;
+	}
+
 	public void setStackInSlot(int slot, ItemStack stack) {
 		stacks[slot] = stack;
 		onContentsChanged(slot); // Trigger update logic

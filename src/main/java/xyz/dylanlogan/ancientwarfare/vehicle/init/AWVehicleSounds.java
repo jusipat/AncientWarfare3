@@ -1,10 +1,7 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.init;
 
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.sound.SoundEvent;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 
 @GameRegistry.ObjectHolder(AncientWarfareVehicles.MOD_ID)

@@ -80,21 +80,30 @@ public class VehicleInventory {
 
 	public List<IVehicleArmor> getInventoryArmor() {
 		List<IVehicleArmor> armors = new ArrayList<>();
-		for (int i = 0; i < this.armorInventory.getSize(); i++) {
+		for (int i = 0; i < this.armorInventory.getSlots(); i++) {
 			ItemStack stack = this.armorInventory.getStackInSlot(i);
-			ArmourRegistry.getArmorForStack(stack).ifPresent(armors::add);
+			IVehicleArmor armor = ArmourRegistry.getArmorForStack(stack);
+			if (armor != null) {
+				armors.add(armor);
+			}
 		}
 		return armors;
 	}
 
+
+
 	public List<IVehicleUpgradeType> getInventoryUpgrades() {
 		List<IVehicleUpgradeType> upgrades = new ArrayList<>();
-		for (int i = 0; i < this.upgradeInventory.getSize(); i++) {
+		for (int i = 0; i < this.upgradeInventory.getSlots(); i++) {
 			ItemStack stack = this.upgradeInventory.getStackInSlot(i);
-			UpgradeRegistry.getUpgrade(stack).ifPresent(upgrades::add);
+			IVehicleUpgradeType upgrade = UpgradeRegistry.getUpgrade(stack);
+			if (upgrade != null) {
+				upgrades.add(upgrade);
+			}
 		}
 		return upgrades;
 	}
+
 
 	public StorageStackHandler getStorageInventory() {
 		return this.storageInventory;
@@ -102,7 +111,7 @@ public class VehicleInventory {
 
 	public List<VehicleAmmoEntry> getAmmoCounts() {
 		List<VehicleAmmoEntry> counts = new ArrayList<>();
-		for (int i = 0; i < this.ammoInventory.getSize(); i++) {
+		for (int i = 0; i < this.ammoInventory.getSlots(); i++) {
 			ItemStack stack = this.ammoInventory.getStackInSlot(i);
 			AmmoRegistry.getAmmoForStack(stack).ifPresent(ammo -> {
 				boolean found = false;

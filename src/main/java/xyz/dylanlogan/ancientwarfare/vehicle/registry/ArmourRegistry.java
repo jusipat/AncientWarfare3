@@ -1,8 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.registry;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.VehicleArmorIron;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.VehicleArmorObsidian;
@@ -11,36 +11,53 @@ import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemArmor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ArmourRegistry {
+
 	private ArmourRegistry() {}
 
 	public static IVehicleArmor armorStone;
 	public static IVehicleArmor armorIron;
 	public static IVehicleArmor armorObsidian;
 
-	private static Map<ResourceLocation, IVehicleArmor> armorInstances = new HashMap<>();
+	private static Map<String, IVehicleArmor> armorInstances = new HashMap<>();
 
-	public static void registerArmorTypes(IForgeRegistry<Item> registry) {
-		armorStone = registerArmorType(new VehicleArmorStone(), registry);
-		armorIron = registerArmorType(new VehicleArmorIron(), registry);
-		armorObsidian = registerArmorType(new VehicleArmorObsidian(), registry);
+	/**
+	 * Registers all armor types as items.
+	 */
+	public static void registerArmorTypes() {
+		armorStone = registerArmorType(new VehicleArmorStone(), "armor_stone");
+		armorIron = registerArmorType(new VehicleArmorIron(), "armor_iron");
+		armorObsidian = registerArmorType(new VehicleArmorObsidian(), "armor_obsidian");
 	}
 
-	private static IVehicleArmor registerArmorType(IVehicleArmor armor, IForgeRegistry<Item> registry) {
+	/**
+	 * Registers a single armor type and its corresponding item.
+	 */
+	private static IVehicleArmor registerArmorType(IVehicleArmor armor, String registryName) {
+		armorInstances.put(registryName, armor);
 
-		armorInstances.put(armor.getRegistryName(), armor);
-		ItemArmor item = new ItemArmor(armor.getRegistryName());
-		registry.register(item);
+		ItemArmor item = new ItemArmor(registryName); // Pass the registry name directly
+		item.setUnlocalizedName(registryName);
+		GameRegistry.registerItem(item, registryName); // Register the item in 1.7.10 style
+
 		return armor;
 	}
 
-	public static Optional<IVehicleArmor> getArmorType(ResourceLocation registryName) {
-		return Optional.ofNullable(armorInstances.get(registryName));
+	/**
+	 * Retrieves an armor type by its registry name.
+	 */
+	public static IVehicleArmor getArmorType(String registryName) {
+		return armorInstances.get(registryName);
 	}
 
-	public static Optional<IVehicleArmor> getArmorForStack(ItemStack stack) {
-		return Optional.ofNullable(armorInstances.get(stack.getItem().getRegistryName()));
+	/**
+	 * Retrieves an armor type based on the item stack.
+	 */
+	public static IVehicleArmor getArmorForStack(ItemStack stack) {
+		if (stack == null || stack.getItem() == null) {
+			return null;
+		}
+		return armorInstances.get(stack.getUnlocalizedName());
 	}
 }

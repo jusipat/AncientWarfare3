@@ -1,6 +1,3 @@
-package xyz.dylanlogan.ancientwarfare.vehicle.init;
-
-
 import net.minecraft.item.Item;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemMisc;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemSpawner;

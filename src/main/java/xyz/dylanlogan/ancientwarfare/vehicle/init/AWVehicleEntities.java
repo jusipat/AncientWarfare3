@@ -22,7 +22,7 @@ public class AWVehicleEntities {
 	private static class VehiculeDeclaration extends EntityDeclaration {
 
 		public VehiculeDeclaration(Class<? extends Entity> entityClass, String entityName) {
-			super(entityClass, entityName, nextID++, AncientWarfareVehicles.MOD_ID);
+			super(entityClass, entityName, nextID++);
 		}
 
 		@Override

@@ -11,7 +11,7 @@ public class ArmourStackHandler {
 	private final VehicleBase vehicle;
 
 	public ArmourStackHandler(VehicleBase vehicle, int size) {
-		this.stacks = new ItemStack[size]; // Initialize empty inventory
+		this.stacks = new ItemStack[size];
 		this.vehicle = vehicle;
 	}
 
@@ -22,6 +22,10 @@ public class ArmourStackHandler {
 	public void setStackInSlot(int slot, ItemStack stack) {
 		stacks[slot] = stack;
 		onContentsChanged(slot);
+	}
+
+	public int getSlots() {
+		return stacks.length;
 	}
 
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
