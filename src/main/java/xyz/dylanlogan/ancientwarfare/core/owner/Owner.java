@@ -81,15 +81,16 @@ public class Owner {
 			return tag;
 		}
 		tag.setString(OWNER_NAME_TAG, name);
-		tag.setUniqueId(OWNER_ID_TAG, uuid);
-
+		tag.setLong(OWNER_ID_TAG + "_most", uuid.getMostSignificantBits());
+		tag.setLong(OWNER_ID_TAG + "_least", uuid.getLeastSignificantBits());
 		return tag;
 	}
 
 	public static Owner deserializeFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey(OWNER_NAME_TAG)) {
-			//noinspection ConstantConditions - NBTTagCompound has getUniqueId marked as Nullable incorrectly
-			return new Owner(tag.getUniqueId(OWNER_ID_TAG), tag.getString(OWNER_NAME_TAG));
+			long mostSigBits = tag.getLong(OWNER_ID_TAG + "_most");
+			long leastSigBits = tag.getLong(OWNER_ID_TAG + "_least");
+			return new Owner(new UUID(mostSigBits, leastSigBits), tag.getString(OWNER_NAME_TAG));
 		}
 		return Owner.EMPTY;
 	}

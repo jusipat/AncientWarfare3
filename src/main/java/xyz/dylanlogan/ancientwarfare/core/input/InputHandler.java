@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 import xyz.dylanlogan.ancientwarfare.core.config.AWCoreStatics;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
+import xyz.dylanlogan.ancientwarfare.core.network.PacketItemMouseScroll;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,11 +25,11 @@ import java.util.function.Predicate;
 public class InputHandler {
 
 	private static final String CATEGORY = "keybind.category.awCore";
-	public static final KeyBinding ALT_ITEM_USE_1 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_1, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_Z, CATEGORY);
-	public static final KeyBinding ALT_ITEM_USE_2 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_2, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_X, CATEGORY);
-	public static final KeyBinding ALT_ITEM_USE_3 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_3, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_C, CATEGORY);
-	public static final KeyBinding ALT_ITEM_USE_4 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_4, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_V, CATEGORY);
-	public static final KeyBinding ALT_ITEM_USE_5 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_5, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_B, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_1 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_1, Keyboard.KEY_Z, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_2 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_2, Keyboard.KEY_X, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_3 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_3, Keyboard.KEY_C, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_4 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_4, Keyboard.KEY_V, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_5 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_5, Keyboard.KEY_B, CATEGORY);
 
 	private static final Set<InputCallbackDispatcher> keybindingCallbacks = new HashSet<>();
 
@@ -74,31 +75,38 @@ public class InputHandler {
 			return;
 		}
 
-		boolean state = Keyboard.getEventKeyState();
+		boolean state = Keyboard.isKeyDown(Keyboard.getEventKey());
 
 		if (state) {
-			keybindingCallbacks.stream().filter(k -> k.getKeyBinding().isKeyDown()).forEach(InputCallbackDispatcher::onKeyPressed);
+			keybindingCallbacks.stream().filter(k -> k.getKeyBinding().isPressed()).forEach(InputCallbackDispatcher::onKeyPressed);
 		}
 	}
 
 	@SubscribeEvent
-	public void onMouseEvent(MouseEvent event){
+	public void onMouseEvent(MouseEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (player.isSneaking() && event.getDwheel() != 0){
-			ItemStack stack = player.getHeldItemMainhand();
-			Item item = stack.getItem();
-			if (item instanceof IScrollableItem){
-				if (event.getDwheel() > 0) {
-					if (((IScrollableItem) item).onScrollUp(player.world, player, stack)) {
-						NetworkHandler.sendToServer(new PacketItemMouseScroll(true));
-					}
 
-				} else {
-					if (((IScrollableItem) item).onScrollDown(player.worldObj, player, stack)) {
-						NetworkHandler.sendToServer(new PacketItemMouseScroll(false));
+		if (player.isSneaking()) {
+			int delta = event.dwheel;
+			if (delta != 0) {
+				ItemStack stack = player.getHeldItem();
+
+				if (stack != null && stack.getItem() instanceof IScrollableItem) {
+					Item item = stack.getItem();
+
+					if (delta > 0) {
+						// Scroll up
+						if (((IScrollableItem) item).onScrollUp(player.worldObj, player, stack)) {
+							NetworkHandler.sendToServer(new PacketItemMouseScroll(true));
+						}
+					} else {
+						// Scroll down
+						if (((IScrollableItem) item).onScrollDown(player.worldObj, player, stack)) {
+							NetworkHandler.sendToServer(new PacketItemMouseScroll(false));
+						}
 					}
+					event.setCanceled(true);
 				}
-				event.setCanceled(true);
 			}
 		}
 	}
