@@ -21,7 +21,6 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle;
 
-import net.minecraft.client.renderer.entity.RenderManager;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.model.ModelBallistaMobile;
@@ -30,8 +29,8 @@ public class RenderBallistaMobile extends RenderVehicleBase {
 
 	ModelBallistaMobile model = new ModelBallistaMobile();
 
-	public RenderBallistaMobile(RenderManager renderManager) {
-		super(renderManager);
+	public RenderBallistaMobile() {
+		super();
 	}
 
 	@Override

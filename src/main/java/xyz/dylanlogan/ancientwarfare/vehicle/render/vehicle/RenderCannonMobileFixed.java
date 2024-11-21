@@ -30,8 +30,8 @@ public class RenderCannonMobileFixed extends RenderVehicleBase {
 
 	ModelCannonMobileFixed model = new ModelCannonMobileFixed();
 
-	public RenderCannonMobileFixed(RenderManager renderManager) {
-		super(renderManager);
+	public RenderCannonMobileFixed() {
+		super();
 	}
 
 	@Override

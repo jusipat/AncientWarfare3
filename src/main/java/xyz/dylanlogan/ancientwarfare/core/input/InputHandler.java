@@ -1,258 +1,105 @@
 package xyz.dylanlogan.ancientwarfare.core.input;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Property;
-import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
-import xyz.dylanlogan.ancientwarfare.core.config.AWCoreStatics;
-import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface;
-import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface.ItemKey;
-import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
-import xyz.dylanlogan.ancientwarfare.core.network.PacketItemInteraction;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
+import xyz.dylanlogan.ancientwarfare.core.config.AWCoreStatics;
+import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
 
+@SideOnly(Side.CLIENT)
 public class InputHandler {
 
-    public static final String KEY_ALT_ITEM_USE_0 = "keybind.alt_item_use_1";
-    public static final String KEY_ALT_ITEM_USE_1 = "keybind.alt_item_use_2";
-    public static final String KEY_ALT_ITEM_USE_2 = "keybind.alt_item_use_3";
-    public static final String KEY_ALT_ITEM_USE_3 = "keybind.alt_item_use_4";
-    public static final String KEY_ALT_ITEM_USE_4 = "keybind.alt_item_use_5";
+	private static final String CATEGORY = "keybind.category.awCore";
+	public static final KeyBinding ALT_ITEM_USE_1 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_1, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_Z, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_2 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_2, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_X, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_3 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_3, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_C, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_4 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_4, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_V, CATEGORY);
+	public static final KeyBinding ALT_ITEM_USE_5 = new KeyBinding(AWCoreStatics.KEY_ALT_ITEM_USE_5, ItemKeyConflictContext.INSTANCE, Keyboard.KEY_B, CATEGORY);
 
-    public static final InputHandler instance = new InputHandler();
-    /**
-     * map of keys by their registry-name
-     */
-    private final HashMap<String, Keybind> keybindMap;
-    /**
-     * map of a -set- of keys by their key-id
-     */
-    private final HashMap<Integer, Set<Keybind>> bindsByKey;
-    private long lastMouseInput = -1;
+	private static final Set<InputCallbackDispatcher> keybindingCallbacks = new HashSet<>();
 
-    private InputHandler() {
-        keybindMap = new HashMap<String, Keybind>();
-        bindsByKey = new HashMap<Integer, Set<Keybind>>();
-    }
+	static {
+		MinecraftForge.EVENT_BUS.register(new InputHandler());
+	}
 
-    public void loadConfig() {
-        registerKeybind(KEY_ALT_ITEM_USE_0, Keyboard.KEY_Z, new ItemInputCallback(ItemKey.KEY_0));
-        registerKeybind(KEY_ALT_ITEM_USE_1, Keyboard.KEY_X, new ItemInputCallback(ItemKey.KEY_1));
-        registerKeybind(KEY_ALT_ITEM_USE_2, Keyboard.KEY_C, new ItemInputCallback(ItemKey.KEY_2));
-        registerKeybind(KEY_ALT_ITEM_USE_3, Keyboard.KEY_V, new ItemInputCallback(ItemKey.KEY_3));
-        registerKeybind(KEY_ALT_ITEM_USE_4, Keyboard.KEY_B, new ItemInputCallback(ItemKey.KEY_4));
-    }
+	private InputHandler() {
+	}
 
-    public void updateFromConfig() {
-        updateKeybind(KEY_ALT_ITEM_USE_0);
-        updateKeybind(KEY_ALT_ITEM_USE_1);
-        updateKeybind(KEY_ALT_ITEM_USE_2);
-        updateKeybind(KEY_ALT_ITEM_USE_3);
-        updateKeybind(KEY_ALT_ITEM_USE_4);
-    }
+	public static void initKeyBindings() {
+		ClientRegistry.registerKeyBinding(ALT_ITEM_USE_1);
+		ClientRegistry.registerKeyBinding(ALT_ITEM_USE_2);
+		ClientRegistry.registerKeyBinding(ALT_ITEM_USE_3);
+		ClientRegistry.registerKeyBinding(ALT_ITEM_USE_4);
+		ClientRegistry.registerKeyBinding(ALT_ITEM_USE_5);
 
-    private void updateKeybind(String name) {
-        Keybind k = getKeybind(name);
-        if (k != null)//could be null if the keybind was added by a child-mod that is not currently present
-        {
-            reassignKeyCode(k, getKeybindProp(name, k.key).getInt());
-        }
-    }
+		initCallbacks();
+	}
 
-    public List<Property> getKeyConfig(String select){
-        List<Property> list = new ArrayList<Property>();
-        for(Keybind entry : keybindMap.values()){
-            if(entry.getName().contains(select))
-                list.add(getKeybindProp(entry.getName(), entry.getKeyCode()));
-        }
-        return list;
-    }
+	private static void initCallbacks() {
+		registerCallBack(ALT_ITEM_USE_1, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_1));
+		registerCallBack(ALT_ITEM_USE_2, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_2));
+		registerCallBack(ALT_ITEM_USE_3, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_3));
+		registerCallBack(ALT_ITEM_USE_4, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_4));
+		registerCallBack(ALT_ITEM_USE_5, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_5));
+	}
 
-    public Property getKeybindProp(String name){
-        Keybind k = getKeybind(name);
-        if (k != null)
-        {
-            return getKeybindProp(name, k.key);
-        }
-        return null;
-    }
+	public static void registerCallBack(KeyBinding keyBinding, IInputCallback callback) {
+		Predicate<InputCallbackDispatcher> matchingKeyBinding = d -> d.getKeyBinding().equals(keyBinding);
+		if (keybindingCallbacks.stream().anyMatch(matchingKeyBinding)) {
+			keybindingCallbacks.stream().filter(matchingKeyBinding).findFirst().ifPresent(d -> d.addInputCallback(callback));
+		} else {
+			keybindingCallbacks.add(new InputCallbackDispatcher(keyBinding, callback));
+		}
+	}
 
-    private Property getKeybindProp(String keyName, int defaultVal) {
-        return AncientWarfareCore.statics.getKeyBindID(keyName, defaultVal);
-    }
+	@SubscribeEvent
+	public void onKeyInput(InputEvent.KeyInputEvent evt) {
+		Minecraft minecraft = Minecraft.getMinecraft();
+		EntityPlayer player = minecraft.thePlayer;
+		if (player == null) {
+			return;
+		}
 
-    @SubscribeEvent
-    public void onKeyInput(KeyInputEvent evt) {
-        Minecraft minecraft = Minecraft.getMinecraft();
-        if (minecraft == null) {
-            return;
-        }
-        EntityPlayer player = minecraft.thePlayer;
-        if (player == null) {
-            return;
-        }
+		boolean state = Keyboard.getEventKeyState();
 
-        int key = Keyboard.getEventKey();
-        boolean state = Keyboard.getEventKeyState();
+		if (state) {
+			keybindingCallbacks.stream().filter(k -> k.getKeyBinding().isKeyDown()).forEach(InputCallbackDispatcher::onKeyPressed);
+		}
+	}
 
-        if (bindsByKey.containsKey(key)) {
-            Set<Keybind> keys = bindsByKey.get(key);
-            for (Keybind k : keys) {
-                if (state) {
-                    k.onKeyPressed();
-                } else {
-                    k.onKeyReleased();
-                }
-            }
-        }
-    }
+	@SubscribeEvent
+	public void onMouseEvent(MouseEvent event){
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (player.isSneaking() && event.getDwheel() != 0){
+			ItemStack stack = player.getHeldItemMainhand();
+			Item item = stack.getItem();
+			if (item instanceof IScrollableItem){
+				if (event.getDwheel() > 0) {
+					if (((IScrollableItem) item).onScrollUp(player.world, player, stack)) {
+						NetworkHandler.sendToServer(new PacketItemMouseScroll(true));
+					}
 
-    public Keybind getKeybind(String name) {
-        return keybindMap.get(name);
-    }
-
-    public String getKeybindBinding(String name) {
-        return Keyboard.getKeyName(getKeybind(name).getKeyCode());
-    }
-
-    public void registerKeybind(String name, int keyCode, InputCallback cb) {
-        if (!keybindMap.containsKey(name)) {
-            Property property = getKeybindProp(name, keyCode);
-            property.comment = "Default key: " + Keyboard.getKeyName(keyCode);
-            int key = property.getInt();
-            Keybind k = new Keybind(name, key);
-            keybindMap.put(name, k);
-            if (!bindsByKey.containsKey(key)) {
-                bindsByKey.put(key, new HashSet<Keybind>());
-            }
-            bindsByKey.get(key).add(k);
-        } else {
-            throw new RuntimeException("Attempt to register duplicate keybind: " + name);
-        }
-        if (cb != null) {
-            keybindMap.get(name).inputHandlers.add(cb);
-        }
-    }
-
-    public void reassignKeybind(String name, int newKey) {
-        Keybind k = keybindMap.get(name);
-        if (k == null) {
-            return;
-        }
-
-        getKeybindProp(name, k.key).set(newKey);
-        reassignKeyCode(k, newKey);
-        AWCoreStatics.update();
-    }
-
-    private void reassignKeyCode(Keybind k, int newKey) {
-        bindsByKey.get(k.key).remove(k);
-        k.key = newKey;
-
-        if (!bindsByKey.containsKey(newKey)) {
-            bindsByKey.put(newKey, new HashSet<Keybind>());
-        }
-        bindsByKey.get(newKey).add(k);
-    }
-
-    public void addInputCallback(String name, InputCallback cb) {
-        keybindMap.get(name).inputHandlers.add(cb);
-    }
-
-    public Collection<Keybind> getKeybinds() {
-        return keybindMap.values();
-    }
-
-    public static final class Keybind {
-        List<InputCallback> inputHandlers = new ArrayList<InputCallback>();
-
-        private int key;
-        private final String name;
-        private boolean isPressed;
-
-        private Keybind(String name, int key) {
-            this.name = name;
-            this.key = key;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getKeyCode() {
-            return key;
-        }
-
-        private void onKeyPressed() {
-            isPressed = true;
-            for (InputCallback c : inputHandlers) {
-                c.onKeyPressed();
-            }
-        }
-
-        public void onKeyReleased() {
-            for (InputCallback c : inputHandlers) {
-                c.onKeyReleased();
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "Keybind [" + key + "," + name + "]";
-        }
-
-        public boolean isPressed() {
-            return isPressed;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return this == o || o instanceof Keybind && getName().equals(((Keybind) o).getName());
-        }
-
-        @Override
-        public int hashCode() {
-            return getName().hashCode();
-        }
-    }
-
-    public static interface InputCallback {
-        public void onKeyPressed();
-
-        public void onKeyReleased();
-    }
-
-    private static final class ItemInputCallback implements InputCallback {
-        private final ItemKey key;
-
-        public ItemInputCallback(ItemKey key) {
-            this.key = key;
-        }
-
-        @Override
-        public void onKeyPressed() {
-            Minecraft minecraft = Minecraft.getMinecraft();
-            if (minecraft.currentScreen != null) {
-                return;
-            }
-            ItemStack stack = minecraft.thePlayer.getHeldItem();
-            if (stack != null && stack.getItem() instanceof IItemKeyInterface) {
-                if (((IItemKeyInterface) stack.getItem()).onKeyActionClient(minecraft.thePlayer, stack, key)) {
-                    PacketItemInteraction pkt = new PacketItemInteraction(0, key);
-                    NetworkHandler.sendToServer(pkt);
-                }
-            }
-        }
-
-        @Override
-        public void onKeyReleased() {
-        }
-
-    }
-
+				} else {
+					if (((IScrollableItem) item).onScrollDown(player.worldObj, player, stack)) {
+						NetworkHandler.sendToServer(new PacketItemMouseScroll(false));
+					}
+				}
+				event.setCanceled(true);
+			}
+		}
+	}
 }

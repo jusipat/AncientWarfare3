@@ -30,8 +30,8 @@ public class RenderCatapultMobileFixed extends RenderVehicleBase {
 
 	ModelCatapultMobileFixed model = new ModelCatapultMobileFixed();
 
-	public RenderCatapultMobileFixed(RenderManager renderManager) {
-		super(renderManager);
+	public RenderCatapultMobileFixed() {
+		super();
 	}
 
 	@Override

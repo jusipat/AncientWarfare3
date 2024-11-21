@@ -2,12 +2,9 @@ package xyz.dylanlogan.ancientwarfare.vehicle.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IVehicleType;
@@ -35,17 +32,14 @@ import xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle.RenderTrebuchetStand
 import xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle.RenderVehicleBase;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-public class RenderVehicle extends Render<VehicleBase> {
+public class RenderVehicle extends Render {
 
-	private HashMap<IVehicleType, RenderVehicleBase> vehicleRenders = new HashMap<>();
+	private final HashMap<IVehicleType, RenderVehicleBase> vehicleRenders = new HashMap<>();
 
-	public RenderVehicle(RenderManager renderManager) {
-		super(renderManager);
-
+	public RenderVehicle() {
 		vehicleRenders.put(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed(renderManager));
 		vehicleRenders.put(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret(renderManager));
 		vehicleRenders.put(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed(renderManager));
@@ -70,36 +64,57 @@ public class RenderVehicle extends Render<VehicleBase> {
 	}
 
 	@Override
-	public void doRender(VehicleBase vehicle, double x, double y, double z, float renderYaw, float partialTicks) {
+	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
+		if (!(entity instanceof VehicleBase)) return;
+
+		VehicleBase vehicle = (VehicleBase) entity;
 		boolean useAlpha = false;
-		if (!AWVehicleStatics.clientSettings.renderVehiclesInFirstPerson && vehicle.getControllingPassenger() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+
+		// Handle transparency in first-person view
+		if (!AWVehicleStatics.clientSettings.renderVehiclesInFirstPerson &&
+				vehicle.getControllingPassenger() == Minecraft.getMinecraft().thePlayer &&
+				Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
 			useAlpha = true;
-			GlStateManager.color(1.f, 1.f, 1.f, 0.2f);
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.2F);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(renderYaw, 0, 1, 0);
-		GlStateManager.scale(-1, -1, 1);
+
+		// Render the vehicle
+		GL11.glPushMatrix();
+		GL11.glTranslated(x, y, z);
+		GL11.glRotatef(yaw, 0.0F, 1.0F, 0.0F);
+		GL11.glScalef(-1.0F, -1.0F, 1.0F);
+
 		if (vehicle.hitAnimationTicks > 0) {
-			float percent = ((float) vehicle.hitAnimationTicks / 20.f);
-			GlStateManager.color(1.f, 1.f - percent, 1.f - percent, 1.f);
+			float percent = ((float) vehicle.hitAnimationTicks / 20.0F);
+			GL11.glColor4f(1.0F, 1.0F - percent, 1.0F - percent, 1.0F);
 		}
+
 		bindTexture(vehicle.getTexture());
 		RenderVehicleBase render = vehicleRenders.get(vehicle.vehicleType);
-		render.renderVehicle(vehicle, x, y, z, renderYaw, partialTicks);
-		GlStateManager.color(1.f, 1.f, 1.f, 1.f);
-		GlStateManager.popMatrix();
-		if (useAlpha) {
-			GlStateManager.disableBlend();
+		if (render != null) {
+			render.renderVehicle(vehicle, x, y, z, yaw, partialTicks);
 		}
 
-		// dont' render nameplate for the vehicle that thePlayer is on
-		if (isInWorld(vehicle) && AWVehicleStatics.clientSettings.renderVehicleNameplates && vehicle.getControllingPassenger() != Minecraft.getMinecraft().player) {
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glPopMatrix();
+
+		if (useAlpha) {
+			GL11.glDisable(GL11.GL_BLEND);
+		}
+
+		// Render nameplate
+		if (isInWorld(vehicle) &&
+				AWVehicleStatics.clientSettings.renderVehicleNameplates &&
+				vehicle.getControllingPassenger() != Minecraft.getMinecraft().thePlayer) {
 			renderNamePlate(vehicle, x, y, z);
 		}
+	}
 
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return entity instanceof VehicleBase ? ((VehicleBase) entity).getTexture() : null;
 	}
 
 	private boolean isInWorld(VehicleBase vehicle) {
@@ -109,56 +124,53 @@ public class RenderVehicle extends Render<VehicleBase> {
 	private DecimalFormat formatter1d = new DecimalFormat("#.#");
 
 	private void renderNamePlate(VehicleBase vehicle, double x, double y, double z) {
-		double var10 = vehicle.getDistanceSq(this.renderManager.renderViewEntity);
-		int par9 = 64;
-		String par2Str = vehicle.vehicleType.getLocalizedName();
+		double distanceSq = vehicle.getDistanceSqToEntity(renderManager.livingPlayer);
+		int maxDistance = 64;
+		String displayName = vehicle.vehicleType.getLocalizedName();
+
 		if (AWVehicleStatics.clientSettings.renderVehicleNameplateHealth) {
-			par2Str = par2Str + " " + formatter1d.format(vehicle.getHealth()) + "/" + formatter1d.format(vehicle.baseHealth);
+			displayName += " " + formatter1d.format(vehicle.getHealth()) + "/" + formatter1d.format(vehicle.baseHealth);
 		}
-		if (var10 <= (double) (par9 * par9)) {
-			FontRenderer var12 = this.getFontRendererFromRenderManager();
-			float var13 = 1.6F;
-			float var14 = 0.016666668F * var13;
-			float namePlateHeight = vehicle.height + 0.75f;
-			GlStateManager.pushMatrix();
-			GlStateManager.translate((float) x + 0.0F, (float) y + namePlateHeight, (float) z);
-			GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-			GlStateManager.scale(-var14, -var14, var14);
-			GlStateManager.disableLighting();
-			GlStateManager.depthMask(false);
-			GlStateManager.disableDepth();
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			Tessellator tesselator = Tessellator.getInstance();
-			BufferBuilder bufferBuilder = tesselator.getBuffer();
-			byte var16 = 0;
-			GlStateManager.disableTexture2D();
-			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-			int var17 = var12.getStringWidth(par2Str) / 2;
-			bufferBuilder.pos((double) (-var17 - 1), (double) (-1 + var16), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			bufferBuilder.pos((double) (-var17 - 1), (double) (8 + var16), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			bufferBuilder.pos((double) (var17 + 1), (double) (8 + var16), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			bufferBuilder.pos((double) (var17 + 1), (double) (-1 + var16), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-			tesselator.draw();
-			GlStateManager.enableTexture2D();
-			var12.drawString(par2Str, -var12.getStringWidth(par2Str) / 2, var16, 553648127);
-			GlStateManager.enableDepth();
-			GlStateManager.depthMask(true);
-			var12.drawString(par2Str, -var12.getStringWidth(par2Str) / 2, var16, -1);
-			GlStateManager.enableLighting();
-			GlStateManager.disableBlend();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-			GlStateManager.popMatrix();
+		if (distanceSq <= (maxDistance * maxDistance)) {
+			FontRenderer fontRenderer = getFontRendererFromRenderManager();
+			float scale = 0.016666668F * 1.6F; // Adjusted scale
+			float namePlateHeight = vehicle.height + 0.75F;
+
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float) x, (float) y + namePlateHeight, (float) z);
+			GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+			GL11.glScalef(-scale, -scale, scale);
+
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDepthMask(false);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+			Tessellator tessellator = Tessellator.instance;
+			int textWidth = fontRenderer.getStringWidth(displayName) / 2;
+
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			tessellator.startDrawingQuads();
+			tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+			tessellator.addVertex(-textWidth - 1, -1, 0.0D);
+			tessellator.addVertex(-textWidth - 1, 8, 0.0D);
+			tessellator.addVertex(textWidth + 1, 8, 0.0D);
+			tessellator.addVertex(textWidth + 1, -1, 0.0D);
+			tessellator.draw();
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+			fontRenderer.drawString(displayName, -fontRenderer.getStringWidth(displayName) / 2, 0, 553648127);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glDepthMask(true);
+			fontRenderer.drawString(displayName, -fontRenderer.getStringWidth(displayName) / 2, 0, -1);
+
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
 		}
 	}
-
-	@Nullable
-	@Override
-	protected ResourceLocation getEntityTexture(VehicleBase entity) {
-		return entity.getTexture();
-	}
-
 }

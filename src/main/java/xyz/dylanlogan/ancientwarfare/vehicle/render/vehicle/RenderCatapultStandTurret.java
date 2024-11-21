@@ -21,7 +21,6 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle;
 
-import net.minecraft.client.renderer.entity.RenderManager;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.model.ModelCatapultStandTurret;
@@ -30,8 +29,8 @@ public class RenderCatapultStandTurret extends RenderVehicleBase {
 
 	ModelCatapultStandTurret model = new ModelCatapultStandTurret();
 
-	public RenderCatapultStandTurret(RenderManager renderManager) {
-		super(renderManager);
+	public RenderCatapultStandTurret() {
+		super();
 	}
 
 	@Override

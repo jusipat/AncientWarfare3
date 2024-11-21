@@ -10,17 +10,14 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.render.missile.RenderArrow;
 import xyz.dylanlogan.ancientwarfare.vehicle.render.missile.RenderShot;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 
-public class RenderMissile extends Render<MissileBase> {
-	private HashMap<IAmmo, Render<MissileBase>> missileRenders = new HashMap<>();
+public class RenderMissile extends Render {
+	private HashMap<IAmmo, Render> missileRenders = new HashMap<>();
 	private RenderArrow arrowRender;
 	private RenderShot shotRender;
 
 	public RenderMissile(RenderManager renderManager) {
-		super(renderManager);
-
 		arrowRender = new RenderArrow(renderManager);
 		shotRender = new RenderShot(renderManager);
 
@@ -80,20 +77,22 @@ public class RenderMissile extends Render<MissileBase> {
 		missileRenders.put(AmmoRegistry.ammoBallIronShot, shotRender);
 	}
 
-	@Nullable
 	@Override
-	protected ResourceLocation getEntityTexture(MissileBase entity) {
-		return entity.getTexture();
-	}
-
-	@Override
-	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {
-		Render render = missileRenders.get(entity.ammoTyle);
-		render.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		if (entity instanceof MissileBase) {
+			return ((MissileBase) entity).getTexture();
+		}
 		return null;
+	}
+
+	@Override
+	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
+		if (entity instanceof MissileBase) {
+			MissileBase missile = (MissileBase) entity;
+			Render render = missileRenders.get(missile.ammoType);
+			if (render != null) {
+				render.doRender(missile, x, y, z, yaw, partialTicks);
+			}
+		}
 	}
 }

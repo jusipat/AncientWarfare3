@@ -30,8 +30,8 @@ public class RenderBatteringRam extends RenderVehicleBase {
 
 	public ModelBatteringRam model = new ModelBatteringRam();
 
-	public RenderBatteringRam(RenderManager renderManager) {
-		super(renderManager);
+	public RenderBatteringRam() {
+		super();
 	}
 
 	@Override

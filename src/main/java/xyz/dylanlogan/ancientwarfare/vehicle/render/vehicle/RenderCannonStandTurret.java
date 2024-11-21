@@ -30,8 +30,8 @@ public class RenderCannonStandTurret extends RenderVehicleBase {
 
 	ModelCannonStandTurret model = new ModelCannonStandTurret();
 
-	public RenderCannonStandTurret(RenderManager renderManager) {
-		super(renderManager);
+	public RenderCannonStandTurret() {
+		super();
 	}
 
 	@Override

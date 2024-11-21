@@ -1,10 +1,10 @@
-package xyz.dylanlogan.ancientwarfare.vehicle.input;
+package xyz.dylanlogan.ancientwarfare.core.input;
 
+import net.minecraft.client.Minecraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import xyz.dylanlogan.ancientwarfare.core.input.IInputCallback;
-import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
+import net.shadowmage.ancientwarfare.core.input.IInputCallback;
+import net.shadowmage.ancientwarfare.vehicle.entity.VehicleBase;
 
 import java.util.function.Consumer;
 
@@ -19,7 +19,7 @@ public class VehicleCallback implements IInputCallback {
 	@Override
 	public void onKeyPressed() {
 		Minecraft mc = Minecraft.getMinecraft();
-		VehicleBase vehicle = (VehicleBase) mc.thePlayer.ridingEntity;
+		VehicleBase vehicle = (VehicleBase) mc.player.getRidingEntity();
 		callback.accept(vehicle);
 	}
 }

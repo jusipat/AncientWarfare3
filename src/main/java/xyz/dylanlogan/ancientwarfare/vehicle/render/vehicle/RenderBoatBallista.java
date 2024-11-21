@@ -30,8 +30,8 @@ public class RenderBoatBallista extends RenderVehicleBase {
 
 	ModelBoatBallista model = new ModelBoatBallista();
 
-	public RenderBoatBallista(RenderManager renderManager) {
-		super(renderManager);
+	public RenderBoatBallista() {
+		super();
 	}
 
 	@Override

@@ -21,7 +21,6 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle;
 
-import net.minecraft.client.renderer.entity.RenderManager;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 import xyz.dylanlogan.ancientwarfare.vehicle.model.ModelCatapultStandFixed;
@@ -30,8 +29,8 @@ public class RenderCatapultStandFixed extends RenderVehicleBase {
 
 	ModelCatapultStandFixed model = new ModelCatapultStandFixed();
 
-	public RenderCatapultStandFixed(RenderManager renderManager) {
-		super(renderManager);
+	public RenderCatapultStandFixed() {
+		super();
 	}
 
 	@Override

@@ -22,7 +22,7 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle;
 
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
@@ -32,8 +32,8 @@ public class RenderHwacha extends RenderVehicleBase {
 
 	ModelHwacha model = new ModelHwacha();
 
-	public RenderHwacha(RenderManager renderManager) {
-		super(renderManager);
+	public RenderHwacha() {
+		super();
 	}
 
 	@Override

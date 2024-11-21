@@ -30,8 +30,8 @@ public class RenderBoatCatapult extends RenderVehicleBase {
 
 	ModelBoatCatapult model = new ModelBoatCatapult();
 
-	public RenderBoatCatapult(RenderManager renderManager) {
-		super(renderManager);
+	public RenderBoatCatapult() {
+		super();
 	}
 
 	@Override

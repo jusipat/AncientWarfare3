@@ -30,8 +30,8 @@ public class RenderBoatTransport extends RenderVehicleBase {
 
 	ModelBoatTransport model = new ModelBoatTransport();
 
-	public RenderBoatTransport(RenderManager renderManager) {
-		super(renderManager);
+	public RenderBoatTransport() {
+		super();
 	}
 
 	@Override

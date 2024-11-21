@@ -21,8 +21,7 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.render.vehicle;
 
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.model.ModelChestCart;
@@ -30,8 +29,8 @@ import xyz.dylanlogan.ancientwarfare.vehicle.model.ModelChestCart;
 public class RenderChestCart extends RenderVehicleBase {
 	ModelChestCart model = new ModelChestCart();
 
-	public RenderChestCart(RenderManager renderManager) {
-		super(renderManager);
+	public RenderChestCart() {
+		super();
 	}
 
 	@Override

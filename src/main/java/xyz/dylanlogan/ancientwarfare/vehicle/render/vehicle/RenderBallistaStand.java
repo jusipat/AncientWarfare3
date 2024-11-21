@@ -30,8 +30,8 @@ public class RenderBallistaStand extends RenderVehicleBase {
 
 	ModelBallistaStand model = new ModelBallistaStand();
 
-	public RenderBallistaStand(RenderManager renderManager) {
-		super(renderManager);
+	public RenderBallistaStand() {
+		super();
 	}
 
 	@Override

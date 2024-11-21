@@ -30,8 +30,8 @@ public class RenderTrebuchetStandFixed extends RenderVehicleBase {
 
 	ModelTrebuchetStandFixed model = new ModelTrebuchetStandFixed();
 
-	public RenderTrebuchetStandFixed(RenderManager renderManager) {
-		super(renderManager);
+	public RenderTrebuchetStandFixed() {
+		super();
 	}
 
 	@Override
