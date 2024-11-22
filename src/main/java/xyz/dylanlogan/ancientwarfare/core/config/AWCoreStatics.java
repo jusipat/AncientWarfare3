@@ -8,6 +8,12 @@ import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 
 public class AWCoreStatics extends ModConfiguration{
 
+    public static final String KEY_ALT_ITEM_USE_1 = "keybind.awCore.alt.item.use.1";
+    public static final String KEY_ALT_ITEM_USE_2 = "keybind.awCore.alt.item.use.2";
+    public static final String KEY_ALT_ITEM_USE_3 = "keybind.awCore.alt.item.use.3";
+    public static final String KEY_ALT_ITEM_USE_4 = "keybind.awCore.alt.item.use.4";
+    public static final String KEY_ALT_ITEM_USE_5 = "keybind.awCore.alt.item.use.5";
+
     public static boolean DEBUG = true;
     public static final String resourcePath = "/assets/ancientwarfare/resources/";
 

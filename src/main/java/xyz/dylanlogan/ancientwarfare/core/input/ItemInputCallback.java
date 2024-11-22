@@ -4,7 +4,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.PacketItemInteraction;
 
@@ -20,17 +19,14 @@ class ItemInputCallback implements IInputCallback {
 	public void onKeyPressed() {
 		Minecraft minecraft = Minecraft.getMinecraft();
 		if (minecraft.currentScreen != null) {
-			return;
-		}
-		if (!runAction(minecraft, EnumHand.MAIN_HAND)) {
-			runAction(minecraft, EnumHand.OFF_HAND);
+			return; // useless !
 		}
 	}
 
-	private boolean runAction(Minecraft minecraft, EnumHand hand) {
+	private boolean runAction(Minecraft minecraft) {
 		ItemStack stack = minecraft.thePlayer.getHeldItem();
 		if (stack.getItem() instanceof IItemKeyInterface && ((IItemKeyInterface) stack.getItem()).onKeyActionClient(minecraft.thePlayer, stack, altFunction)) {
-			PacketItemInteraction pkt = new PacketItemInteraction(altFunction);
+			PacketItemInteraction pkt = new PacketItemInteraction(altFunction.ordinal()); // this probably breaks things
 			NetworkHandler.sendToServer(pkt);
 			return true;
 		}

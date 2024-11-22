@@ -17,6 +17,7 @@ import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IMissileHitCallback;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -345,8 +346,11 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	protected void readEntityFromNBT(NBTTagCompound tag) {
 		this.ammoType = AmmoRegistry.getAmmo(new ResourceLocation(tag.getString("ammoRegistryName")));
 		this.inGround = tag.getBoolean("inGround");
-		persistentBlockPos = BlockPos.fromLong(tag.getLong("persistentBlockPos"));
-		persistentBlock = NBTUtil.readBlockState(tag.getCompoundTag("persistentBlock"));
+		persistentBlockPos = new ChunkCoordinates(
+						tag.getInteger("persistentBlockPosX"),
+						tag.getInteger("persistentBlockPosY"),
+						tag.getInteger("persistentBlockPosZ"));
+		persistentBlock = tag.getInteger("persistentBlock");
 		this.ticksExisted = tag.getInteger("ticks");
 		this.mX = tag.getFloat("mX");
 		this.mY = tag.getFloat("mY");
@@ -360,10 +364,10 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	protected void writeEntityToNBT(NBTTagCompound tag) {
 		tag.setString("ammoRegistryName", ammoType.getRegistryName().toString());
 		tag.setBoolean("inGround", this.inGround);
-		tag.setLong("persistentBlockPos", persistentBlockPos.toLong());
-		NBTTagCompound block = new NBTTagCompound();
-		NBTUtil.writeBlockState(block, persistentBlock);
-		tag.setTag("persistentBlock", block);
+		tag.setInteger("persistentBlockPosX", persistentBlockPos.posX);
+		tag.setInteger("persistentBlockPosY", persistentBlockPos.posY);
+		tag.setInteger("persistentBlockPosZ", persistentBlockPos.posZ);
+		tag.setInteger("persistentBlock", worldObj.getBlockMetadata(this.chunkCoordX, this.chunkCoordY, this.chunkCoordZ));
 		tag.setInteger("ticks", this.ticksExisted);
 		tag.setFloat("mX", this.mX);
 		tag.setFloat("mY", this.mY);
@@ -378,32 +382,81 @@ public class MissileBase extends Entity implements IEntityAdditionalSpawnData {
 	@Override
 	public void writeSpawnData(ByteBuf data) {
 		PacketBuffer pb = new PacketBuffer(data);
-		pb.writeString(ammoType.getRegistryName().toString());
+
+		// Write ammo type
+		String registryName = ammoType.getRegistryName().toString();
+		pb.writeInt(registryName.length()); // Write the length of the string
+		pb.writeBytes(registryName.getBytes()); // Write the string bytes
+
+		// Write rotation data
 		pb.writeFloat(rotationYaw);
 		pb.writeFloat(rotationPitch);
+
+		// Write inGround status
 		pb.writeBoolean(inGround);
-		pb.writeLong(persistentBlockPos.toLong());
-		pb.writeInt(Block.getStateId(persistentBlock));
+
+		pb.writeInt(persistentBlockPos.posX);
+		pb.writeInt(persistentBlockPos.posY);
+		pb.writeInt(persistentBlockPos.posZ);
+
+		// Write persistent block and metadata
+		pb.writeInt(Block.blockRegistry.getIDForObject(persistentBlock));
+		pb.writeInt(persistentBlock);
+
+		// Write rocket burn time
 		pb.writeInt(rocketBurnTime);
+
+		// Write launcher entity ID if present
 		pb.writeBoolean(this.launcher != null);
 		if (this.launcher != null) {
 			pb.writeInt(this.launcher.getEntityId());
 		}
 	}
 
+
 	@Override
 	public void readSpawnData(ByteBuf data) {
 		PacketBuffer pb = new PacketBuffer(data);
-		ammoType = AmmoRegistry.getAmmo(new ResourceLocation(pb.readString(64)));
+
+		try {
+			// Read ammo type
+			String ammoRegistryName = pb.readStringFromBuffer(64);
+			this.ammoType = AmmoRegistry.getAmmo(new ResourceLocation(ammoRegistryName));
+			if (this.ammoType == null) {
+				this.ammoType = AmmoRegistry.ammoArrow; // Default to arrow ammo if null
+			}
+
+		// Read entity rotation
 		this.prevRotationYaw = this.rotationYaw = pb.readFloat();
 		this.prevRotationPitch = this.rotationPitch = pb.readFloat();
+
+		// Read whether the missile is in the ground
 		this.inGround = pb.readBoolean();
-		persistentBlockPos = BlockPos.fromLong(pb.readLong());
-		persistentBlock = Block.getStateById(pb.readInt());
+
+		// Read persistent block position as ChunkCoordinates
+		int x = pb.readInt();
+		int y = pb.readInt();
+		int z = pb.readInt();
+		this.persistentBlockPos = new ChunkCoordinates(x, y, z);
+
+		// Read persistent block metadata
+		this.persistentBlock = pb.readInt();
+
+		// Read movement values
+		this.mX = pb.readFloat();
+		this.mY = pb.readFloat();
+		this.mZ = pb.readFloat();
+
+		// Read rocket burn time
 		this.rocketBurnTime = pb.readInt();
+
+		// Read launcher entity
 		boolean hasLauncher = pb.readBoolean();
 		if (hasLauncher) {
-			launcher = worldObj.getEntityByID(pb.readInt());
+			this.launcher = worldObj.getEntityByID(pb.readInt());
 		}
-	}
+	} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

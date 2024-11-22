@@ -51,11 +51,11 @@ public class InputHandler {
 	}
 
 	private static void initCallbacks() {
-		registerCallBack(ALT_ITEM_USE_1, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_1));
-		registerCallBack(ALT_ITEM_USE_2, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_2));
-		registerCallBack(ALT_ITEM_USE_3, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_3));
-		registerCallBack(ALT_ITEM_USE_4, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_4));
-		registerCallBack(ALT_ITEM_USE_5, new ItemInputCallback(ItemAltFunction.ALT_FUNCTION_5));
+		registerCallBack(ALT_ITEM_USE_1, new ItemInputCallback(IItemKeyInterface.ItemAltFunction.ALT_FUNCTION_1));
+		registerCallBack(ALT_ITEM_USE_2, new ItemInputCallback(IItemKeyInterface.ItemAltFunction.ALT_FUNCTION_2));
+		registerCallBack(ALT_ITEM_USE_3, new ItemInputCallback(IItemKeyInterface.ItemAltFunction.ALT_FUNCTION_3));
+		registerCallBack(ALT_ITEM_USE_4, new ItemInputCallback(IItemKeyInterface.ItemAltFunction.ALT_FUNCTION_4));
+		registerCallBack(ALT_ITEM_USE_5, new ItemInputCallback(IItemKeyInterface.ItemAltFunction.ALT_FUNCTION_5));
 	}
 
 	public static void registerCallBack(KeyBinding keyBinding, IInputCallback callback) {
@@ -75,7 +75,7 @@ public class InputHandler {
 			return;
 		}
 
-		boolean state = Keyboard.isKeyDown(Keyboard.getEventKey());
+		boolean state = Keyboard.getEventKeyState();
 
 		if (state) {
 			keybindingCallbacks.stream().filter(k -> k.getKeyBinding().isPressed()).forEach(InputCallbackDispatcher::onKeyPressed);
@@ -83,30 +83,23 @@ public class InputHandler {
 	}
 
 	@SubscribeEvent
-	public void onMouseEvent(MouseEvent event) {
+	public void onMouseEvent(MouseEvent event){
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
-		if (player.isSneaking()) {
-			int delta = event.dwheel;
-			if (delta != 0) {
-				ItemStack stack = player.getHeldItem();
-
-				if (stack != null && stack.getItem() instanceof IScrollableItem) {
-					Item item = stack.getItem();
-
-					if (delta > 0) {
-						// Scroll up
-						if (((IScrollableItem) item).onScrollUp(player.worldObj, player, stack)) {
-							NetworkHandler.sendToServer(new PacketItemMouseScroll(true));
-						}
-					} else {
-						// Scroll down
-						if (((IScrollableItem) item).onScrollDown(player.worldObj, player, stack)) {
-							NetworkHandler.sendToServer(new PacketItemMouseScroll(false));
-						}
+		if (player.isSneaking() && event.dwheel != 0){
+			ItemStack stack = player.getHeldItem();
+			Item item = stack.getItem();
+			if (item instanceof IScrollableItem){
+				if (event.dwheel > 0) {
+					if (((IScrollableItem) item).onScrollUp(player.worldObj, player, stack)) {
+						NetworkHandler.sendToServer(new PacketItemMouseScroll(true));
 					}
-					event.setCanceled(true);
+
+				} else {
+					if (((IScrollableItem) item).onScrollDown(player.worldObj, player, stack)) {
+						NetworkHandler.sendToServer(new PacketItemMouseScroll(false));
+					}
 				}
+				event.setCanceled(true);
 			}
 		}
 	}

@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 
 public class ClientProxyBase extends CommonProxyBase {
 

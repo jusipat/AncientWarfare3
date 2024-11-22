@@ -31,28 +31,28 @@ import java.util.Set;
 @SideOnly(Side.CLIENT)
 public class VehicleInputHandler {
 	private static final String CATEGORY = "keybind.category.awVehicles";
-	private static final KeyBinding FORWARD = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_FORWARD, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_W,
+	private static final KeyBinding FORWARD = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_FORWARD,  Keyboard.KEY_W,
 			CATEGORY);
-	private static final KeyBinding REVERSE = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_REVERSE, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_S,
+	private static final KeyBinding REVERSE = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_REVERSE,  Keyboard.KEY_S,
 			CATEGORY);
-	private static final KeyBinding LEFT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_LEFT, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_A, CATEGORY);
-	private static final KeyBinding RIGHT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_RIGHT, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_D, CATEGORY);
-	private static final KeyBinding ASCEND_AIM_UP = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_ASCEND_AIM_UP, VehicleKeyConflictContext.INSTANCE,
+	private static final KeyBinding LEFT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_LEFT,  Keyboard.KEY_A, CATEGORY);
+	private static final KeyBinding RIGHT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_RIGHT,  Keyboard.KEY_D, CATEGORY);
+	private static final KeyBinding ASCEND_AIM_UP = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_ASCEND_AIM_UP, 
 			Keyboard.KEY_R, CATEGORY);
-	private static final KeyBinding DESCEND_AIM_DOWN = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_DESCEND_AIM_DOWN, VehicleKeyConflictContext.INSTANCE,
+	private static final KeyBinding DESCEND_AIM_DOWN = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_DESCEND_AIM_DOWN, 
 			Keyboard.KEY_F, CATEGORY);
-	private static final KeyBinding FIRE = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_FIRE, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_SPACE, CATEGORY);
-	private static final KeyBinding AMMO_PREV = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_AMMO_PREV, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_T,
+	private static final KeyBinding FIRE = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_FIRE,  Keyboard.KEY_SPACE, CATEGORY);
+	private static final KeyBinding AMMO_PREV = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_AMMO_PREV,  Keyboard.KEY_T,
 			CATEGORY);
-	private static final KeyBinding AMMO_NEXT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_AMMO_NEXT, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_G,
+	private static final KeyBinding AMMO_NEXT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_AMMO_NEXT,  Keyboard.KEY_G,
 			CATEGORY);
-	private static final KeyBinding TURRET_LEFT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_TURRET_LEFT, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_Z,
+	private static final KeyBinding TURRET_LEFT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_TURRET_LEFT,  Keyboard.KEY_Z,
 			CATEGORY);
-	private static final KeyBinding TURRET_RIGHT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_TURRET_RIGHT, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_X,
+	private static final KeyBinding TURRET_RIGHT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_TURRET_RIGHT,  Keyboard.KEY_X,
 			CATEGORY);
-	private static final KeyBinding MOUSE_AIM = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_MOUSE_AIM, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_C,
+	private static final KeyBinding MOUSE_AIM = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_MOUSE_AIM,  Keyboard.KEY_C,
 			CATEGORY);
-	private static final KeyBinding AMMO_SELECT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_AMMO_SELECT, VehicleKeyConflictContext.INSTANCE, Keyboard.KEY_V,
+	private static final KeyBinding AMMO_SELECT = new KeyBinding(AWVehicleStatics.KEY_VEHICLE_AMMO_SELECT,  Keyboard.KEY_V,
 			CATEGORY);
 
 	private static final Set<Integer> releaseableKeys = new HashSet<>();
@@ -184,7 +184,7 @@ public class VehicleInputHandler {
 
 	private static double getDistanceToCollidedEntity(Entity entity, Vec3 startVector, Vec3 endVector) {
 		float borderSize = entity.getCollisionBorderSize();
-		AxisAlignedBB entBB = entity.getEntityBoundingBox().grow((double) borderSize, (double) borderSize, (double) borderSize);
+		AxisAlignedBB entBB = entity.boundingBox.expand(borderSize, borderSize, borderSize);
 		MovingObjectPosition MovingObjectPosition = entBB.calculateIntercept(startVector, endVector);
 
 		return MovingObjectPosition != null ? startVector.distanceTo(MovingObjectPosition.hitVec) : Double.MAX_VALUE;
@@ -223,7 +223,7 @@ public class VehicleInputHandler {
 
 			PacketVehicleInput pkt = new PacketVehicleInput(vehicle);
 
-			vehicleMovementHandlers.stream().filter(h -> h.getKeyBinding().isKeyDown() && !h.getReverseKeyBinding().isKeyDown())
+			vehicleMovementHandlers.stream().filter(h -> h.getKeyBinding().getIsKeyPressed() && !h.getReverseKeyBinding().getIsKeyPressed())
 					.forEach(h -> h.updatePacket(pkt));
 
 			NetworkHandler.sendToServer(pkt);

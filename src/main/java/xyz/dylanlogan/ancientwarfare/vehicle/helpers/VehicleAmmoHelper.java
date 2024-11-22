@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.util.Constants;
-import scala.Function2;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
@@ -28,6 +27,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 
 public class VehicleAmmoHelper implements IExtendedEntityProperties {
 
@@ -55,7 +55,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 			return;
 		}
 		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
-			int removed = InventoryTools.removeItems(vehicle.inventory.ammoInventory, new ItemStack(AmmoRegistry.getItem(currentAmmoType)), 1).getCount();
+			int removed = InventoryTools.removeItems(vehicle.inventory, 0, new ItemStack(AmmoRegistry.getItem(currentAmmoType)), 1).getCount();
 			VehicleAmmoEntry entry = this.ammoEntries.get(this.currentAmmoType);
 			int origCount = entry.ammoCount;
 			entry.ammoCount -= removed;
@@ -72,15 +72,25 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 	 * get the current EFFECTIVE ammo count (not actual).  Soldiers use this to fool
 	 * the vehicle into firing infinite rounds.
 	 */
+//	public int getCurrentAmmoCount() {
+//		if (vehicle.getControllingPassenger() instanceof NpcFaction || AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo && vehicle.getControllingPassenger() instanceof NpcSiegeEngineer) {
+//			return 64;
+//		}
+//		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
+//			return this.ammoEntries.get(currentAmmoType).ammoCount;
+//		}
+//		return 0;
+//	}
+
 	public int getCurrentAmmoCount() {
-		if (vehicle.getControllingPassenger() instanceof NpcFaction || AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo && vehicle.getControllingPassenger() instanceof NpcSiegeEngineer) {
-			return 64;
-		}
-		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
-			return this.ammoEntries.get(currentAmmoType).ammoCount;
-		}
-		return 0;
+	if (vehicle.getControllingPassenger() instanceof NpcFaction) {
+		return 64;
 	}
+	if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
+		return this.ammoEntries.get(currentAmmoType).ammoCount;
+	}
+	return 0;
+}
 
 	boolean doesntUseAmmo() {
 		return vehicle.vehicleType.getValidAmmoTypes().isEmpty();
@@ -91,9 +101,10 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		this.ammoEntries.put(ammo.getRegistryName(), ent);
 	}
 
-//	public void setNextAmmo() {
-//		getAvailable(this::getHigherWrapped).ifPresent(this::setCurrentAmmo);
-//	}
+	public void setNextAmmo() {
+		getAvailable((map, key) -> getHigherWrapped(map, key)).ifPresent(this::setCurrentAmmo);
+	}
+
 
 	private <K, V> Map.Entry<K, V> getHigherWrapped(NavigableMap<K, V> map, K key) {
 		Map.Entry<K, V> entry = map.higherEntry(key);
@@ -106,7 +117,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 	}
 
 	private Optional<ResourceLocation> getAvailable(
-			Function2<NavigableMap<ResourceLocation, VehicleAmmoEntry>, ResourceLocation, Map.Entry<ResourceLocation, VehicleAmmoEntry>> getNextEntry) {
+			BiFunction<NavigableMap<ResourceLocation, VehicleAmmoEntry>, ResourceLocation, Map.Entry<ResourceLocation, VehicleAmmoEntry>> getNextEntry) {
 		if (currentAmmoType == null) {
 			return Optional.empty();
 		}
@@ -179,6 +190,21 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		NetworkHandler.sendToAllTracking(vehicle, pkt);
 	}
 
+//	@Nullable //TODO replace with optional
+//	public IAmmo getCurrentAmmoType() {
+//		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
+//			VehicleAmmoEntry entry = this.ammoEntries.get(currentAmmoType);
+//			if (entry != null && (!(vehicle.getControllingPassenger() instanceof NpcBase) || entry.ammoCount > 0)) {
+//				return entry.baseAmmoType;
+//			}
+//		}
+//		if (vehicle.getControllingPassenger() instanceof NpcFaction || !AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo && vehicle.getControllingPassenger() instanceof NpcSiegeEngineer) {
+//			NpcBase npc = (NpcBase) vehicle.getControllingPassenger();
+//			return vehicle.vehicleType.getAmmoForSoldierRank(npc.getLevelingStats().getLevel());
+//		}
+//		return null;
+//	}
+
 	@Nullable //TODO replace with optional
 	public IAmmo getCurrentAmmoType() {
 		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
@@ -187,7 +213,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 				return entry.baseAmmoType;
 			}
 		}
-		if (vehicle.getControllingPassenger() instanceof NpcFaction || !AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo && vehicle.getControllingPassenger() instanceof NpcSiegeEngineer) {
+		if (vehicle.getControllingPassenger() instanceof NpcFaction || !AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo) {
 			NpcBase npc = (NpcBase) vehicle.getControllingPassenger();
 			return vehicle.vehicleType.getAmmoForSoldierRank(npc.getLevelingStats().getLevel());
 		}

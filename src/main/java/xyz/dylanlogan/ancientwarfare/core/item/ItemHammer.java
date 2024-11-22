@@ -17,7 +17,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import xyz.dylanlogan.ancientwarfare.core.block.AWCoreBlockLoader;
-import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface;
 import xyz.dylanlogan.ancientwarfare.core.interfaces.IWorkSite;
 

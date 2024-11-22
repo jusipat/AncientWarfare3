@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
-import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockPosition;
 

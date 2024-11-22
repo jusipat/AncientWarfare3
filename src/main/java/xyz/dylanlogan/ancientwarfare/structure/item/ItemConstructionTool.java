@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockPosition;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
@@ -43,19 +42,19 @@ public class ItemConstructionTool extends Item implements IItemKeyInterface, IBo
         text = "RMB" + " = " + StatCollector.translateToLocal("guistrings.construction.do_action");
         list.add(text);
 
-        keyText = InputHandler.instance.getKeybindBinding(InputHandler.KEY_ALT_ITEM_USE_0);
+        keyText = InputHandler.instance.getKeybindBinding(InputHandler.ALT_ITEM_USE_1);
         text = keyText + " = " + StatCollector.translateToLocal("guistrings.construction.toggle_mode");
         list.add(text);
 
-        keyText = InputHandler.instance.getKeybindBinding(InputHandler.KEY_ALT_ITEM_USE_1);
+        keyText = InputHandler.instance.getKeybindBinding(InputHandler.ALT_ITEM_USE_2);
         text = keyText + " = " + StatCollector.translateToLocal("guistrings.construction.set_fill_block");
         list.add(text);
 
-        keyText = InputHandler.instance.getKeybindBinding(InputHandler.KEY_ALT_ITEM_USE_2);
+        keyText = InputHandler.instance.getKeybindBinding(InputHandler.ALT_ITEM_USE_3);
         text = keyText + " = " + StatCollector.translateToLocal("guistrings.construction.set_pos_1");
         list.add(text);
 
-        keyText = InputHandler.instance.getKeybindBinding(InputHandler.KEY_ALT_ITEM_USE_3);
+        keyText = InputHandler.instance.getKeybindBinding(InputHandler.ALT_ITEM_USE_4);
         text = keyText + " = " + StatCollector.translateToLocal("guistrings.construction.set_pos_2");
         list.add(text);
 
