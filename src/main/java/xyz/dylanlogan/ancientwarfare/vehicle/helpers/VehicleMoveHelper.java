@@ -145,7 +145,7 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		} else {
 			vehicle.wheelRotation += forwardMotion * 60;
 		}
-		this.vehicle.move(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+		//this.vehicle.move(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 	}
 
 	protected void onUpdateServer() {
@@ -167,7 +167,7 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		}
 		vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw) * -forwardMotion;
 		vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw) * -forwardMotion;
-		this.vehicle(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+		//this.vehicle(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 		this.wasOnGround = vehicle.onGround;
 		if (vehicle.isCollidedHorizontally) {
 			forwardMotion *= 0.65f;
@@ -305,13 +305,13 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 			//check top/upper blocks(riding through)
 			BlockPos breakPos = new BlockPos(x, y, z);
 			int state = vehicle.worldObj.getBlockMetadata(breakPos.x, breakPos.y, breakPos.z);
-			if (isTrampable(state)) {
-				BlockTools.breakBlockAndDrop(vehicle.worldObj, null, breakPos.getX(), breakPos.getY(), breakPos.getZ());
-			}
+//			if (isTrampable(state)) {
+//				BlockTools.breakBlockAndDrop(vehicle.worldObj, null, breakPos.getX(), breakPos.getY(), breakPos.getZ());
+//			}
 			//check lower blocks (riding on)
-			if (vehicle.worldObj.getBlockState(breakPos.down()).getBlock() == Blocks.grass) {
-				vehicle.worldObj.setBlockState(breakPos.down(), Blocks.dirt, 3);
-			}
+//			if (vehicle.worldObj.getBlockState(breakPos.down()).getBlock() == Blocks.grass) {
+//				vehicle.worldObj.setBlockState(breakPos.down(), Blocks.dirt, 3);
+//			}
 		}
 	}
 

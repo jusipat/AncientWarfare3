@@ -16,6 +16,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import org.joml.Vector3d;
+import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -80,7 +81,7 @@ public class VehicleInputHandler {
 		ClientRegistry.registerKeyBinding(MOUSE_AIM);
 		ClientRegistry.registerKeyBinding(AMMO_SELECT);
 
-		initCallbacks();
+		//initCallbacks();
 		initReleaseableKeys();
 	}
 
@@ -118,18 +119,18 @@ public class VehicleInputHandler {
 		}
 	}
 
-	private static void initCallbacks() {
-		InputHandler.registerCallBack(MOUSE_AIM,
-				() -> AWVehicleStatics.clientSettings.enableMouseAim = !AWVehicleStatics.clientSettings.enableMouseAim); //TODO add code to update config once mouseAim is made into config setting
-		InputHandler.registerCallBack(FIRE, new VehicleCallback(VehicleInputHandler::handleFireAction));
-		InputHandler.registerCallBack(ASCEND_AIM_UP, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(-1, 0)));
-		InputHandler.registerCallBack(DESCEND_AIM_DOWN, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(1, 0)));
-		InputHandler.registerCallBack(TURRET_LEFT, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(0, -1)));
-		InputHandler.registerCallBack(TURRET_RIGHT, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(0, 1)));
-		InputHandler.registerCallBack(AMMO_NEXT, new VehicleCallback(v -> v.ammoHelper.setNextAmmo()));
-		InputHandler.registerCallBack(AMMO_PREV, new VehicleCallback(v -> v.ammoHelper.setPreviousAmmo()));
-		InputHandler.registerCallBack(AMMO_SELECT, new VehicleCallback(VehicleInputHandler::handleAmmoSelectAction));
-	}
+//	private static void initCallbacks() {
+//		InputHandler.registerCallBack(MOUSE_AIM,
+//				() -> AWVehicleStatics.clientSettings.enableMouseAim = !AWVehicleStatics.clientSettings.enableMouseAim); //TODO add code to update config once mouseAim is made into config setting
+//		InputHandler.registerCallBack(FIRE, new VehicleCallback(VehicleInputHandler::handleFireAction));
+//		InputHandler.registerCallBack(ASCEND_AIM_UP, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(-1, 0)));
+//		InputHandler.registerCallBack(DESCEND_AIM_DOWN, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(1, 0)));
+//		InputHandler.registerCallBack(TURRET_LEFT, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(0, -1)));
+//		InputHandler.registerCallBack(TURRET_RIGHT, new VehicleCallback(v -> v.firingHelper.handleAimKeyInput(0, 1)));
+//		InputHandler.registerCallBack(AMMO_NEXT, new VehicleCallback(v -> v.ammoHelper.setNextAmmo()));
+//		InputHandler.registerCallBack(AMMO_PREV, new VehicleCallback(v -> v.ammoHelper.setPreviousAmmo()));
+//		InputHandler.registerCallBack(AMMO_SELECT, new VehicleCallback(VehicleInputHandler::handleAmmoSelectAction));
+//	}
 
 	private static void handleAmmoSelectAction(VehicleBase vehicle) {
 		if (!vehicle.isAmmoLoaded()) {
@@ -155,31 +156,57 @@ public class VehicleInputHandler {
 	private static final float MAX_RANGE = 140;
 
 	private static MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, Entity excludedEntity) {
-		Vec3 playerEyesPos = RayTracer.getCorrectedHeadVec(player);
+		Vec3 playerEyesPos = player.getLookVec();
 		Vec3 lookVector = player.getLook(0);
 		Vec3 endVector = playerEyesPos.addVector(lookVector.xCoord * MAX_RANGE, lookVector.yCoord * MAX_RANGE, lookVector.zCoord * MAX_RANGE);
+
+		// Ray trace to check for block collisions
 		MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerEyesPos, endVector);
 
-		Optional<Tuple<Double, Entity>> closestEntityFound = getClosestCollidedEntity(excludedEntity, playerEyesPos, lookVector, endVector);
+		// Get closest collided entity
+		Tuple closestEntityFound = getClosestCollidedEntity(excludedEntity, playerEyesPos, lookVector, endVector);
 
-		if (closestEntityFound.isPresent() && (blockHit == null || closestEntityFound.get().getFirst() < blockHit.hitVec.distanceTo(playerEyesPos))) {
-			Entity hitEntity = closestEntityFound.get().getSecond();
-			blockHit = new MovingObjectPosition(hitEntity, new Vec3.createVectorHelper(hitEntity.posX, hitEntity.posY + hitEntity.height * 0.65d, hitEntity.posZ));
+		// If an entity is closer than the block hit, use the entity hit
+		if (closestEntityFound != null && (blockHit == null || (Double) closestEntityFound.getFirst() < blockHit.hitVec.distanceTo(playerEyesPos))) {
+			Entity hitEntity = (Entity) closestEntityFound.getSecond();
+			blockHit = new MovingObjectPosition(hitEntity,  Vec3.createVectorHelper(hitEntity.posX, hitEntity.posY + hitEntity.height * 0.65d, hitEntity.posZ));
 		}
+
 		return blockHit;
 	}
 
-	private static Optional<Tuple<Double, Entity>> getClosestCollidedEntity(Entity excludedEntity, Vector3d playerEyesPos, Vector3d lookVector, Vector3d endVector) {
+
+
+	private static Tuple getClosestCollidedEntity(Entity excludedEntity, Vec3 playerEyesPos, Vec3 lookVector, Vec3 endVector) {
 		Minecraft mc = Minecraft.getMinecraft();
 
-		//noinspection ConstantConditions
+		// Get all possible hit entities within the bounding box expanded by lookVector
 		List<Entity> possibleHitEntities = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity,
-				mc.renderViewEntity.boundingBox.expand(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE)
+				mc.renderViewEntity.boundingBox.expand(lookVector.xCoord * MAX_RANGE, lookVector.yCoord * MAX_RANGE, lookVector.zCoord * MAX_RANGE)
 						.expand(1, 1, 1));
-		return possibleHitEntities.stream().filter(e -> e != excludedEntity && e.canBeCollidedWith())
-				.map(e -> new Tuple<>(getDistanceToCollidedEntity(e, playerEyesPos, endVector), e)).filter(t -> t.getFirst() < Double.MAX_VALUE)
-				.sorted(Comparator.comparing(Tuple::getFirst)).findFirst();
+
+		double closestDistance = Double.MAX_VALUE;
+		Entity closestEntity = null;
+
+		// Iterate through entities and find the closest one
+		for (Entity entity : possibleHitEntities) {
+			if (entity != excludedEntity && entity.canBeCollidedWith()) {
+				double distance = getDistanceToCollidedEntity(entity, playerEyesPos, endVector);
+				if (distance < closestDistance) {
+					closestDistance = distance;
+					closestEntity = entity;
+				}
+			}
+		}
+
+		// If a closest entity was found, return it in a Tuple, otherwise return null
+		if (closestEntity != null) {
+			return new Tuple(closestDistance, closestEntity);
+		} else {
+			return null; // No entity found
+		}
 	}
+
 
 	private static double getDistanceToCollidedEntity(Entity entity, Vec3 startVector, Vec3 endVector) {
 		float borderSize = entity.getCollisionBorderSize();

@@ -17,11 +17,11 @@ public class ClientProxyBase extends CommonProxyBase {
         return Minecraft.getMinecraft().thePlayer;
     }
 
-    @Override
-    public final boolean isKeyPressed(String keyName) {
-        KeyBinding kb = InputHandler.getKeybind(keyName);
-        return kb != null && kb.isPressed();
-    }
+//    @Override
+//    public final boolean isKeyPressed(String keyName) {
+//        KeyBinding kb = InputHandler.getKeybind(keyName);
+//        return kb != null && kb.isPressed();
+//    }
 
     @Override
     public final World getWorld(int dimension) {
