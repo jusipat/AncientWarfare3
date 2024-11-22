@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import xyz.dylanlogan.ancientwarfare.core.input.IScrollableItem;
 
 public class PacketItemMouseScroll extends PacketBase {
 	private boolean scrollUp;

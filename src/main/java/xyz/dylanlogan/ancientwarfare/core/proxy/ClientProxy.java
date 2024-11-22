@@ -48,7 +48,7 @@ public class ClientProxy extends ClientProxyBase {
         NetworkHandler.registerGui(NetworkHandler.GUI_RESEARCH_STATION, GuiResearchStation.class);
         NetworkHandler.registerGui(NetworkHandler.GUI_BACKPACK, GuiBackpack.class);
         NetworkHandler.registerGui(NetworkHandler.GUI_RESEARCH_BOOK, GuiResearchBook.class);
-        InputHandler.instance.loadConfig();
+        //InputHandler.instance.loadConfig(); todo: bring back config
 
         TileCraftingTableRender render = new TileCraftingTableRender(new ModelEngineeringStation(), "textures/model/core/tile_engineering_station.png");
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngineeringStation.class, render);

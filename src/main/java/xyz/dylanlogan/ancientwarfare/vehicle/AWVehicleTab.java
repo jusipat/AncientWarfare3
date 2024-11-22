@@ -1,7 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleItems;
 
 public class AWVehicleTab extends CreativeTabs {
 	public AWVehicleTab() {
@@ -9,7 +10,7 @@ public class AWVehicleTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
-		return new ItemStack(AWVehicleItems.SPAWNER);
+	public Item getTabIconItem() {
+		return AWVehicleItems.SPAWNER;
 	}
 }

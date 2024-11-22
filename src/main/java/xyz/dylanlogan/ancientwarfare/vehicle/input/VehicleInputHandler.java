@@ -16,7 +16,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import org.joml.Vector3d;
-import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -158,7 +157,7 @@ public class VehicleInputHandler {
 	private static MovingObjectPosition getPlayerLookTargetClient(EntityPlayer player, Entity excludedEntity) {
 		Vec3 playerEyesPos = RayTracer.getCorrectedHeadVec(player);
 		Vec3 lookVector = player.getLook(0);
-		Vec3 endVector = playerEyesPos.add(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE);
+		Vec3 endVector = playerEyesPos.addVector(lookVector.xCoord * MAX_RANGE, lookVector.yCoord * MAX_RANGE, lookVector.zCoord * MAX_RANGE);
 		MovingObjectPosition blockHit = player.worldObj.rayTraceBlocks(playerEyesPos, endVector);
 
 		Optional<Tuple<Double, Entity>> closestEntityFound = getClosestCollidedEntity(excludedEntity, playerEyesPos, lookVector, endVector);
@@ -174,9 +173,9 @@ public class VehicleInputHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 
 		//noinspection ConstantConditions
-		List<Entity> possibleHitEntities = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.getRenderViewEntity(),
-				mc.getRenderViewEntity().getEntityBoundingBox().expand(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE)
-						.grow(1, 1, 1));
+		List<Entity> possibleHitEntities = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity,
+				mc.renderViewEntity.boundingBox.expand(lookVector.x * MAX_RANGE, lookVector.y * MAX_RANGE, lookVector.z * MAX_RANGE)
+						.expand(1, 1, 1));
 		return possibleHitEntities.stream().filter(e -> e != excludedEntity && e.canBeCollidedWith())
 				.map(e -> new Tuple<>(getDistanceToCollidedEntity(e, playerEyesPos, endVector), e)).filter(t -> t.getFirst() < Double.MAX_VALUE)
 				.sorted(Comparator.comparing(Tuple::getFirst)).findFirst();

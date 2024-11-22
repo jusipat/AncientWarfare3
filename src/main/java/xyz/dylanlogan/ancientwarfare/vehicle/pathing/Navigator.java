@@ -172,7 +172,7 @@ public class Navigator implements IPathableCallback {
 			}
 		}
 		this.stuckCheckTicks = this.stuckCheckTicksMax;
-		stuckCheckPosition = new Vec3d(entity.posX, entity.posY, entity.posZ);
+		stuckCheckPosition = new Vector3d(entity.posX, entity.posY, entity.posZ);
 		Node start = this.path.getFirstNode();
 		if (start != null && (getEntityDistance(start) < 0.8f && start.y == ey)) {
 			this.path.claimNode();//skip the first node because it is probably behind you, move onto next
@@ -183,7 +183,7 @@ public class Navigator implements IPathableCallback {
 	private void doorInteraction() {
 		if (this.doorCheckTicks <= 0) {
 			this.doorCheckTicks = DOOR_CHECK_TICKS_MAX;
-			if (this.entity.collidedHorizontally && checkForDoors(entity.getPosition())) {
+			if (this.entity.isCollidedHorizontally && checkForDoors(entity.getPosition())) {
 				if (this.hasDoor) {
 					this.interactWithDoor(doorPos, true);
 					this.doorOpenTicks = DOOR_OPEN_MAX;
@@ -238,7 +238,7 @@ public class Navigator implements IPathableCallback {
 		{
 			x++;
 		}
-		state = entity.world.getBlockState(new BlockPos(x, y, z));
+		state = entity.worldObj.getBlockState(new BlockPos(x, y, z));
 		block = state.getBlock();
 		if ((block instanceof BlockDoor && state.getMaterial() == Material.WOOD) || block instanceof BlockFenceGate) {
 			if (hasDoor && !doorPos.equals(entityPos)) {
@@ -268,17 +268,17 @@ public class Navigator implements IPathableCallback {
 	}
 
 	private void interactWithDoor(BlockPos doorPos, boolean open) {
-		IBlockState state = entity.world.getBlockState(doorPos);
+		IBlockState state = entity.worldObj.getBlockState(doorPos);
 		Block block = state.getBlock();
-		if (block instanceof BlockDoor && state.getMaterial() == Material.WOOD) {
+		if (block instanceof BlockDoor && state.getMaterial() == Material.wood) {
 			((BlockDoor) block).toggleDoor(entity.world, doorPos, open);
 		} else if (block instanceof BlockFenceGate && open != state.getValue(BlockFenceGate.OPEN)) {
 			if (open && !state.getValue(BlockFenceGate.OPEN)) {
-				entity.world.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, true), 2);
-				entity.world.playEvent(null, 1008, doorPos, 0);
+				entity.worldObj.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, true), 2);
+				entity.worldObj.playEvent(null, 1008, doorPos, 0);
 			} else if (!open && state.getValue(BlockFenceGate.OPEN)) {
-				entity.world.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, false), 2);
-				entity.world.playEvent(null, 1014, doorPos, 0);
+				entity.worldObj.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, false), 2);
+				entity.worldObj.playEvent(null, 1014, doorPos, 0);
 			}
 		}
 	}
@@ -290,7 +290,7 @@ public class Navigator implements IPathableCallback {
 				this.currentTarget = this.path.claimNode();
 			}
 			this.stuckCheckTicks = this.stuckCheckTicksMax;
-			stuckCheckPosition = new Vec3d(entity.posX, entity.posY, entity.posZ);
+			stuckCheckPosition = new Vector3d(entity.posX, entity.posY, entity.posZ);
 		}
 
 	}

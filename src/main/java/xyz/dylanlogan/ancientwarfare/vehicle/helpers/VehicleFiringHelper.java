@@ -180,7 +180,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 			missile.setMissileParams2(ammo, x, y, z, yaw, pitch, velocity);
 			missile.setMissileCallback(vehicle);
 			missile.setLaunchingEntity(vehicle);
-			missile.setShooter(vehicle.getControllingPassenger());
+			missile.setShooter(vehicle.ridingEntity);
 			return missile;
 		}
 		return null;
@@ -409,9 +409,9 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		float x = (float) (vehicle.posX + offset.x);
 		float y = (float) (vehicle.posY + offset.y);
 		float z = (float) (vehicle.posZ + offset.z);
-		float tx = (float) (target.x - x);
-		float ty = (float) (target.y - y);
-		float tz = (float) (target.z - z);
+		float tx = (float) (target.xCoord - x);
+		float ty = (float) (target.yCoord - y);
+		float tz = (float) (target.zCoord - z);
 		float range = MathHelper.sqrt_float(tx * tx + tz * tz);
 		if (vehicle.canAimPitch()) {
 			Tuple angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);

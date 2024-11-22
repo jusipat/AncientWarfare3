@@ -20,12 +20,12 @@ public class AWCoreStatics extends ModConfiguration{
     /**
      * category names
      */
-    private static final String worldGenSettings = "04_world_gen_settings";
-    private static final String keybinds = "05_keybinds";
-    private static final String researchSettings = "06_research";
-    private static final String researchDetailSettings = "07_research_details";
-    private static final String recipeDetailSettings = "08_recipe_details";
-    private static final String recipeResearchDetails = "09_recipe_research_details";
+    public static final String worldGenSettings = "04_world_gen_settings";
+    public static final String keybinds = "05_keybinds";
+    public static final String researchSettings = "06_research";
+    public static final String researchDetailSettings = "07_research_details";
+    public static final String recipeDetailSettings = "08_recipe_details";
+    public static final String recipeResearchDetails = "09_recipe_research_details";
 
     /**
      * research options

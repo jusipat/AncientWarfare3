@@ -129,9 +129,9 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		return entry == null ? map.lastEntry() : entry;
 	}
 
-//	public void setPreviousAmmo() {
-//		getAvailable(this::getLowerWrapped).ifPresent(this::setCurrentAmmo);
-//	}
+	public void setPreviousAmmo() {
+		getAvailable(this::getLowerWrapped).ifPresent(this::setCurrentAmmo);
+	}
 
 	public void handleClientAmmoSelection(ResourceLocation ammoRegistryName) {
 		NetworkHandler.sendToServer(new PacketAmmoSelect(vehicle, ammoRegistryName.toString()));

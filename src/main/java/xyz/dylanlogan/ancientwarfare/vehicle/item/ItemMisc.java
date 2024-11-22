@@ -19,18 +19,18 @@ public class ItemMisc extends ItemBaseVehicle {
 		itemTypeTooltip = "item." + itemType.getItemTypeString() + ".tooltip";
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format(itemTypeTooltip));
-	}
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
+//		tooltip.add(I18n.format(itemTypeTooltip));
+//	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-
-	public void registerClient() {
-		ModelLoaderHelper.registerItem(this, (i, m) -> new ModelResourceLocation(new ResourceLocation(AncientWarfareCore.modID, "vehicle/misc"), "variant=" + getRegistryName().getResourcePath()));
-	}
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//
+//	public void registerClient() {
+//		ModelLoaderHelper.registerItem(this, (i, m) -> new ModelResourceLocation(new ResourceLocation(AncientWarfareCore.modID, "vehicle/misc"), "variant=" + getRegistryName().getResourcePath()));
+//	}
 
 	public enum VehicleItemType {
 		AMMO_MATERIAL("ammo_material"),

@@ -106,7 +106,7 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		if (vehicle.worldObj.isRemote) {
 			onUpdateClient();
 		} else {
-			if (this.vehicle.getControllingPassenger() == null) {
+			if (this.vehicle.ridingEntity == null) {
 				this.clearInputFromDismount();
 			}
 			onUpdateServer();
@@ -161,20 +161,20 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		}
 		if (move == VehicleMovementType.AIR1 || move == VehicleMovementType.AIR2) {
 			vehicle.fallDistance = 0.f;
-			if (vehicle.getControllingPassenger() != null) {
-				vehicle.getControllingPassenger().fallDistance = 0.f;
+			if (vehicle.ridingEntity != null) {
+				vehicle.ridingEntity.fallDistance = 0.f;
 			}
 		}
 		vehicle.motionX = Trig.sinDegrees(vehicle.rotationYaw) * -forwardMotion;
 		vehicle.motionZ = Trig.cosDegrees(vehicle.rotationYaw) * -forwardMotion;
 		this.vehicle(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 		this.wasOnGround = vehicle.onGround;
-		if (vehicle.collidedHorizontally) {
+		if (vehicle.isCollidedHorizontally) {
 			forwardMotion *= 0.65f;
 		}
 		this.tearUpGrass();
 		boolean sendUpdate = (vehicle.motionX != 0 || vehicle.motionY != 0 || vehicle.motionZ != 0 || vehicle.rotationYaw != vehicle.prevRotationYaw || vehicle.rotationPitch != vehicle.prevRotationPitch);
-		sendUpdate = sendUpdate || vehicle.getControllingPassenger() != null;
+		sendUpdate = sendUpdate || vehicle.ridingEntity != null;
 		sendUpdate = sendUpdate || this.vehicle.ticksExisted % 60 == 0;
 		if (sendUpdate) {
 			boolean air = move == VehicleMovementType.AIR1 || move == VehicleMovementType.AIR2;
@@ -319,7 +319,7 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		return world.getBlock(x,y,z) instanceof IPlantable || trampableBlocks.contains(world.getBlock(x,y,z));
 	}
 
-	protected static List<Block> trampableBlocks = Lists.newArrayList(Blocks.SNOW, Blocks.DEADBUSH, Blocks.TALLGRASS, Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM);
+	protected static List<Block> trampableBlocks = Lists.newArrayList(Blocks.snow, Blocks.deadbush, Blocks.tallgrass, Blocks.red_flower, Blocks.yellow_flower, Blocks.brown_mushroom, Blocks.red_mushroom);
 
 	public void setMoveTo(double x, double y, double z) {
 		float yawDiff = Trig.getYawTowardsTarget(vehicle.posX, vehicle.posZ, x, z, vehicle.rotationYaw);
