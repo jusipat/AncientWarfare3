@@ -295,7 +295,7 @@ public class PathUtils {
 			if (worldAccess.isDoor(pos)) {
 				canPath = false;
 				break;
-			} else if (worldAccess.isLadder(pos)) {
+			} else if (worldAccess.isLadder(pos.x, pos.y, pos.z)) {
 				canPath = false;
 				break;
 			} else if (!worldAccess.isWalkable(x0, ey, z0)) {
@@ -342,7 +342,8 @@ public class PathUtils {
 			if (worldAccess.isDoor(new BlockPos(ex, cy, ez))) {
 				canPath = false;
 				break;
-			} else if (worldAccess.isLadder(new BlockPos(ex, cy, ey))) {
+
+			} else if (worldAccess.isLadder(ex, cy, ey)) {
 				canPath = false;
 				break;
 			}

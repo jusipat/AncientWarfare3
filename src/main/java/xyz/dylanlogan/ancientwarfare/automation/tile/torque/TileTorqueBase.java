@@ -21,6 +21,8 @@ import xyz.dylanlogan.ancientwarfare.core.interfaces.ITorque.TorqueCell;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.PacketBlockEvent;
 
+import java.io.IOException;
+
 @Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFHCore", striprefs = true)
 public abstract class TileTorqueBase extends TileEntity implements ITorqueTile, IInteractableTile, IRotatableTile, IEnergyHandler {
 
@@ -286,7 +288,7 @@ public abstract class TileTorqueBase extends TileEntity implements ITorqueTile, 
         return cell.getEnergy() - e;
     }
 
-    protected final void sendDataToClient(int type, int data) {
+    protected final void sendDataToClient(int type, int data) throws IOException {
         PacketBlockEvent pkt = new PacketBlockEvent();
         pkt.setParams(xCoord, yCoord, zCoord, getBlockType(), (short) type, (short) data);
         NetworkHandler.sendToAllTrackingChunk(worldObj, xCoord >> 4, zCoord >> 4, pkt);

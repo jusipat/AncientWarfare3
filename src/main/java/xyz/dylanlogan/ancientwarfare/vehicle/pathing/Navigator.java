@@ -66,10 +66,10 @@ public class Navigator implements IPathableCallback {
 	}
 
 	public void setMoveToTarget(BlockPos pos) {
-		//TODO 1.6.4 AW has logic in npcbase that uses this - readd?
-		if (!entity.worldObj.isBlockLoaded(pos)) {
-			return;
-		}
+//		//TODO 1.6.4 AW has logic in npcbase that uses this - readd?
+//		if (!entity.worldObj.isBlockLoaded(pos)) {
+//			return;
+//		}
 		this.sendToClients(pos);
 		int ex = MathHelper.floor_double(entity.posX);
 		int ey = MathHelper.floor_double(entity.posY);
@@ -183,7 +183,7 @@ public class Navigator implements IPathableCallback {
 	private void doorInteraction() {
 		if (this.doorCheckTicks <= 0) {
 			this.doorCheckTicks = DOOR_CHECK_TICKS_MAX;
-			if (this.entity.isCollidedHorizontally && checkForDoors(entity.getPosition())) {
+			if (this.entity.isCollidedHorizontally && checkForDoors((int) entity.posX, (int) entity.posY, (int) entity.posZ)) {
 				if (this.hasDoor) {
 					this.interactWithDoor(doorPos, true);
 					this.doorOpenTicks = DOOR_OPEN_MAX;
@@ -197,24 +197,24 @@ public class Navigator implements IPathableCallback {
 		}
 	}
 
-	private boolean checkForDoors(BlockPos entityPos) {
-		IBlockState state = entity.world.getBlockState(entityPos);
-		Block block = state.getBlock();
-		if ((block instanceof BlockDoor && state.getMaterial() == Material.WOOD) || block instanceof BlockFenceGate) {
-			if (hasDoor && !doorPos.equals(entityPos)) {
-				this.interactWithDoor(doorPos, false);
-			}
-			doorPos = entityPos;
+	private boolean checkForDoors(int x, int y, int z) {
+		BlockPos pos = new BlockPos(x,y,z);
+		Block block = world.getBlock(pos);
+		if ((block instanceof BlockDoor && block.getMaterial() == Material.wood) || block instanceof BlockFenceGate) {
+//			if (hasDoor && !doorPos.equals(entityPos)) {
+//				this.interactWithDoor(doorPos, false);
+//			}
+			//doorPos = entityPos;
 			hasDoor = true;
 			return true;
 		}
-		if (block == AWStructureBlocks.GATE_PROXY) {
-			WorldTools.getTile(entity.world, entityPos, TEGateProxy.class).ifPresent(proxy -> {
-				interactWithGate(false);
-				gate = proxy.getOwner().orElse(null);
-			});
-			return true;
-		}
+//		if (block == AWStructureBlocks.GATE_PROXY) {
+//			WorldTools.getTile(entity.world, entityPos, TEGateProxy.class).ifPresent(proxy -> {
+//				interactWithGate(false);
+//				gate = proxy.getOwner().orElse(null);
+//			});
+//			return true;
+//		}
 		float yaw = entity.rotationYaw;
 		while (yaw < 0) {
 			yaw += 360.f;
@@ -222,9 +222,9 @@ public class Navigator implements IPathableCallback {
 		while (yaw >= 360.f) {
 			yaw -= 360.f;
 		}
-		int x = entityPos.getX();
-		int y = entityPos.getY();
-		int z = entityPos.getZ();
+//		int x = entityPos.getX();
+//		int y = entityPos.getY();
+//		int z = entityPos.getZ();
 		if (yaw >= 360 - 45 || yaw < 45)//south, check z+
 		{
 			z++;
@@ -238,23 +238,23 @@ public class Navigator implements IPathableCallback {
 		{
 			x++;
 		}
-		state = entity.worldObj.getBlockState(new BlockPos(x, y, z));
-		block = state.getBlock();
-		if ((block instanceof BlockDoor && state.getMaterial() == Material.WOOD) || block instanceof BlockFenceGate) {
-			if (hasDoor && !doorPos.equals(entityPos)) {
-				this.interactWithDoor(doorPos, false);
-			}
-			doorPos = entityPos;
-			hasDoor = true;
-			return true;
-		}
-		if (block == AWStructureBlocks.GATE_PROXY) {
-			WorldTools.getTile(entity.world, new BlockPos(x, y, z), TEGateProxy.class).ifPresent(proxy -> {
-				interactWithGate(false);
-				gate = proxy.getOwner().orElse(null);
-			});
-			return true;
-		}
+//		state = entity.worldObj.getBlockState(new BlockPos(x, y, z));
+//		block = state.getBlock();
+//		if ((block instanceof BlockDoor && state.getMaterial() == Material.WOOD) || block instanceof BlockFenceGate) {
+//			if (hasDoor && !doorPos.equals(entityPos)) {
+//				this.interactWithDoor(doorPos, false);
+//			}
+//			doorPos = entityPos;
+//			hasDoor = true;
+//			return true;
+//		}
+//		if (block == AWStructureBlocks.GATE_PROXY) {
+//			WorldTools.getTile(entity.world, new BlockPos(x, y, z), TEGateProxy.class).ifPresent(proxy -> {
+//				interactWithGate(false);
+//				gate = proxy.getOwner().orElse(null);
+//			});
+//			return true;
+//		}
 		return false;
 	}
 
@@ -268,19 +268,19 @@ public class Navigator implements IPathableCallback {
 	}
 
 	private void interactWithDoor(BlockPos doorPos, boolean open) {
-		IBlockState state = entity.worldObj.getBlockState(doorPos);
-		Block block = state.getBlock();
-		if (block instanceof BlockDoor && state.getMaterial() == Material.wood) {
-			((BlockDoor) block).toggleDoor(entity.world, doorPos, open);
-		} else if (block instanceof BlockFenceGate && open != state.getValue(BlockFenceGate.OPEN)) {
-			if (open && !state.getValue(BlockFenceGate.OPEN)) {
-				entity.worldObj.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, true), 2);
-				entity.worldObj.playEvent(null, 1008, doorPos, 0);
-			} else if (!open && state.getValue(BlockFenceGate.OPEN)) {
-				entity.worldObj.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, false), 2);
-				entity.worldObj.playEvent(null, 1014, doorPos, 0);
-			}
-		}
+//		IBlockState state = entity.worldObj.getBlockState(doorPos);
+//		Block block = state.getBlock();
+//		if (block instanceof BlockDoor && state.getMaterial() == Material.wood) {
+//			((BlockDoor) block).toggleDoor(entity.world, doorPos, open);
+//		} else if (block instanceof BlockFenceGate && open != state.getValue(BlockFenceGate.OPEN)) {
+//			if (open && !state.getValue(BlockFenceGate.OPEN)) {
+//				entity.worldObj.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, true), 2);
+//				entity.worldObj.playEvent(null, 1008, doorPos, 0);
+//			} else if (!open && state.getValue(BlockFenceGate.OPEN)) {
+//				entity.worldObj.setBlockState(doorPos, state.withProperty(BlockFenceGate.OPEN, false), 2);
+//				entity.worldObj.playEvent(null, 1014, doorPos, 0);
+//			}
+//		}
 	}
 
 	private void claimNode() {

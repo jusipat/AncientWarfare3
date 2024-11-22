@@ -9,6 +9,8 @@ import xyz.dylanlogan.ancientwarfare.core.network.PacketGui;
 import xyz.dylanlogan.ancientwarfare.structure.tile.SpawnerSettings;
 import xyz.dylanlogan.ancientwarfare.structure.tile.TileAdvancedSpawner;
 
+import java.io.IOException;
+
 public class ContainerSpawnerAdvancedInventoryBlock extends ContainerSpawnerAdvancedInventoryBase {
 
     private TileAdvancedSpawner spawner;
@@ -40,7 +42,7 @@ public class ContainerSpawnerAdvancedInventoryBlock extends ContainerSpawnerAdva
         }
     }
 
-    private void sendSettingsToClient() {
+    private void sendSettingsToClient() throws IOException {
         NBTTagCompound tag = new NBTTagCompound();
         settings.writeToNBT(tag);
 

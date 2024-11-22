@@ -40,6 +40,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAimUpdate;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketFireUpdate;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -308,7 +309,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		vehicle.vehicleType.playReloadSound(vehicle);
 	}
 
-	public void handleFireUpdate() {
+	public void handleFireUpdate() throws IOException {
 		if (reloadingTicks <= 0 || vehicle.worldObj.isRemote) {
 
 			boolean shouldFire = vehicle.ammoHelper.getCurrentAmmoCount() > 0 || vehicle.ammoHelper.doesntUseAmmo();
@@ -323,7 +324,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 	}
 
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public void updateAim(Optional<Float> pitch, Optional<Float> yaw, Optional<Float> power) {
+	public void updateAim(Optional<Float> pitch, Optional<Float> yaw, Optional<Float> power) throws IOException {
 		boolean sendReply = false;
 		if (pitch.isPresent()) {
 			sendReply = true;
@@ -342,7 +343,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		}
 	}
 
-	public void handleFireInput() {
+	public void handleFireInput() throws IOException {
 		if (isReadyToFire()) {
 			NetworkHandler.sendToServer(new PacketFireUpdate(vehicle));
 		}
@@ -476,7 +477,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		return isAtTarget(5f);
 	}
 
-	public void handleSoldierTargetInput(double targetX, double targetY, double targetZ) {
+	public void handleSoldierTargetInput(double targetX, double targetY, double targetZ) throws IOException {
 		boolean updated = false;
 		boolean updatePitch = false;
 		boolean updatePower = false;

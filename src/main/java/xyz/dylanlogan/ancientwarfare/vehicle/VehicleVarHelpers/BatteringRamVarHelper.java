@@ -4,6 +4,7 @@ import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
 import xyz.dylanlogan.ancientwarfare.structure.entity.EntityGate;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
@@ -26,20 +27,6 @@ public class BatteringRamVarHelper extends VehicleFiringVarsHelper {
 	 */
 	public BatteringRamVarHelper(VehicleBase vehicle) {
 		super(vehicle);
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setFloat("lA", logAngle);
-		tag.setFloat("lS", logSpeed);
-		return tag;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		logAngle = tag.getFloat("lA");
-		logSpeed = tag.getFloat("lS");
 	}
 
 	@Override
@@ -77,7 +64,7 @@ public class BatteringRamVarHelper extends VehicleFiringVarsHelper {
 	}
 
 	public void doDamageEffects() {
-		if (vehicle.world.isRemote) {
+		if (vehicle.worldObj.isRemote) {
 			return;
 		}
 		BlockPos[] effectedPositions = VehicleTypeBatteringRam.getEffectedPositions(vehicle);
@@ -87,21 +74,21 @@ public class BatteringRamVarHelper extends VehicleFiringVarsHelper {
 			if (pos == null) {
 				continue;
 			}
-			bb = new AxisAlignedBB(pos, pos.add(1, 1, 1));
-			hitEntities = vehicle.world.getEntitiesWithinAABBExcludingEntity(vehicle, bb);
+			bb = AxisAlignedBB.getBoundingBox(pos.x, pos.y, pos.z, pos.x+1,pos.y+1, pos.z+1);
+			hitEntities = vehicle.worldObj.getEntitiesWithinAABBExcludingEntity(vehicle, bb);
 			if (hitEntities != null) {
 				boolean firstGateBlock = true; // only used if a gate was hit
 				for (Entity ent : hitEntities) {
 					System.out.println("entity: " + ent);
 					ent.attackEntityFrom(DamageType.batteringDamage, 5 + vehicle.vehicleMaterialLevel);
 					if (ent instanceof EntityGate) {
-						String gateTypeName = (((EntityGate) ent).gateType.getVariant().toString().toLowerCase());
+						String gateTypeName = (((EntityGate) ent).getGateType().getDisplayName());
 						if (gateTypeName.contains("wood") && firstGateBlock) {
-							ent.playSound(AWVehicleSounds.BATTERING_RAM_HIT_WOOD, 3, 1);
+							//ent.playSound(AWVehicleSounds.BATTERING_RAM_HIT_WOOD, 3, 1);
 							firstGateBlock = false; // makes playing the sound only once, the gate can hit the Gate entity multiple times at once
 						} else if (gateTypeName.contains("iron") && firstGateBlock) {
 							System.out.println("sound played");
-							ent.playSound(AWVehicleSounds.BATTERING_RAM_HIT_IRON, 3, 1);
+							//ent.playSound(AWVehicleSounds.BATTERING_RAM_HIT_IRON, 3, 1);
 							firstGateBlock = false;
 						}
 					}
@@ -109,8 +96,8 @@ public class BatteringRamVarHelper extends VehicleFiringVarsHelper {
 			}
 			if (AWVehicleStatics.generalSettings.batteringRamBreaksBlocks) {
 				Random rand = new Random();
-				if (rand.nextDouble() < (AWVehicleStatics.generalSettings.batteringRamBlockBreakPercentageChance / 100)) {
-					BlockTools.breakBlockAndDrop(vehicle.world, pos);
+				if (rand.nextDouble() < ((double) AWVehicleStatics.generalSettings.batteringRamBlockBreakPercentageChance / 100)) {
+					BlockTools.breakBlockAndDrop(vehicle.worldObj, null, pos.x, pos.y, pos.z);
 				}
 			}
 		}
@@ -168,4 +155,20 @@ public class BatteringRamVarHelper extends VehicleFiringVarsHelper {
 		return 0;
 	}
 
+	@Override
+	public void saveNBTData(NBTTagCompound tag) {
+		tag.setFloat("lA", logAngle);
+		tag.setFloat("lS", logSpeed);
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		logAngle = tag.getFloat("lA");
+		logSpeed = tag.getFloat("lS");
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
+	}
 }

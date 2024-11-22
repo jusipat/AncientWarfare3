@@ -22,12 +22,12 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void preInit() {
-		NetworkHandler.registerGui(NetworkHandler.GUI_VEHICLE_AMMO_SELECTION, GuiVehicleAmmoSelection.class);
-		NetworkHandler.registerGui(NetworkHandler.GUI_VEHICLE_INVENTORY, GuiVehicleInventory.class);
-		NetworkHandler.registerGui(NetworkHandler.GUI_VEHICLE_STATS, GuiVehicleStats.class);
-
-		RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, RenderMissile::new);
-		RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, RenderVehicle::new);
+//		NetworkHandler.registerGui(NetworkHandler.GUI_VEHICLE_AMMO_SELECTION, GuiVehicleAmmoSelection.class);
+//		NetworkHandler.registerGui(NetworkHandler.GUI_VEHICLE_INVENTORY, GuiVehicleInventory.class);
+//		NetworkHandler.registerGui(NetworkHandler.GUI_VEHICLE_STATS, GuiVehicleStats.class);
+//
+//		RenderingRegistry.registerEntityRenderingHandler(MissileBase.class, RenderMissile::new);
+//		RenderingRegistry.registerEntityRenderingHandler(VehicleBase.class, RenderVehicle::new);
 
 		MinecraftForge.EVENT_BUS.register(new RenderOverlay());
 		MinecraftForge.EVENT_BUS.register(new RenderOverlayAdvanced());

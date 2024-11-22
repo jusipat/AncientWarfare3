@@ -18,7 +18,7 @@ public class PacketVehicleInput extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) {
+	protected void writeToStream(ByteBuf data) throws IOException {
 		super.writeToStream(data);
 		data.writeByte(forwardInput);
 		data.writeByte(turnInput);

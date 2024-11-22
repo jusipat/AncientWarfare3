@@ -64,10 +64,7 @@ public abstract class VehicleFiringVarsHelper implements IExtendedEntityProperti
 			player.mountEntity(vehicle);
 			return true;
 		} else if (player.isSneaking()) {
-			NetworkHandler.INSTANCE.openGui(player, NetworkHandler.GUI_VEHICLE_INVENTORY, vehicle.getEntityId());
-		} else if (vehicle.riddenByEntity == player && vehicle.getControllingPassenger() instanceof NpcBase) {
-			NpcBase npc = (NpcBase) vehicle.getControllingPassenger(); //vehicle.getPassengers().get(0);
-			npc.dismountEntity(npc);
+			//NetworkHandler.INSTANCE.openGui(player, NetworkHandler.GUI_VEHICLE_INVENTORY, vehicle.getEntityId());
 		}
 		return true;
 	}

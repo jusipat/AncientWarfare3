@@ -27,6 +27,7 @@ import xyz.dylanlogan.ancientwarfare.core.gui.elements.Button;
 import xyz.dylanlogan.ancientwarfare.core.gui.elements.CompositeScrolled;
 import xyz.dylanlogan.ancientwarfare.vehicle.container.ContainerVehicle;
 import xyz.dylanlogan.ancientwarfare.vehicle.gui.elements.ButtonAmmo;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,22 +42,12 @@ public class GuiVehicleAmmoSelection extends GuiContainerBase<ContainerVehicle> 
 	}
 
 	@Override
-	public int getXSize() {
-		return 256;
-	}
-
-	@Override
-	public int getYSize() {
-		return 240;
-	}
-
-	@Override
 	public void initElements() {
 		//TODO lang translations
 		area = new CompositeScrolled(this, 10, 40, xSize - 20, ySize - 40 - 10);
 		addGuiElement(area);
 
-		Button done = new Button(getXSize() - 35 - 5, 5, 35, 12, "Done") {
+		Button done = new Button(256 - 35 - 5, 5, 35, 12, "Done") {
 			@Override
 			protected void onPressed() {
 				closeGui();
@@ -75,7 +66,7 @@ public class GuiVehicleAmmoSelection extends GuiContainerBase<ContainerVehicle> 
 		int currentY = 10;
 
 		for (int i = 0; i < ammos.size(); i++) {
-			ButtonAmmo ammo = new ButtonAmmo(5, currentY, getXSize() - 20 - 20 - 5, 22, ammos.get(i), getContainer().vehicle) {
+			ButtonAmmo ammo = new ButtonAmmo(5, currentY, 256 - 20 - 20 - 5, 22, ammos.get(i), getContainer().vehicle) {
 				@Override
 				protected void onPressed() {
 					super.onPressed();

@@ -11,6 +11,7 @@ import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.PacketGui;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ContainerBase extends Container {
@@ -70,7 +71,7 @@ public class ContainerBase extends Container {
     /**
      * server side method to send a data-packet to the client-side GUI attached to the client-side version of this container
      */
-    protected final void sendDataToGui(NBTTagCompound data) {
+    protected final void sendDataToGui(NBTTagCompound data) throws IOException {
         if (!player.worldObj.isRemote) {
             PacketGui pkt = new PacketGui();
             pkt.setTag("gui", data);
@@ -92,7 +93,7 @@ public class ContainerBase extends Container {
     /**
      * send data from server container to client container
      */
-    protected void sendDataToClient(NBTTagCompound data) {
+    protected void sendDataToClient(NBTTagCompound data) throws IOException {
         if (!player.worldObj.isRemote) {
             PacketGui pkt = new PacketGui();
             pkt.setData(data);
@@ -118,7 +119,7 @@ public class ContainerBase extends Container {
      * This method is called immediately after the container has been constructed and set as the active container.
      * The data is received client-side immediately after the GUI has been constructed, initialized, and opened.
      */
-    public void sendInitData() {
+    public void sendInitData() throws IOException {
 
     }
 

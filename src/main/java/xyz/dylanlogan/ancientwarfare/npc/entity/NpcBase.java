@@ -36,6 +36,7 @@ import xyz.dylanlogan.ancientwarfare.npc.item.ItemNpcSpawner;
 import xyz.dylanlogan.ancientwarfare.npc.item.ItemShield;
 import xyz.dylanlogan.ancientwarfare.npc.skin.NpcSkinManager;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public abstract class NpcBase extends EntityCreature implements IEntityAdditionalSpawnData, IOwnable, IEntityPacketHandler {
@@ -109,7 +110,7 @@ public abstract class NpcBase extends EntityCreature implements IEntityAdditiona
         }
     }
 
-    public void setCustomTexRef(String customTexRef) {
+    public void setCustomTexRef(String customTexRef) throws IOException {
         if (customTexRef == null) {
             customTexRef = "";
         }
@@ -791,7 +792,7 @@ public abstract class NpcBase extends EntityCreature implements IEntityAdditiona
         setOwnerName(player.getCommandSenderName());
     }
 
-    public void setOwnerName(String name) {
+    public void setOwnerName(String name) throws IOException {
         if (name == null) {
             name = "";
         }

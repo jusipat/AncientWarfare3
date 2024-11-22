@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.structure.tile.TileAdvancedSpawner;
 
+import java.io.IOException;
+
 public class ContainerSpawnerAdvancedBlock extends ContainerSpawnerAdvancedBase {
 
     private final TileAdvancedSpawner spawner;
@@ -23,7 +25,7 @@ public class ContainerSpawnerAdvancedBlock extends ContainerSpawnerAdvancedBase 
     }
 
     @Override
-    public void sendInitData() {
+    public void sendInitData() throws IOException {
         if (!spawner.getWorldObj().isRemote) {
             NetworkHandler.sendToPlayer((EntityPlayerMP) player, getSettingPacket());
         }

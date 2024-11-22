@@ -134,19 +134,19 @@ public class VehicleInputHandler {
 
 	private static void handleAmmoSelectAction(VehicleBase vehicle) {
 		if (!vehicle.isAmmoLoaded()) {
-			Minecraft.getMinecraft().thePlayer.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
+			//Minecraft.getMinecraft().thePlayer.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
 			return;
 		}
 
 		if (!vehicle.vehicleType.getValidAmmoTypes().isEmpty()) {
-			NetworkHandler.INSTANCE.openGui(Minecraft.getMinecraft().thePlayer, NetworkHandler.GUI_VEHICLE_AMMO_SELECTION, vehicle.getEntityId());
+			//NetworkHandler.INSTANCE.openGui(Minecraft.getMinecraft().thePlayer, NetworkHandler.GUI_VEHICLE_AMMO_SELECTION, vehicle.getEntityId());
 		}
 	}
 
 	private static void handleFireAction(VehicleBase vehicle) {
 		String configName = vehicle.vehicleType.getConfigName();
 		if (!vehicle.isAmmoLoaded() && !(configName.equals("battering_ram") || configName.equals("boat_transport") || configName.equals("chest_cart"))) {
-			Minecraft.getMinecraft().thePlayer.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
+			//Minecraft.getMinecraft().thePlayer.sendStatusMessage(new TextComponentTranslation("gui.ancientwarfarevehicles.ammo.no_ammo"), true);
 		}
 		if (vehicle.isAimable()) {
 			vehicle.firingHelper.handleFireInput();

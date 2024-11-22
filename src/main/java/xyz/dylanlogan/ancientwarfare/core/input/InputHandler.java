@@ -280,11 +280,11 @@ public void onKeyPressed()
   ItemStack stack = minecraft.thePlayer.inventory.getCurrentItem();
   if(stack!=null && stack.getItem() instanceof IItemKeyInterface)
     {
-    if(((IItemKeyInterface)stack.getItem()).onKeyActionClient(minecraft.thePlayer, stack, key))
-      {
-      PacketItemInteraction pkt = new PacketItemInteraction(0, key);
-      NetworkHandler.sendToServer(pkt);
-      }
+//    if(((IItemKeyInterface)stack.getItem()).onKeyActionClient(minecraft.thePlayer, stack, key))
+//      {
+//      PacketItemInteraction pkt = new PacketItemInteraction(0, key);
+//      NetworkHandler.sendToServer(pkt);
+//      }
     }
   }
 

@@ -7,9 +7,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
+import xyz.dylanlogan.ancientwarfare.core.owner.Owner;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
@@ -182,7 +184,7 @@ public abstract class Ammo implements IAmmo {
 		if (!AWVehicleStatics.generalSettings.shotsDestroysBlocks) {
 			return;
 		}
-		BlockTools.breakBlockAndDrop(world, pos);
+		BlockTools.breakBlockAndDrop(world, null, pos.x, pos.y, pos.z);
 	}
 
 	protected void igniteBlock(World world, int x, int y, int z, int maxSearch) {
@@ -191,8 +193,8 @@ public abstract class Ammo implements IAmmo {
 		}
 		for (int i = 0; i < maxSearch && y - i >= 1; i++) {
 			BlockPos curPos = new BlockPos(x, y - i, z);
-			if (!world.isAirBlock(curPos) && world.isAirBlock(curPos.up())) {
-				world.setBlockState(curPos.up(), Blocks.FIRE.getDefaultState(), 3);
+			if (!world.isAirBlock(curPos.getX(), curPos.getY(), curPos.getZ()) && world.isAirBlock(curPos.getX(), curPos.getY()+1, curPos.getZ())) {
+				world.setBlock(curPos.getX(), curPos.getY(), curPos.getZ(), Blocks.fire);
 			}
 		}
 	}
@@ -201,10 +203,10 @@ public abstract class Ammo implements IAmmo {
 		if (!AWVehicleStatics.generalSettings.allowFriendlyFire && missile.shooterLiving instanceof NpcBase) {
 			@Nonnull NpcBase npc = ((NpcBase) missile.shooterLiving);
 			if (entity instanceof NpcBase) {
-				Owner targetNpcOwner = ((NpcBase) entity).getOwner();
-				return !npc.getOwner().isOwnerOrSameTeamOrFriend(world, targetNpcOwner.getUUID(), targetNpcOwner.getName());
+				//Owner targetNpcOwner = ((NpcBase) entity).getOwner(); todo: fix owner get
+				//return !npc.getOwner().isOwnerOrSameTeamOrFriend(world, targetNpcOwner.getUUID(), targetNpcOwner.getName());
 			} else if (entity instanceof EntityPlayer) {
-				return !npc.getOwner().isOwnerOrSameTeamOrFriend(world, entity.getUniqueID(), entity.getName());
+				//return !npc.getOwner().isOwnerOrSameTeamOrFriend(world, entity.getUniqueID(), ((EntityPlayer) entity).getDisplayName());
 			}
 		}
 		return true;
@@ -216,11 +218,8 @@ public abstract class Ammo implements IAmmo {
 		}
 		for (int i = 0; i < maxSearch && y - i >= 1; i++) {
 			BlockPos curPos = new BlockPos(x, y - i, z);
-			if (!world.isAirBlock(curPos)) {
-				if (world.isAirBlock(curPos.up())) {
-					world.setBlockState(curPos.up(), Blocks.LAVA.getDefaultState(), 3);
-				}
-				break;
+			if (!world.isAirBlock(curPos.getX(), curPos.getY(), curPos.getZ()) && world.isAirBlock(curPos.getX(), curPos.getY()+1, curPos.getZ())) {
+				world.setBlock(curPos.getX(), curPos.getY(), curPos.getZ(), Blocks.lava);
 			}
 		}
 	}
@@ -233,9 +232,9 @@ public abstract class Ammo implements IAmmo {
 	}
 
 	protected void spawnGroundBurst(World world, MovingObjectPosition hit, float maxVelocity, IAmmo type, int count, float minPitch, Entity shooter) {
-		Vector3i dirVec = hit.sideHit.getDirectionVec();
-		Vector3d hitVec = hit.hitVec.addVector(dirVec.getX() * 0.2f, dirVec.getY() * 0.2f, dirVec.getZ() * 0.2f);
-		spawnBurst(world, maxVelocity, type, count, minPitch, shooter, hit.sideHit, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z);
+		Vec3 dirVec = hit.hitVec;
+		Vec3 hitVec = hit.hitVec.addVector(dirVec.xCoord * 0.2f, dirVec.yCoord * 0.2f, dirVec.zCoord * 0.2f);
+		spawnBurst(world, maxVelocity, type, count, minPitch, shooter, EnumFacing.getFront(hit.sideHit), (float) hitVec.xCoord, (float) hitVec.yCoord, (float) hitVec.zCoord);
 	}
 
 	private void spawnBurst(World world, float maxVelocity, IAmmo type, int count, float minPitch, Entity shooter, EnumFacing sideHit, float x, float y, float z) {
@@ -251,7 +250,7 @@ public abstract class Ammo implements IAmmo {
 			float pitch;
 			float randVelocity;
 			float velocity;
-			if (sideHit.getAxis().isVertical()) {
+			if (sideHit.getFrontOffsetY() == 0) {
 				pitch = 90 - (world.rand.nextFloat() * randRange);
 				yaw = world.rand.nextFloat() * 360.f;
 				randVelocity = world.rand.nextFloat();
@@ -313,19 +312,19 @@ public abstract class Ammo implements IAmmo {
 
 	protected void breakAroundOnLevel(World world, BlockPos origin, BlockPos center, float maxHardness) {
 		affectBlock(world, origin, center, maxHardness);
-		affectBlock(world, origin, center.north(), maxHardness);
-		affectBlock(world, origin, center.east(), maxHardness);
-		affectBlock(world, origin, center.west(), maxHardness);
-		affectBlock(world, origin, center.south(), maxHardness);
-		affectBlock(world, origin, center.north().east(), maxHardness);
-		affectBlock(world, origin, center.east().south(), maxHardness);
-		affectBlock(world, origin, center.south().west(), maxHardness);
-		affectBlock(world, origin, center.west().north(), maxHardness);
+//		affectBlock(world, origin, center.north(), maxHardness);
+//		affectBlock(world, origin, center.east(), maxHardness);
+//		affectBlock(world, origin, center.west(), maxHardness);
+//		affectBlock(world, origin, center.south(), maxHardness);
+//		affectBlock(world, origin, center.north().east(), maxHardness);
+//		affectBlock(world, origin, center.east().south(), maxHardness);
+//		affectBlock(world, origin, center.south().west(), maxHardness);
+//		affectBlock(world, origin, center.west().north(), maxHardness);
 	}
 
 	private void affectBlock(World world, BlockPos origin, BlockPos pos, float maxHardness) {
-		double distanceAdjustedHardness = maxHardness - origin.getDistance(pos.getX(), pos.getY(), pos.getZ()) * 15;
-		if (distanceAdjustedHardness > 0 && distanceAdjustedHardness > world.getBlockState(pos).getBlockHardness(world, pos)) {
+		double distanceAdjustedHardness = maxHardness - origin.distance(pos.getX(), pos.getY(), pos.getZ()) * 15;
+		if (distanceAdjustedHardness > 0 && distanceAdjustedHardness > world.getBlock(pos.x, pos.y, pos.z).getBlockHardness(world, pos.x, pos.y, pos.z)) {
 			breakBlockAndDrop(world, pos);
 		}
 	}

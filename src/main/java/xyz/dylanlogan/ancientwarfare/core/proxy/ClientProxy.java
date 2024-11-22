@@ -94,7 +94,7 @@ public class ClientProxy extends ClientProxyBase {
         }
 
         private static List<IConfigElement> getKeybindElements() {
-            List<Property> props = InputHandler.instance.getKeyConfig("item_use");
+           List<Property> props = null; //InputHandler.instance.getKeyConfig("item_use");
             List<IConfigElement> list = new ArrayList<IConfigElement>();
             for(Property property : props) {
                 list.add(new ConfigElement(property));

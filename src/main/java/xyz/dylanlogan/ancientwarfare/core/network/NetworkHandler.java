@@ -13,6 +13,7 @@ import net.minecraft.world.WorldServer;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.core.container.ContainerBase;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -111,20 +112,20 @@ public final class NetworkHandler implements IGuiHandler {
         INSTANCE.channel.sendToServer(pkt.getFMLPacket());
     }
 
-    public static void sendToPlayer(EntityPlayerMP player, PacketBase pkt) {
+    public static void sendToPlayer(EntityPlayerMP player, PacketBase pkt) throws IOException {
         INSTANCE.channel.sendTo(pkt.getFMLPacket(), player);
     }
 
-    public static void sendToAllPlayers(PacketBase pkt) {
+    public static void sendToAllPlayers(PacketBase pkt) throws IOException {
         INSTANCE.channel.sendToAll(pkt.getFMLPacket());
     }
 
-    public static void sendToAllTracking(Entity e, PacketBase pkt) {
+    public static void sendToAllTracking(Entity e, PacketBase pkt) throws IOException {
         WorldServer server = (WorldServer) e.worldObj;
         server.getEntityTracker().func_151247_a(e, pkt.getFMLPacket());
     }
 
-    public static void sendToAllNear(World world, int x, int y, int z, double range, PacketBase pkt) {
+    public static void sendToAllNear(World world, int x, int y, int z, double range, PacketBase pkt) throws IOException {
         INSTANCE.channel.sendToAllAround(pkt.getFMLPacket(), new TargetPoint(world.provider.dimensionId, x, y, z, range));
     }
 
@@ -135,7 +136,7 @@ public final class NetworkHandler implements IGuiHandler {
      * @param pkt   the packet
      */
     @SuppressWarnings("unchecked")
-    public static void sendToAllTrackingChunk(World world, int cx, int cz, PacketBase pkt) {
+    public static void sendToAllTrackingChunk(World world, int cx, int cz, PacketBase pkt) throws IOException {
         WorldServer server = (WorldServer) world;
         for (EntityPlayer p : (List<EntityPlayer>) server.playerEntities) {
             if (server.getPlayerManager().isPlayerWatchingChunk((EntityPlayerMP) p, cx, cz)) {

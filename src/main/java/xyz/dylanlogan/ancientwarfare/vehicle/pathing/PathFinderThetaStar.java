@@ -352,10 +352,10 @@ public class PathFinderThetaStar {
 					}
 				} else if (p.y < y)//moving up from parent, check parent.y ->parent.y+2
 				{
-					if (world.isPartialBlock(p.getPos().down()))//check to make sure its not going to be too far to jump up
-					{
-						return;
-					}
+//					if (world.isPartialBlock(p.getPos().down()))//check to make sure its not going to be too far to jump up
+//					{
+//						return;
+//					}
 					if (!world.checkBlockBounds(p.x, p.y + 2, p.z)) {
 						return;
 					}

@@ -22,6 +22,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.VehicleAmmoEntry;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -46,7 +47,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 	/**
 	 * SERVER ONLY relays changes to clients to update a single ammo type, also handles updating underlying inventory...
 	 */
-	void decreaseCurrentAmmo() {
+	void decreaseCurrentAmmo() throws IOException {
 		if (vehicle.worldObj.isRemote) {
 			return;
 		}
@@ -137,7 +138,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		NetworkHandler.sendToServer(new PacketAmmoSelect(vehicle, ammoRegistryName.toString()));
 	}
 
-	public void updateSelectedAmmo(String ammoRegistryName) {
+	public void updateSelectedAmmo(String ammoRegistryName) throws IOException {
 		if (!ammoRegistryName.equals(currentAmmoType == null ? "" : currentAmmoType.toString())) {
 			this.currentAmmoType = new ResourceLocation(ammoRegistryName);
 			if (!vehicle.worldObj.isRemote) {
@@ -166,7 +167,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		}
 	}
 
-	public void updateAmmoCounts() {
+	public void updateAmmoCounts() throws IOException {
 		if (vehicle.worldObj.isRemote) {
 			return;
 		}

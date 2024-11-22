@@ -19,6 +19,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.ArmourRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.UpgradeRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.upgrades.IVehicleUpgradeType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 	/**
 	 * SERVER ONLY
 	 */
-	public void updateUpgrades() {
+	public void updateUpgrades() throws IOException {
 		if (vehicle.worldObj.isRemote) {
 			return;
 		}

@@ -8,6 +8,7 @@ import net.minecraftforge.common.util.Constants;
 import xyz.dylanlogan.ancientwarfare.automation.tile.TileChunkLoaderDeluxe;
 import xyz.dylanlogan.ancientwarfare.core.container.ContainerTileBase;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public class ContainerChunkLoaderDeluxe extends ContainerTileBase<TileChunkLoade
         sendChunkList();
     }
 
-    private void sendChunkList() {
+    private void sendChunkList() throws IOException {
         NBTTagCompound tag = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
         NBTTagCompound ccipTag;

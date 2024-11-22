@@ -35,7 +35,8 @@ public class PathWorldAccess {
 	}
 
 	public Block getBlock(BlockPos pos) {
-		return world.getBlockState(pos).getBlock();
+		return null;
+		//return world.getBlockState(pos).getBlock();
 	}
 
 	public int getTravelCost(BlockPos pos) {
@@ -59,36 +60,36 @@ public class PathWorldAccess {
 	 */
 	public boolean checkBlockBounds(int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
-		IBlockState state = world.getBlockState(pos);
-		Block block = state.getBlock();
-		if (block == Blocks.water || block == Blocks.flowing_water) {
-			return true;
-		} else if (block == Blocks.trapdoor) {
-			return state.getValue(BlockTrapDoor.OPEN);
-		}
-		if (block != Blocks.air) {
-			AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
-			if (bb == null) {
-				return true;
-			}
-			if (bb.maxY >= 0.5d) {
-				return false;
-			}
-		}
+//		IBlockState state = world.getBlockState(pos);
+//		Block block = state.getBlock();
+//		if (block == Blocks.water || block == Blocks.flowing_water) {
+//			return true;
+//		} else if (block == Blocks.trapdoor) {
+//			return state.getValue(BlockTrapDoor.OPEN);
+//		}
+//		if (block != Blocks.air) {
+//			AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
+//			if (bb == null) {
+//				return true;
+//			}
+//			if (bb.maxY >= 0.5d) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 
 	private boolean isWalkable2(int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		Block block = getBlock(pos);
-		Block blockDown = getBlock(pos.down());
-		Block blockUp = getBlock(pos.up());
+		//Block blockDown = getBlock(pos.down());
+		//Block blockUp = getBlock(pos.up());
 		boolean cube = !checkBlockBounds(x, y, z);
 		boolean cube2 = !checkBlockBounds(x, y - 1, z);
 		boolean cube3 = !checkBlockBounds(x, y + 1, z);
-		if (isFence(blockDown) || (isDoor(pos.down()) && isDoor(pos)) || (block == Blocks.cactus || blockDown == Blocks.cactus || blockUp == Blocks.cactus)) {
-			return false;
-		}
+//		if (isFence(blockDown) || (isDoor(pos.down()) && isDoor(pos)) || (block == Blocks.cactus || blockDown == Blocks.cactus || blockUp == Blocks.cactus)) {
+//			return false;
+//		}
 		if (canGoOnLand) {
 			if (canUseLaders && isLadder(block)) {
 				return true;
@@ -101,30 +102,18 @@ public class PathWorldAccess {
 				return true;
 			}
 		}
-		return canSwim && isWater(block) && blockUp == Blocks.air;
-	}
-
-	public boolean isPartialBlock(BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() != Blocks.air) {
-			AxisAlignedBB bb = state.getCollisionBoundingBox(world, pos);
-			if (bb == null) {
-				return false;
-			}
-			if (bb.maxY <= 0.75d && bb.minX < 0.35 && bb.maxX > 0.65 && bb.minZ < 0.35 && bb.maxZ > 0.65) {
-				return true;
-			}
-		}
-		return false;
+		//return canSwim && isWater(block) && blockUp == Blocks.air;
+		return true;
 	}
 
 	private boolean canSupport(Block block, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		if (block == Blocks.trapdoor) {
-			return !state.getValue(BlockTrapDoor.OPEN) && state.getValue(BlockTrapDoor.HALF) == BlockTrapDoor.DoorHalf.BOTTOM;
-		}
-		AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
-		return bb != null && bb.maxY <= 0.5d && bb.minX < 0.35 && bb.maxX > 0.65 && bb.minZ < 0.35 && bb.maxZ > 0.65;
+//		IBlockState state = world.getBlockState(pos);
+//		if (block == Blocks.trapdoor) {
+//			return !state.getValue(BlockTrapDoor.OPEN) && state.getValue(BlockTrapDoor.HALF) == BlockTrapDoor.DoorHalf.BOTTOM;
+//		}
+//		AxisAlignedBB bb = block.getCollisionBoundingBox(state, world, pos);
+//		return bb != null && bb.maxY <= 0.5d && bb.minX < 0.35 && bb.maxX > 0.65 && bb.minZ < 0.35 && bb.maxZ > 0.65;
+		return true;
 	}
 
 	private boolean isFence(Block block) {
@@ -140,21 +129,22 @@ public class PathWorldAccess {
 	}
 
 	public boolean isDoor(BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		Block block = state.getBlock();
-		if (block == AWStructureBlocks.GATE_PROXY) {
-			return WorldTools.getTile(world, pos, TEGateProxy.class)
-					.map(proxy -> proxy.getOwner().map(p -> p.getGateType().canSoldierActivate()).orElse(false)).orElse(true);
-		}
-		return (block instanceof BlockDoor && state.getMaterial() == Material.wood) || block instanceof BlockFenceGate;
+//		IBlockState state = world.getBlockState(pos);
+//		Block block = state.getBlock();
+//		if (block == AWStructureBlocks.GATE_PROXY) {
+//			return WorldTools.getTile(world, pos, TEGateProxy.class)
+//					.map(proxy -> proxy.getOwner().map(p -> p.getGateType().canSoldierActivate()).orElse(false)).orElse(true);
+//		}
+//		return (block instanceof BlockDoor && state.getMaterial() == Material.wood) || block instanceof BlockFenceGate;
+		return false;
 	}
 
 	private boolean isLadder(Block block) {
 		return block == Blocks.ladder || block == Blocks.vine;
 	}
 
-	protected boolean isLadder(BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+	public boolean isLadder(int x, int y, int z) {
+		Block block = world.getBlock(x,y,z);
 		return isLadder(block);
 	}
 

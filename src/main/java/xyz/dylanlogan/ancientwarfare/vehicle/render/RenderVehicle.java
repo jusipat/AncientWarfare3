@@ -40,27 +40,27 @@ public class RenderVehicle extends Render {
 	private final HashMap<IVehicleType, RenderVehicleBase> vehicleRenders = new HashMap<>();
 
 	public RenderVehicle() {
-		vehicleRenders.put(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed(renderManager));
-		vehicleRenders.put(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret(renderManager));
-		vehicleRenders.put(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed(renderManager));
-		vehicleRenders.put(VehicleRegistry.CATAPULT_MOBILE_TURRET, new RenderCatapultMobileTurret(renderManager));
-		vehicleRenders.put(VehicleRegistry.BALLISTA_STAND_FIXED, new RenderBallistaStand(renderManager));
-		vehicleRenders.put(VehicleRegistry.BALLISTA_STAND_TURRET, new RenderBallistaStand(renderManager));
-		vehicleRenders.put(VehicleRegistry.BALLISTA_MOBILE_FIXED, new RenderBallistaMobile(renderManager));
-		vehicleRenders.put(VehicleRegistry.BALLISTA_MOBILE_TURRET, new RenderBallistaMobile(renderManager));
-		vehicleRenders.put(VehicleRegistry.BATTERING_RAM, new RenderBatteringRam(renderManager));
-		vehicleRenders.put(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed(renderManager));
-		vehicleRenders.put(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandTurret(renderManager));
-		vehicleRenders.put(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonMobileFixed(renderManager));
-		vehicleRenders.put(VehicleRegistry.HWACHA, new RenderHwacha(renderManager));
-		vehicleRenders.put(VehicleRegistry.TREBUCHET_STAND_FIXED, new RenderTrebuchetStandFixed(renderManager));
-		vehicleRenders.put(VehicleRegistry.TREBUCHET_STAND_TURRET, new RenderTrebuchetStandTurret(renderManager));
-		vehicleRenders.put(VehicleRegistry.TREBUCHET_MOBILE_FIXED, new RenderTrebuchetMobileFixed(renderManager));
-		vehicleRenders.put(VehicleRegistry.TREBUCHET_LARGE, new RenderTrebuchetLarge(renderManager));
-		vehicleRenders.put(VehicleRegistry.CHEST_CART, new RenderChestCart(renderManager));
-		vehicleRenders.put(VehicleRegistry.BOAT_BALLISTA, new RenderBoatBallista(renderManager));
-		vehicleRenders.put(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult(renderManager));
-		vehicleRenders.put(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport(renderManager));
+		vehicleRenders.put(VehicleRegistry.CATAPULT_STAND_FIXED, new RenderCatapultStandFixed());
+		vehicleRenders.put(VehicleRegistry.CATAPULT_STAND_TURRET, new RenderCatapultStandTurret());
+		vehicleRenders.put(VehicleRegistry.CATAPULT_MOBILE_FIXED, new RenderCatapultMobileFixed());
+		vehicleRenders.put(VehicleRegistry.CATAPULT_MOBILE_TURRET, new RenderCatapultMobileTurret());
+		vehicleRenders.put(VehicleRegistry.BALLISTA_STAND_FIXED, new RenderBallistaStand());
+		vehicleRenders.put(VehicleRegistry.BALLISTA_STAND_TURRET, new RenderBallistaStand());
+		vehicleRenders.put(VehicleRegistry.BALLISTA_MOBILE_FIXED, new RenderBallistaMobile());
+		vehicleRenders.put(VehicleRegistry.BALLISTA_MOBILE_TURRET, new RenderBallistaMobile());
+		vehicleRenders.put(VehicleRegistry.BATTERING_RAM, new RenderBatteringRam());
+		vehicleRenders.put(VehicleRegistry.CANNON_STAND_FIXED, new RenderCannonStandFixed());
+		vehicleRenders.put(VehicleRegistry.CANNON_STAND_TURRET, new RenderCannonStandTurret());
+		vehicleRenders.put(VehicleRegistry.CANNON_MOBILE_FIXED, new RenderCannonMobileFixed());
+		vehicleRenders.put(VehicleRegistry.HWACHA, new RenderHwacha());
+		vehicleRenders.put(VehicleRegistry.TREBUCHET_STAND_FIXED, new RenderTrebuchetStandFixed());
+		vehicleRenders.put(VehicleRegistry.TREBUCHET_STAND_TURRET, new RenderTrebuchetStandTurret());
+		vehicleRenders.put(VehicleRegistry.TREBUCHET_MOBILE_FIXED, new RenderTrebuchetMobileFixed());
+		vehicleRenders.put(VehicleRegistry.TREBUCHET_LARGE, new RenderTrebuchetLarge());
+		vehicleRenders.put(VehicleRegistry.CHEST_CART, new RenderChestCart());
+		vehicleRenders.put(VehicleRegistry.BOAT_BALLISTA, new RenderBoatBallista());
+		vehicleRenders.put(VehicleRegistry.BOAT_CATAPULT, new RenderBoatCatapult());
+		vehicleRenders.put(VehicleRegistry.BOAT_TRANSPORT, new RenderBoatTransport());
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class RenderVehicle extends Render {
 
 		// Handle transparency in first-person view
 		if (!AWVehicleStatics.clientSettings.renderVehiclesInFirstPerson &&
-				vehicle.getControllingPassenger() == Minecraft.getMinecraft().thePlayer &&
+				vehicle.ridingEntity == Minecraft.getMinecraft().thePlayer &&
 				Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
 			useAlpha = true;
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.2F);
@@ -107,7 +107,7 @@ public class RenderVehicle extends Render {
 		// Render nameplate
 		if (isInWorld(vehicle) &&
 				AWVehicleStatics.clientSettings.renderVehicleNameplates &&
-				vehicle.getControllingPassenger() != Minecraft.getMinecraft().thePlayer) {
+				vehicle.riddenByEntity != Minecraft.getMinecraft().thePlayer) {
 			renderNamePlate(vehicle, x, y, z);
 		}
 	}

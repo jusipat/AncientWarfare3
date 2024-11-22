@@ -21,7 +21,9 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.VehicleVarHelpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 
@@ -92,34 +94,10 @@ public class BallistaVarHelper extends VehicleFiringVarsHelper {
 		triggerAngle = -70.f;
 	}
 
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setFloat("cA", crankAngle);
-		tag.setFloat("cS", crankSpeed);
-		tag.setFloat("bA", bowAngle);
-		tag.setFloat("bS", bowSpeed);
-		tag.setFloat("sA", stringAngle);
-		tag.setFloat("sS", stringSpeed);
-		tag.setFloat("tA", triggerAngle);
-		return tag;
-	}
-
 	public float getStringAngle(float bowAngle) {
 		float percentTravel = (bowAngle - 30.f) / 37.5f;
 		float adj = percentTravel * 1.305f;
 		return -30 - adj * bowAngle;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		this.crankAngle = tag.getFloat("cA");
-		this.crankSpeed = tag.getFloat("cS");
-		this.bowAngle = tag.getFloat("bA");
-		this.bowSpeed = tag.getFloat("bS");
-		this.stringAngle = tag.getFloat("sA");
-		this.stringSpeed = tag.getFloat("sS");
-		this.triggerAngle = tag.getFloat("tA");
 	}
 
 	@Override
@@ -162,4 +140,30 @@ public class BallistaVarHelper extends VehicleFiringVarsHelper {
 		return 0;
 	}
 
+	@Override
+	public void saveNBTData(NBTTagCompound tag) {
+		tag.setFloat("cA", crankAngle);
+		tag.setFloat("cS", crankSpeed);
+		tag.setFloat("bA", bowAngle);
+		tag.setFloat("bS", bowSpeed);
+		tag.setFloat("sA", stringAngle);
+		tag.setFloat("sS", stringSpeed);
+		tag.setFloat("tA", triggerAngle);
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		this.crankAngle = tag.getFloat("cA");
+		this.crankSpeed = tag.getFloat("cS");
+		this.bowAngle = tag.getFloat("bA");
+		this.bowSpeed = tag.getFloat("bS");
+		this.stringAngle = tag.getFloat("sA");
+		this.stringSpeed = tag.getFloat("sS");
+		this.triggerAngle = tag.getFloat("tA");
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
+	}
 }

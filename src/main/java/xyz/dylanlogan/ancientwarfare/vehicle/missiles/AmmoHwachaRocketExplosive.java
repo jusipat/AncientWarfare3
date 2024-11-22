@@ -3,6 +3,7 @@ package xyz.dylanlogan.ancientwarfare.vehicle.missiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
@@ -27,9 +28,9 @@ public class AmmoHwachaRocketExplosive extends Ammo {
 	@Override
 	public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit) {
 		if (!world.isRemote) {
-			Vector3i dirVec = hit.sideHit.getDirectionVec();
-			Vector3d hitVec = hit.hitVec.addVector(dirVec.x * 0.2d, dirVec.y * 0.2d, dirVec.z * 0.2d);
-			createExplosion(world, missile, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, 0.6f);
+			Vec3 dirVec = hit.hitVec;
+			Vec3 hitVec = hit.hitVec.addVector(dirVec.xCoord * 0.2d, dirVec.yCoord * 0.2d, dirVec.zCoord * 0.2d);
+			createExplosion(world, missile, (float) hitVec.xCoord, (float) hitVec.yCoord, (float) hitVec.zCoord, 0.6f);
 		}
 	}
 

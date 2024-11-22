@@ -9,6 +9,7 @@ import xyz.dylanlogan.ancientwarfare.structure.network.PacketStructure;
 import xyz.dylanlogan.ancientwarfare.structure.network.PacketStructureRemove;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class StructureTemplateManager {
@@ -22,7 +23,7 @@ public class StructureTemplateManager {
 
     public static final StructureTemplateManager INSTANCE = new StructureTemplateManager();
 
-    public void addTemplate(StructureTemplate template) {
+    public void addTemplate(StructureTemplate template) throws IOException {
         if (template.getValidationSettings() == null) {
             return;
         }
@@ -43,7 +44,7 @@ public class StructureTemplateManager {
         }
     }
 
-    public void onPlayerConnect(EntityPlayerMP player) {
+    public void onPlayerConnect(EntityPlayerMP player) throws IOException {
         NBTTagList list = new NBTTagList();
         for (StructureTemplateClient cl : clientTemplates.values()) {
             NBTTagCompound tag = new NBTTagCompound();
@@ -58,7 +59,7 @@ public class StructureTemplateManager {
 //  NetworkHandler.sendToPlayer(player, pkt2);
     }
 
-    public boolean removeTemplate(String name) {
+    public boolean removeTemplate(String name) throws IOException {
         if (this.loadedTemplates.containsKey(name)) {
             this.loadedTemplates.remove(name);
             this.clientTemplates.remove(name);

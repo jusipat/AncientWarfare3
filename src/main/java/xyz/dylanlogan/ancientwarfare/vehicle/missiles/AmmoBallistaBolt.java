@@ -27,7 +27,7 @@ public class AmmoBallistaBolt extends Ammo {
 	@Override
 	public void onImpactWorld(World world, float x, float y, float z, MissileBase missile, MovingObjectPosition hit) {
 		if (!world.isRemote) {
-			world.playSound(null, x, y, z, AWVehicleSounds.BALLISTA_BOLT_HIT_GROUND, SoundCategory.AMBIENT, 2, 1);
+			//world.playSound(null, x, y, z, AWVehicleSounds.BALLISTA_BOLT_HIT_GROUND, SoundCategory.AMBIENT, 2, 1);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class AmmoBallistaBolt extends Ammo {
 	public void onImpactEntity(World world, Entity ent, float x, float y, float z, MissileBase missile) {
 		if (!world.isRemote) {
 			// using World.playSound instead of Entity.playSound, because Entity.playSound plays the sound to everyone nearby except(!) this player
-			world.playSound(x, y, z, AWVehicleSounds.BALLISTA_BOLT_HIT_ENTITY, 2, 1);
+			//world.playSound(x, y, z, AWVehicleSounds.BALLISTA_BOLT_HIT_ENTITY, 2, 1);
 			ent.attackEntityFrom(DamageType.causeEntityMissileDamage(missile.shooterLiving, false, false), getEntityDamage());
 		}
 	}

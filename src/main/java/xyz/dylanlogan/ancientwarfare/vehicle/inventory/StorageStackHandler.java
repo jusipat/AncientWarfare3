@@ -1,11 +1,13 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 
-public class StorageStackHandler {
+public class StorageStackHandler implements IInventory {
     private final ItemStack[] stacks;
     private VehicleBase vehicle;
 
@@ -66,8 +68,68 @@ public class StorageStackHandler {
         return extracted;
     }
 
+    @Override
+    public int getSizeInventory() {
+        return 0;
+    }
+
     public ItemStack getStackInSlot(int slot) {
         return (slot < 0 || slot >= stacks.length) ? null : stacks[slot];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int index, int count) {
+        return null;
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int index) {
+        return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+
+    }
+
+    @Override
+    public String getInventoryName() {
+        return "";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName() {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return 0;
+    }
+
+    @Override
+    public void markDirty() {
+
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return false;
+    }
+
+    @Override
+    public void openInventory() {
+
+    }
+
+    @Override
+    public void closeInventory() {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return false;
     }
 
     public int getSlots() {

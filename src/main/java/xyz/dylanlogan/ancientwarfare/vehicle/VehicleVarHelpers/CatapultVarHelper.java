@@ -21,7 +21,9 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.VehicleVarHelpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 
@@ -79,24 +81,6 @@ public class CatapultVarHelper extends VehicleFiringVarsHelper {
 	}
 
 	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setFloat("cA", crankAngle);
-		tag.setFloat("cS", crankSpeed);
-		tag.setFloat("aA", armAngle);
-		tag.setFloat("aS", armSpeed);
-		return tag;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		this.crankAngle = tag.getFloat("cA");
-		this.crankSpeed = tag.getFloat("cS");
-		this.armAngle = tag.getFloat("aA");
-		this.armSpeed = tag.getFloat("aS");
-	}
-
-	@Override
 	public float getVar1() {
 		return armAngle;
 	}
@@ -136,4 +120,24 @@ public class CatapultVarHelper extends VehicleFiringVarsHelper {
 		return 0;
 	}
 
+	@Override
+	public void saveNBTData(NBTTagCompound tag) {
+		tag.setFloat("cA", crankAngle);
+		tag.setFloat("cS", crankSpeed);
+		tag.setFloat("aA", armAngle);
+		tag.setFloat("aS", armSpeed);
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		this.crankAngle = tag.getFloat("cA");
+		this.crankSpeed = tag.getFloat("cS");
+		this.armAngle = tag.getFloat("aA");
+		this.armSpeed = tag.getFloat("aS");
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
+	}
 }

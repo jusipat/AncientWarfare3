@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayer;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public abstract class PacketBase {
@@ -36,7 +37,7 @@ public abstract class PacketBase {
 
     protected abstract void writeToStream(ByteBuf data);
 
-    protected abstract void readFromStream(ByteBuf data);
+    protected abstract void readFromStream(ByteBuf data) throws IOException;
 
     protected void execute() {
     }
@@ -45,7 +46,7 @@ public abstract class PacketBase {
         execute();
     }
 
-    public static PacketBase readPacket(ByteBuf data) {
+    public static PacketBase readPacket(ByteBuf data) throws IOException {
         PacketBase pkt = readHeaderFromStream(data);
         pkt.readFromStream(data);
         return pkt;

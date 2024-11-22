@@ -18,8 +18,8 @@ public class RenderMissile extends Render {
 	private RenderShot shotRender;
 
 	public RenderMissile(RenderManager renderManager) {
-		arrowRender = new RenderArrow(renderManager);
-		shotRender = new RenderShot(renderManager);
+		arrowRender = new RenderArrow();
+		shotRender = new RenderShot();
 
 		missileRenders.put(AmmoRegistry.ammoStoneShot10, shotRender);
 		missileRenders.put(AmmoRegistry.ammoStoneShot15, shotRender);

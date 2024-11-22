@@ -21,7 +21,9 @@
 
 package xyz.dylanlogan.ancientwarfare.vehicle.VehicleVarHelpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.helpers.VehicleFiringVarsHelper;
 
@@ -32,17 +34,6 @@ public class DummyVehicleHelper extends VehicleFiringVarsHelper {
 	 */
 	public DummyVehicleHelper(VehicleBase vehicle) {
 		super(vehicle);
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		// TODO Auto-generated method stub
-		return new NBTTagCompound();
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-
 	}
 
 	@Override
@@ -105,4 +96,18 @@ public class DummyVehicleHelper extends VehicleFiringVarsHelper {
 		return 0;
 	}
 
+	@Override
+	public void saveNBTData(NBTTagCompound compound) {
+
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound compound) {
+
+	}
+
+	@Override
+	public void init(Entity entity, World world) {
+
+	}
 }

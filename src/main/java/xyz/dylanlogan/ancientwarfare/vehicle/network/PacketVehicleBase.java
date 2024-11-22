@@ -22,7 +22,7 @@ public abstract class PacketVehicleBase extends PacketBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) {
+	protected void writeToStream(ByteBuf data) throws IOException {
 		data.writeInt(entityID);
 	}
 
@@ -39,7 +39,7 @@ public abstract class PacketVehicleBase extends PacketBase {
 
 	@Override
 	protected void execute(EntityPlayer player) {
-		vehicle = getVehicle(player.world);
+		vehicle = getVehicle(player.worldObj);
 		if (vehicle == null) {
 			return;
 		}

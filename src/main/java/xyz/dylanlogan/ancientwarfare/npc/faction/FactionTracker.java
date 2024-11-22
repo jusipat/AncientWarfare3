@@ -13,6 +13,8 @@ import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.npc.gamedata.FactionData;
 import xyz.dylanlogan.ancientwarfare.npc.network.PacketFactionUpdate;
 
+import java.io.IOException;
+
 public class FactionTracker {
 
     public static final FactionTracker INSTANCE = new FactionTracker();
@@ -75,7 +77,7 @@ public class FactionTracker {
         }
     }
 
-    private void sendFactionEntry(EntityPlayer player, FactionData data) {
+    private void sendFactionEntry(EntityPlayer player, FactionData data) throws IOException {
         FactionEntry entry = data.getEntryFor(player.getCommandSenderName());
         NBTTagCompound tag = new NBTTagCompound();
         NBTTagCompound initTag = entry.writeToNBT(new NBTTagCompound());
@@ -84,7 +86,7 @@ public class FactionTracker {
         NetworkHandler.sendToPlayer((EntityPlayerMP) player, pkt);
     }
 
-    private void sendFactionUpdate(World world, String playerName, String factionName, FactionData data) {
+    private void sendFactionUpdate(World world, String playerName, String factionName, FactionData data) throws IOException {
         EntityPlayer player = world.getPlayerEntityByName(playerName);
         if (player != null && player instanceof EntityPlayerMP) {
             int standing = data.getStandingFor(playerName, factionName);

@@ -21,6 +21,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleMovementType;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketVehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketVehicleMove;
 
+import java.io.IOException;
 import java.util.List;
 
 public class VehicleMoveHelper implements IExtendedEntityProperties {
@@ -148,7 +149,7 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		//this.vehicle.move(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 	}
 
-	protected void onUpdateServer() {
+	protected void onUpdateServer() throws IOException {
 		VehicleMovementType move = vehicle.vehicleType.getMovementType();
 		switch (move) {
 			case GROUND:

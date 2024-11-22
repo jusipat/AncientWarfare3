@@ -32,8 +32,8 @@ public class RenderShot extends RenderMissileBase {
 
 	public ModelShot shot = new ModelShot();
 
-	public RenderShot(RenderManager renderManager) {
-		super(renderManager);
+	public RenderShot() {
+		super();
 	}
 
 	@Override

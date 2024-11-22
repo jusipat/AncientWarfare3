@@ -18,6 +18,8 @@ import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
 import xyz.dylanlogan.ancientwarfare.structure.gates.types.Gate;
 import xyz.dylanlogan.ancientwarfare.structure.gates.types.GateRotatingBridge;
 
+import java.io.IOException;
+
 /**
  * an class to represent ALL gate types
  *
@@ -148,7 +150,7 @@ public class EntityGate extends Entity implements IEntityAdditionalSpawnData, IE
         return this.health;
     }
 
-    public void setHealth(int val) {
+    public void setHealth(int val) throws IOException {
         if (val < 0) {
             val = 0;
         }

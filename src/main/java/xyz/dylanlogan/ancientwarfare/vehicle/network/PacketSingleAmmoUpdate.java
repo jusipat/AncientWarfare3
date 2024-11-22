@@ -19,10 +19,10 @@ public class PacketSingleAmmoUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) {
+	protected void writeToStream(ByteBuf data) throws IOException {
 		super.writeToStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
-		pb.writeString(ammoRegistryName);
+		pb.writeStringToBuffer(ammoRegistryName);
 		pb.writeInt(count);
 	}
 
@@ -30,7 +30,7 @@ public class PacketSingleAmmoUpdate extends PacketVehicleBase {
 	protected void readFromStream(ByteBuf data) throws IOException {
 		super.readFromStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
-		ammoRegistryName = pb.readString(64);
+		ammoRegistryName = pb.readStringFromBuffer(64);
 		count = pb.readInt();
 	}
 

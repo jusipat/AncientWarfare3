@@ -3,6 +3,7 @@ package xyz.dylanlogan.ancientwarfare.vehicle.registry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.VehicleArmorIron;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.VehicleArmorObsidian;
@@ -36,8 +37,8 @@ public class ArmourRegistry {
 	 */
 	private static IVehicleArmor registerArmorType(IVehicleArmor armor, String registryName) {
 		armorInstances.put(registryName, armor);
-
-		ItemArmor item = new ItemArmor(registryName); // Pass the registry name directly
+		ResourceLocation loc = new ResourceLocation(registryName);
+		ItemArmor item = new ItemArmor(loc); // Pass the registry name directly
 		item.setUnlocalizedName(registryName);
 		GameRegistry.registerItem(item, registryName); // Register the item in 1.7.10 style
 

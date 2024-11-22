@@ -44,6 +44,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.entity.types.VehicleTypeTrebuchetLa
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.types.VehicleTypeTrebuchetMobileFixed;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.types.VehicleTypeTrebuchetStandFixed;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.types.VehicleTypeTrebuchetStandTurret;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 
 import java.util.Iterator;
 

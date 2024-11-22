@@ -38,7 +38,7 @@ public class ButtonAmmo extends Button {
 	IAmmo ammo;
 	ItemStack stack;
 	VehicleBase vehicle;
-	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
+	protected static RenderItem itemRenderer = new RenderItem();
 
 	public ButtonAmmo(int topLeftX, int topLeftY, int width, int height, IAmmo ammo, VehicleBase vehicle) {
 		super(topLeftX, topLeftY, width, height, "");
@@ -64,7 +64,7 @@ public class ButtonAmmo extends Button {
 			//on the far right, ammo qty
 			if (this.ammo != null) {
 				String quantity = String.valueOf(vehicle.ammoHelper.getCountOf(ammo));
-				itemRenderer.renderItemIntoGUI(stack, renderX + 3, renderY + 3);
+				//itemRenderer.renderItemIntoGUI(stack, renderX + 3, renderY + 3); todo reimp
 				int quantityRenderX = renderX + this.width - 10 - Minecraft.getMinecraft().fontRenderer.getStringWidth(quantity);
 				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(quantity), quantityRenderX, renderY + textY, 0xffffffff);
 			}

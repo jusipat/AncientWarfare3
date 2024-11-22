@@ -30,6 +30,10 @@ public class Owner {
 		this.name = name;
 	}
 
+	public Owner getOwner() {
+		return this;
+	}
+
 	public Owner(EntityPlayer player) {
 		this(player.getUniqueID(), player.getDisplayName());
 	}

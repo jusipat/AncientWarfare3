@@ -41,7 +41,7 @@ public class PacketVehicleMove extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		super.readFromStream(data);
 		posX = data.readDouble();
 		posY = data.readDouble();

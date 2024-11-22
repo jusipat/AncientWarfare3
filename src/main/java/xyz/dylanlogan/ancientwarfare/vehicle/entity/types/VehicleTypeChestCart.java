@@ -1,7 +1,9 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.entity.types;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -54,17 +56,17 @@ public class VehicleTypeChestCart extends VehicleType {
 	public ResourceLocation getTextureForMaterialLevel(int level) {
 		switch (level) {
 			case 0:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/chest_cart_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/chest_cart_1.png");
 			case 1:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/chest_cart_2.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/chest_cart_2.png");
 			case 2:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/chest_cart_3.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/chest_cart_3.png");
 			case 3:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/chest_cart_4.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/chest_cart_4.png");
 			case 4:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/chest_cart_5.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/chest_cart_5.png");
 			default:
-				return new ResourceLocation(AncientWarfareCore.MOD_ID, "textures/model/vehicle/chest_cart_1.png");
+				return new ResourceLocation(AncientWarfareCore.modID, "textures/model/vehicle/chest_cart_1.png");
 		}
 	}
 
@@ -94,16 +96,6 @@ public class VehicleTypeChestCart extends VehicleType {
 		//  return true;
 		//  }
 
-		@Override
-		public NBTTagCompound serializeNBT() {
-			return new NBTTagCompound();
-		}
-
-		@Override
-		public void deserializeNBT(NBTTagCompound tag) {
-			// TODO Auto-generated method stub
-
-		}
 
 		@Override
 		public void onFiringUpdate() {
@@ -175,6 +167,21 @@ public class VehicleTypeChestCart extends VehicleType {
 		public float getVar8() {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		@Override
+		public void saveNBTData(NBTTagCompound compound) {
+
+		}
+
+		@Override
+		public void loadNBTData(NBTTagCompound compound) {
+
+		}
+
+		@Override
+		public void init(Entity entity, World world) {
+
 		}
 	}
 }

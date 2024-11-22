@@ -123,12 +123,12 @@ public class VehicleTypeTrebuchetLarge extends VehicleType {
 
 	@Override
 	public void playFiringSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.GIANT_TREBUCHET_LAUNCH, 6, 1);
+		//vehicleBase.playSound(AWVehicleSounds.GIANT_TREBUCHET_LAUNCH, 6, 1);
 	}
 
 	@Override
 	public void playReloadSound(VehicleBase vehicleBase) {
-		vehicleBase.playSound(AWVehicleSounds.TREBUCHET_RELOAD, 1, 1);
+		//vehicleBase.playSound(AWVehicleSounds.TREBUCHET_RELOAD, 1, 1);
 	}
 
 	public class TrebuchetLargeVarHelper extends VehicleFiringVarsHelper {

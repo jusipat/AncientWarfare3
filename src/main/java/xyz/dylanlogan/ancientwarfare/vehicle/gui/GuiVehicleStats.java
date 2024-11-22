@@ -33,23 +33,13 @@ public class GuiVehicleStats extends GuiContainerBase<GuiVehicleStats.DummyConta
 	private VehicleBase vehicle;
 	private GuiVehicleInventory parent;
 
-	private static final DummyContainer DUMMY_CONTAINER = new DummyContainer(Minecraft.getMinecraft().player);
+	private static final DummyContainer DUMMY_CONTAINER = new DummyContainer(Minecraft.getMinecraft().thePlayer);
 
 	public GuiVehicleStats(GuiVehicleInventory parent, VehicleBase vehicle) {
 		super(DUMMY_CONTAINER);
 		this.vehicle = vehicle;
 		this.parent = parent;
 		this.shouldCloseOnVanillaKeys = true;
-	}
-
-	@Override
-	public int getXSize() {
-		return 256;
-	}
-
-	@Override
-	public int getYSize() {
-		return 240;
 	}
 
 	@Override
@@ -76,7 +66,7 @@ public class GuiVehicleStats extends GuiContainerBase<GuiVehicleStats.DummyConta
 		addGuiElement(new Label(10, 184, "Yaw Max: " + (vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax)));
 		//TODO are empty labels required here? try removing and see if it still works correctly
 		addGuiElement(new Label(10, 194, ""));
-		addGuiElement(new Label(10, 204, "TeamNum: " + (vehicle.getTeam() == null ? "" : vehicle.getTeam().getName())));
+		//addGuiElement(new Label(10, 204, "TeamNum: " + (vehicle.getTeam() == null ? "" : vehicle.getTeam().getName())));
 		addGuiElement(new Label(10, 214, ""));
 		addGuiElement(new Label(10, 224, ""));
 	}

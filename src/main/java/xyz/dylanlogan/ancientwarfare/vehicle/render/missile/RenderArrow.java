@@ -32,8 +32,8 @@ public class RenderArrow extends RenderMissileBase {
 
 	public ModelArrow2 arrow2 = new ModelArrow2();
 
-	public RenderArrow(RenderManager renderManager) {
-		super(renderManager);
+	public RenderArrow() {
+		super();
 	}
 
 	@Override

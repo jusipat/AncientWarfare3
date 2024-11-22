@@ -19,16 +19,16 @@ public class PacketUpgradeUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) {
+	protected void writeToStream(ByteBuf data) throws IOException {
 		super.writeToStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
 		pb.writeInt(upgradeRegistryNames.length);
 		for (String upgrade : upgradeRegistryNames) {
-			pb.writeString(upgrade);
+			pb.writeStringToBuffer(upgrade);
 		}
 		pb.writeInt(armorRegistryNames.length);
 		for (String armor : armorRegistryNames) {
-			pb.writeString(armor);
+			pb.writeStringToBuffer(armor);
 		}
 	}
 
@@ -38,11 +38,11 @@ public class PacketUpgradeUpdate extends PacketVehicleBase {
 		PacketBuffer pb = new PacketBuffer(data);
 		upgradeRegistryNames = new String[pb.readInt()];
 		for (int i = 0; i < upgradeRegistryNames.length; i++) {
-			upgradeRegistryNames[i] = pb.readString(64);
+			upgradeRegistryNames[i] = pb.readStringFromBuffer(64);
 		}
 		armorRegistryNames = new String[pb.readInt()];
 		for (int i = 0; i < armorRegistryNames.length; i++) {
-			armorRegistryNames[i] = pb.readString(64);
+			armorRegistryNames[i] = pb.readStringFromBuffer(64);
 		}
 	}
 

@@ -526,10 +526,10 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void setDead() {
         if (!this.worldObj.isRemote && !this.isDead && this.getHealth() <= 0) {
-            InventoryTools.dropItemsInWorld(worldObj, inventory.getAmmoInventory(), posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(worldObj, inventory.getArmorInventory(), posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(worldObj, inventory.getUpgradeInventory(), posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(worldObj, inventory.getStorageInventory(), posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.getAmmoInventory(), posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.getArmorInventory(), posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.getUpgradeInventory(), posX, posY, posZ);
+            InventoryTools.dropInventoryInWorld(worldObj, inventory.getStorageInventory(), posX, posY, posZ);
         }
         super.setDead();
     }
@@ -544,7 +544,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     public void onUpdate() {
         super.onUpdate();
         if (this.worldObj.isRemote) {
-            this.onUpdateClient();
+            //this.onUpdateClient();
         } else {
             this.onUpdateServer();
         }
@@ -565,12 +565,12 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         if (this.hurtInvulTicks > 0) {
             this.hurtInvulTicks--;
         }
-        if (this.assignedRider != null) {
-            if (assignedRider.isDead || assignedRider.ridingEntity != this || !assignedRider.isRiding() || assignedRider.ridingEntity != this || (this.getDistanceSq(assignedRider) > (AWNPCStatics.npcActionRange * AWNPCStatics.npcActionRange))) {
-                //TODO config setting for vehicle search range
-                this.assignedRider = null;
-            }
-        }
+//        if (this.assignedRider != null) {
+//            if (assignedRider.isDead || assignedRider.ridingEntity != this || !assignedRider.isRiding() || assignedRider.ridingEntity != this || (this.getDistanceSq(assignedRider.posX, assignedRider.posY, assignedRider.posZ) > (AWNPCStatics.npcActionRange * AWNPCStatics.npcActionRange))) {
+//                //TODO config setting for vehicle search range
+//                this.assignedRider = null;
+//            }
+//        }
 /* TODO perf test vehicles
 		ServerPerformanceMonitor.addVehicleTickTime(System.nanoTime() - t1);
 */
@@ -625,12 +625,12 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
                 for (int z = zMin; z <= zMin + (int) width; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     int state = worldObj.getBlockMetadata(pos.x, pos.y, pos.z);
-                    if (state.isSideSolid(worldObj, pos, EnumFacing.UP) || state.getMaterial() == Material.water) {
-                        if (worldObj.isAirBlock(pos.up()) && worldObj.isAirBlock(pos.up().up())) {
-                            rider.setPositionAndUpdate(x + 0.5d, y + 1, z + 0.5d);
-                            break searchLabel;
-                        }
-                    }
+//                    if (state.isSideSolid(worldObj, pos, EnumFacing.UP) || state.getMaterial() == Material.water) {
+//                        if (worldObj.isAirBlock(pos.up()) && worldObj.isAirBlock(pos.up().up())) {
+//                            rider.setPositionAndUpdate(x + 0.5d, y + 1, z + 0.5d);
+//                            break searchLabel;
+//                        }
+//                    }
                 }
             }
         }
@@ -650,13 +650,13 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
             localTurretDestPitch = localTurretPitch;
         }
 
-        if (!Trig.anglesEqual(localTurretPitch, localTurretDestPitch)) {
-            if (Math.abs(Trig.getAngleDiffSigned(localTurretDestPitch, localTurretPitch)) < localTurretPitchInc) {
-                localTurretPitch = localTurretDestPitch;
-            } else {
-                localTurretPitch += Trig.getAngleDiffSigned(localTurretPitch, localTurretDestPitch) > 0 ? localTurretPitchInc : -localTurretPitchInc;
-            }
-        }
+//        if (!Trig.anglesEqual(localTurretPitch, localTurretDestPitch)) {
+//            if (Math.abs(Trig.getAngleDiffSigned(localTurretDestPitch, localTurretPitch)) < localTurretPitchInc) {
+//                localTurretPitch = localTurretDestPitch;
+//            } else {
+//                localTurretPitch += Trig.getAngleDiffSigned(localTurretPitch, localTurretDestPitch) > 0 ? localTurretPitchInc : -localTurretPitchInc;
+//            }
+//        }
         this.currentTurretPitchSpeed = prevPitch - this.localTurretPitch;
     }
 
@@ -820,16 +820,16 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         if (vehicleType.shouldRiderSit()) {
             passenger.height = 1.3f;
         }
-        if (passenger instanceof NpcBase) {
-            passenger.setPositionAndRotation(posX, posY + passenger.getYOffset(), posZ, 180 - localTurretRotation, passenger.rotationPitch);
-            passenger.setRenderYawOffset(180 - localTurretRotation);
-        } else {
-            passenger.setPosition(posX, posY + passenger.getYOffset(), posZ);
-            passenger.rotationYaw -= this.moveHelper.getRotationSpeed();
-        }
-        if (vehicleType.shouldRiderSit()) {
-            passenger.setEntityBoundingBox(passenger.getEntityBoundingBox().offset(0, 0.6, 0));
-        }
+//        if (passenger instanceof NpcBase) {
+//            passenger.setPositionAndRotation(posX, posY + passenger.getYOffset(), posZ, 180 - localTurretRotation, passenger.rotationPitch);
+//            passenger.setRenderYawOffset(180 - localTurretRotation);
+//        } else {
+//            passenger.setPosition(posX, posY + passenger.getYOffset(), posZ);
+//            passenger.rotationYaw -= this.moveHelper.getRotationSpeed();
+//        }
+//        if (vehicleType.shouldRiderSit()) {
+//            passenger.setEntityBoundingBox(passenger.getEntityBoundingBox().offset(0, 0.6, 0));
+//        }
     }
 
 //    @Override
@@ -874,11 +874,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         pb.writeFloat(this.getHealth());
         pb.writeInt(this.vehicleType.getGlobalVehicleType());
         pb.writeInt(this.vehicleMaterialLevel);
-        pb.writeCompoundTag(upgradeHelper.serializeNBT());
-        pb.writeCompoundTag(ammoHelper.serializeNBT());
-        pb.writeCompoundTag(moveHelper.serializeNBT());
-        pb.writeCompoundTag(firingHelper.serializeNBT());
-        pb.writeCompoundTag(firingVarsHelper.serializeNBT());
+//        pb.writeCompoundTag(upgradeHelper.serializeNBT());
+//        pb.writeCompoundTag(ammoHelper.serializeNBT());
+//        pb.writeCompoundTag(moveHelper.serializeNBT());
+//        pb.writeCompoundTag(firingHelper.serializeNBT());
+//        pb.writeCompoundTag(firingVarsHelper.serializeNBT());
         pb.writeFloat(localLaunchPower);
         pb.writeFloat(localTurretPitch);
         pb.writeFloat(localTurretRotation);
@@ -898,16 +898,16 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         this.setHealth(pb.readFloat());
         IVehicleType type = VehicleType.getVehicleType(pb.readInt());
         this.setVehicleType(type, pb.readInt());
-        try {
-            this.upgradeHelper.deserializeNBT(pb.readCompoundTag());
-            this.ammoHelper.deserializeNBT(pb.readCompoundTag());
-            this.moveHelper.deserializeNBT(pb.readCompoundTag());
-            this.firingHelper.deserializeNBT(pb.readCompoundTag());
-            this.firingVarsHelper.deserializeNBT(pb.readCompoundTag());
-        }
-        catch (IOException e) {
-            AncientWarfareVehicles.LOG.error(e);
-        }
+//        try {
+////            this.upgradeHelper.deserializeNBT(pb.readCompoundTag());
+////            this.ammoHelper.deserializeNBT(pb.readCompoundTag());
+////            this.moveHelper.deserializeNBT(pb.readCompoundTag());
+////            this.firingHelper.deserializeNBT(pb.readCompoundTag());
+////            this.firingVarsHelper.deserializeNBT(pb.readCompoundTag());
+//        }
+//        catch (IOException e) {
+//            AncientWarfareVehicles.LOG.error(e);
+//        }
         this.localLaunchPower = pb.readFloat();
         this.localTurretPitch = pb.readFloat();
         this.localTurretRotation = pb.readFloat();
@@ -934,11 +934,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         this.setHealth(tag.getFloat("health"));
         this.localTurretRotationHome = tag.getFloat("turHome");
         this.inventory.readFromNBT(tag);
-        this.upgradeHelper.deserializeNBT(tag.getCompoundTag("upgrades"));
-        this.ammoHelper.deserializeNBT(tag.getCompoundTag("ammo"));
-        this.moveHelper.deserializeNBT(tag.getCompoundTag("move"));
-        this.firingHelper.deserializeNBT(tag.getCompoundTag("fire"));
-        this.firingVarsHelper.deserializeNBT(tag.getCompoundTag("vars"));
+//        this.upgradeHelper.deserializeNBT(tag.getCompoundTag("upgrades"));
+//        this.ammoHelper.deserializeNBT(tag.getCompoundTag("ammo"));
+//        this.moveHelper.deserializeNBT(tag.getCompoundTag("move"));
+//        this.firingHelper.deserializeNBT(tag.getCompoundTag("fire"));
+//        this.firingVarsHelper.deserializeNBT(tag.getCompoundTag("vars"));
         this.localLaunchPower = tag.getFloat("lc");
         this.localTurretPitch = tag.getFloat("tp");
         this.localTurretDestPitch = tag.getFloat("tpd");
@@ -961,11 +961,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         tag.setFloat("health", this.getHealth());
         tag.setFloat("turHome", this.localTurretRotationHome);
         this.inventory.writeToNBT(tag);//yah..I wrote this one a long time ago, is why it is different.....
-        tag.setTag("upgrades", this.upgradeHelper.serializeNBT());
-        tag.setTag("ammo", this.ammoHelper.serializeNBT());
-        tag.setTag("move", this.moveHelper.serializeNBT());
-        tag.setTag("fire", this.firingHelper.serializeNBT());
-        tag.setTag("vars", this.firingVarsHelper.serializeNBT());
+//        tag.setTag("upgrades", this.upgradeHelper.serializeNBT());
+//        tag.setTag("ammo", this.ammoHelper.serializeNBT());
+//        tag.setTag("move", this.moveHelper.serializeNBT());
+//        tag.setTag("fire", this.firingHelper.serializeNBT());
+//        tag.setTag("vars", this.firingVarsHelper.serializeNBT());
         tag.setFloat("lc", localLaunchPower);
         tag.setFloat("tp", localTurretPitch);
         tag.setFloat("tpd", localTurretDestPitch);

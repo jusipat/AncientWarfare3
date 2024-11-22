@@ -21,6 +21,7 @@ import xyz.dylanlogan.ancientwarfare.core.block.IconRotationMap;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.util.InventoryTools;
 
+import java.io.IOException;
 import java.util.Locale;
 
 public class BlockMailbox extends Block implements IRotatableBlock {
