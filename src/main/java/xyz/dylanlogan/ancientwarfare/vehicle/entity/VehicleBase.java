@@ -271,7 +271,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
         super.onCollideWithPlayer(par1EntityPlayer);
-        if (!worldObj.isRemote && par1EntityPlayer instanceof EntityPlayerMP && par1EntityPlayer.posY > posY && ((EntityPlayerMP) par1EntityPlayer).collidedVertically) {
+        if (!worldObj.isRemote && par1EntityPlayer instanceof EntityPlayerMP && par1EntityPlayer.posY > posY && ((EntityPlayerMP) par1EntityPlayer).isCollidedVertically) {
             EntityPlayerMP player = (EntityPlayerMP) par1EntityPlayer;
 /*			TODO handle collision with players to allow them flying and disallow once they stop colliding
 			probably a collection of players in collision with this entity, on update check if they have collided in the last 10? ticks and if not disallow flying
@@ -457,39 +457,39 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         this.firingVarsHelper.onReloadUpdate();
     }
 
-    @Override // this isnt in 1.7
-    protected void doBlockCollisions() {
-        AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
-        BlockPos.PooledMutableBlockPos posMin = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.minX + 0.001D, axisalignedbb.minY + 0.001D, axisalignedbb.minZ + 0.001D);
-        BlockPos.PooledMutableBlockPos posMax = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.maxX - 0.001D, axisalignedbb.maxY - 0.001D, axisalignedbb.maxZ - 0.001D);
-        BlockPos.PooledMutableBlockPos currentPos = BlockPos.PooledMutableBlockPos.retain();
-
-        if (worldObj.isAreaLoaded(posMin, posMax)) {
-            for (int i = posMin.getX(); i <= posMax.getX(); ++i) {
-                for (int j = posMin.getY(); j <= posMax.getY(); ++j) {
-                    for (int k = posMin.getZ(); k <= posMax.getZ(); ++k) {
-                        currentPos.setPos(i, j, k);
-                        IBlockState iblockstate = world.getBlockState(currentPos);
-
-                        try {
-                            iblockstate.getBlock().onEntityCollidedWithBlock(world, currentPos, iblockstate, this);
-                            onInsideBlock(iblockstate, currentPos);
-                        }
-                        catch (Throwable throwable) {
-                            CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Colliding entity with block");
-                            CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being collided with");
-                            CrashReportCategory.addBlockInfo(crashreportcategory, currentPos, iblockstate);
-                            throw new ReportedException(crashreport);
-                        }
-                    }
-                }
-            }
-        }
-
-        posMin.release();
-        posMax.release();
-        currentPos.release();
-    }
+//    @Override // this isnt in 1.7
+//    protected void doBlockCollisions() {
+//        AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
+//        BlockPos.PooledMutableBlockPos posMin = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.minX + 0.001D, axisalignedbb.minY + 0.001D, axisalignedbb.minZ + 0.001D);
+//        BlockPos.PooledMutableBlockPos posMax = BlockPos.PooledMutableBlockPos.retain(axisalignedbb.maxX - 0.001D, axisalignedbb.maxY - 0.001D, axisalignedbb.maxZ - 0.001D);
+//        BlockPos.PooledMutableBlockPos currentPos = BlockPos.PooledMutableBlockPos.retain();
+//
+//        if (worldObj.isAreaLoaded(posMin, posMax)) {
+//            for (int i = posMin.getX(); i <= posMax.getX(); ++i) {
+//                for (int j = posMin.getY(); j <= posMax.getY(); ++j) {
+//                    for (int k = posMin.getZ(); k <= posMax.getZ(); ++k) {
+//                        currentPos.setPos(i, j, k);
+//                        IBlockState iblockstate = world.getBlockState(currentPos);
+//
+//                        try {
+//                            iblockstate.getBlock().onEntityCollidedWithBlock(world, currentPos, iblockstate, this);
+//                            onInsideBlock(iblockstate, currentPos);
+//                        }
+//                        catch (Throwable throwable) {
+//                            CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Colliding entity with block");
+//                            CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being collided with");
+//                            CrashReportCategory.addBlockInfo(crashreportcategory, currentPos, iblockstate);
+//                            throw new ReportedException(crashreport);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        posMin.release();
+//        posMax.release();
+//        currentPos.release();
+//    }
 
     protected void onInsideBlock(int x, int y, int z) {
         if (worldObj.getBlock(x, y, z) == Blocks.waterlily) {
@@ -526,19 +526,19 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     @Override
     public void setDead() {
         if (!this.worldObj.isRemote && !this.isDead && this.getHealth() <= 0) {
-            InventoryTools.dropItemsInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(worldObj, inventory.upgradeInventory, posX, posY, posZ);
-            InventoryTools.dropItemsInWorld(worldObj, inventory.storageInventory, posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.getAmmoInventory(), posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.getArmorInventory(), posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.getUpgradeInventory(), posX, posY, posZ);
+            InventoryTools.dropItemsInWorld(worldObj, inventory.getStorageInventory(), posX, posY, posZ);
         }
         super.setDead();
     }
 
-    @Nullable
-    @Override
-    public Entity getControllingPassenger() {
-        return getPassengers().isEmpty() ? null : getPassengers().get(0);
-    }
+//    @Nullable
+//    @Override
+//    public Entity getControllingPassenger() {
+//        return getPassengers().isEmpty() ? null : getPassengers().get(0);
+//    }
 
     @Override
     public void onUpdate() {
@@ -579,11 +579,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     /**
      * client-side updates
      */
-    private void onUpdateClient() {
-        if (getControllingPassenger() instanceof NpcBase) {
-            // this.updatePassenger(getControllingPassenger()); todo: Not in 1.7
-        }
-    }
+//    private void onUpdateClient() {
+//        if (getControllingPassenger() instanceof NpcBase) {
+//            // this.updatePassenger(getControllingPassenger()); todo: Not in 1.7
+//        }
+//    }
 
     //    @Override
 //    public boolean startRiding(Entity entity, boolean force) {
@@ -601,8 +601,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
      * server-side updates...
      */
     private void onUpdateServer() {
-        if (this.getControllingPassenger() instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) this.getControllingPassenger();
+        if (this.ridingEntity instanceof EntityPlayerMP player) {
             if (player.isSneaking()) {
                 this.handleDismount(player);
                 player.setSneaking(false);
@@ -740,11 +739,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
      */
     public void packVehicle() {
         if (!this.worldObj.isRemote) {
-            InventoryTools.dropItemInWorld(worldObj, getItemForVehicle(), posX, posY, posZ);
-            InventoryTools.dropInventoryInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
-            InventoryTools.dropInventoryInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
-            InventoryTools.dropInventoryInWorld(worldObj, inventory.upgradeInventory, posX, posY, posZ);
-            InventoryTools.dropInventoryInWorld(worldObj, inventory.storageInventory, posX, posY, posZ);
+            //InventoryTools.dropItemInWorld(worldObj, getItemForVehicle(), posX, posY, posZ);
+            //InventoryTools.dropInventoryInWorld(worldObj, inventory.getAmmoInventory(), posX, posY, posZ);
+            //InventoryTools.dropInventoryInWorld(worldObj, inventory.getArmorInventory(), posX, posY, posZ);
+            //InventoryTools.dropInventoryInWorld(worldObj, inventory.getUpgradeInventory(), posX, posY, posZ);
+            //InventoryTools.dropInventoryInWorld(worldObj, inventory.getStorageInventory(), posX, posY, posZ); TODO: fix
             this.setDead();
         }
     }
@@ -774,7 +773,7 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
 
     @Override
     public void applyEntityCollision(Entity entity) {
-        if (entity != getControllingPassenger() && !(entity instanceof NpcBase))//skip if it if it is the rider
+        if (entity != ridingEntity && !(entity instanceof NpcBase))//skip if it if it is the rider
         {
             double xDiff = entity.posX - this.posX;
             double zDiff = entity.posZ - this.posZ;
@@ -1012,6 +1011,11 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
     }
 
     @Override
+    public void onStuckDetected() {
+        // todo: reimp
+    }
+
+    @Override
     public void setPath(List<Node> path) {
         this.nav.forcePath(path);
     }
@@ -1025,12 +1029,14 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         return this.currentForwardSpeedMax;
     }
 
-    @Override
-    public void onStuckDetected() {
-        if (getControllingPassenger() instanceof NpcBase) {
-            ((NpcBase) getControllingPassenger()).onStuckDetected();
-        }
-    }
+//    @Override
+//    public void onStuckDetected() {
+//        if (ridingEntity instanceof NpcBase) {
+//            ((NpcBase) getControllingPassenger()).onStuckDetected();
+//        }
+//    }
+
+
 
 //    @Nullable todo: doesn't exist in 1.7
 //    @Override
@@ -1051,15 +1057,15 @@ public class VehicleBase extends Entity implements IEntityAdditionalSpawnData, I
         return "";
     }
 
-    @Override
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
+//    @Override
+//    public void setOwner(Owner owner) {
+//        this.owner = owner;
+//    }
 
-    @Override
-    public Owner getOwner() {
-        return owner;
-    }
+//    @Override
+//    public Owner getOwner() {
+//        return owner;
+//    }
 
     @Override
     public boolean isOwner(EntityPlayer player) {

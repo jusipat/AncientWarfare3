@@ -19,6 +19,7 @@ import xyz.dylanlogan.ancientwarfare.core.gui.GuiBackpack;
 import xyz.dylanlogan.ancientwarfare.core.gui.GuiResearchBook;
 import xyz.dylanlogan.ancientwarfare.core.gui.crafting.GuiEngineeringStation;
 import xyz.dylanlogan.ancientwarfare.core.gui.research.GuiResearchStation;
+import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.model.crafting_table.ModelEngineeringStation;
 import xyz.dylanlogan.ancientwarfare.core.model.crafting_table.ModelResearchStation;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;

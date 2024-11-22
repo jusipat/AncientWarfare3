@@ -22,11 +22,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.VehicleAmmoEntry;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class VehicleAmmoHelper implements IExtendedEntityProperties {
@@ -55,7 +51,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 			return;
 		}
 		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
-			int removed = InventoryTools.removeItems(vehicle.inventory, 0, new ItemStack(AmmoRegistry.getItem(currentAmmoType)), 1).getCount();
+			int removed = Objects.requireNonNull(InventoryTools.removeItems(vehicle.inventory, 0, new ItemStack(AmmoRegistry.getItem(currentAmmoType)), 1)).stackSize;
 			VehicleAmmoEntry entry = this.ammoEntries.get(this.currentAmmoType);
 			int origCount = entry.ammoCount;
 			entry.ammoCount -= removed;
@@ -83,7 +79,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 //	}
 
 	public int getCurrentAmmoCount() {
-	if (vehicle.getControllingPassenger() instanceof NpcFaction) {
+	if (vehicle.ridingEntity instanceof NpcFaction) {
 		return 64;
 	}
 	if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
@@ -209,12 +205,12 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 	public IAmmo getCurrentAmmoType() {
 		if (currentAmmoType != null && ammoEntries.containsKey(currentAmmoType)) {
 			VehicleAmmoEntry entry = this.ammoEntries.get(currentAmmoType);
-			if (entry != null && (!(vehicle.getControllingPassenger() instanceof NpcBase) || entry.ammoCount > 0)) {
+			if (entry != null && (!(vehicle.ridingEntity instanceof NpcBase) || entry.ammoCount > 0)) {
 				return entry.baseAmmoType;
 			}
 		}
-		if (vehicle.getControllingPassenger() instanceof NpcFaction || !AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo) {
-			NpcBase npc = (NpcBase) vehicle.getControllingPassenger();
+		if (vehicle.ridingEntity instanceof NpcFaction || !AWVehicleStatics.generalSettings.ownedSoldiersUseAmmo) {
+			NpcBase npc = (NpcBase) vehicle.ridingEntity;
 			return vehicle.vehicleType.getAmmoForSoldierRank(npc.getLevelingStats().getLevel());
 		}
 		return null;

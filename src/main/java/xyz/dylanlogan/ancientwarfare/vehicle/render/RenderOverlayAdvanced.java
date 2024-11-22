@@ -1,15 +1,14 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.render;
 
+import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import org.joml.Vector3d;
 import xyz.dylanlogan.ancientwarfare.core.util.RenderTools;
 import xyz.dylanlogan.ancientwarfare.core.util.Trig;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
@@ -24,9 +23,9 @@ public class RenderOverlayAdvanced {
 
 	@SubscribeEvent
 	public void renderLast(RenderWorldLastEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		if (AWVehicleStatics.clientSettings.renderAdvOverlay && player.getRidingEntity() instanceof VehicleBase && Minecraft.getMinecraft().currentScreen == null) {
-			RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase) player.getRidingEntity(), player, event.getPartialTicks());
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (AWVehicleStatics.clientSettings.renderAdvOverlay && player.ridingEntity instanceof VehicleBase && Minecraft.getMinecraft().currentScreen == null) {
+			RenderOverlayAdvanced.renderAdvancedVehicleOverlay((VehicleBase) player.ridingEntity, player, event.partialTicks);
 		}
 	}
 
@@ -48,7 +47,7 @@ public class RenderOverlayAdvanced {
 		GlStateManager.disableTexture2D();
 		GlStateManager.color(1, 1, 1, 0.6f);
 
-		Vec3d renderOffset = new Vec3d(vehicle.posX - player.posX, vehicle.posY - player.posY, vehicle.posZ - player.posZ);
+		Vector3d renderOffset = new Vector3d(vehicle.posX - player.posX, vehicle.posY - player.posY, vehicle.posZ - player.posZ);
 
 		drawStraightLine(vehicle, partialTick, renderOffset);
 
@@ -60,7 +59,7 @@ public class RenderOverlayAdvanced {
 		GlStateManager.enableTexture2D();
 	}
 
-	private static void drawStraightLine(VehicleBase vehicle, float partialTick, Vec3d renderOffset) {
+	private static void drawStraightLine(VehicleBase vehicle, float partialTick, Vector3d renderOffset) {
 		double x2 = renderOffset.x - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick * vehicle.moveHelper.getRotationSpeed());
 		double z2 = renderOffset.z - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick * vehicle.moveHelper.getRotationSpeed());
 		GlStateManager.glLineWidth(3f);
@@ -70,7 +69,7 @@ public class RenderOverlayAdvanced {
 		GlStateManager.glEnd();
 	}
 
-	private static void drawDynamicPart(VehicleBase vehicle, float partialTick, Vec3d renderOffset, IDynamicOverlayPartRenderer dynamicRenderer) {
+	private static void drawDynamicPart(VehicleBase vehicle, float partialTick, Vector3d renderOffset, IDynamicOverlayPartRenderer dynamicRenderer) {
 		GlStateManager.glLineWidth(4f);
 		GlStateManager.color(1.f, 0.4f, 0.4f, 0.4f);
 		GlStateManager.glBegin(GL11.GL_LINES);
@@ -81,33 +80,33 @@ public class RenderOverlayAdvanced {
 		double yaw = vehicle.localTurretRotation + partialTick * vehicle.moveHelper.getRotationSpeed();
 
 		double vH = -Trig.sinDegrees((float) angle) * speed;
-		Vec3d accelerationVector = new Vec3d(Trig.sinDegrees((float) yaw) * vH, Trig.cosDegrees((float) angle) * speed, Trig.cosDegrees((float) yaw) * vH);
+		Vector3d accelerationVector = new Vector3d(Trig.sinDegrees((float) yaw) * vH, Trig.cosDegrees((float) angle) * speed, Trig.cosDegrees((float) yaw) * vH);
 
 		dynamicRenderer.render(renderOffset, speed, accelerationVector, gravity);
 		GlStateManager.glEnd();
 	}
 
-	private static void drawRocketFlightPath(VehicleBase vehicle, EntityPlayer player, Vec3d renderOffset, double speed, Vec3d accelerationVector,
+	private static void drawRocketFlightPath(VehicleBase vehicle, EntityPlayer player, Vector3d renderOffset, double speed, Vector3d accelerationVector,
 			double gravity) {
 		int rocketBurnTime = (int) (speed * 20.f * AmmoHwachaRocket.BURN_TIME_FACTOR);
 
-		Vec3d offset = vehicle.getMissileOffset();
+		Vector3d offset = vehicle.getMissileOffset();
 		double x2 = renderOffset.x + offset.x;
 		double y2 = renderOffset.y + offset.y;
 		double z2 = renderOffset.z + offset.z;
 
 		double floorY = renderOffset.y;
 
-		Vec3d adjustedAccelerationVector = accelerationVector;
+		Vector3d adjustedAccelerationVector = accelerationVector;
 		if (vehicle.vehicleType.getMovementType() == VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType() == VehicleMovementType.AIR2) {
-			adjustedAccelerationVector = adjustedAccelerationVector.addVector(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+			adjustedAccelerationVector = adjustedAccelerationVector.add(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 			floorY = -player.posY;
 		}
 
 		float xAcc = (float) (adjustedAccelerationVector.x / speed) * AmmoHwachaRocket.ACCELERATION_FACTOR;
 		float yAcc = (float) (adjustedAccelerationVector.y / speed) * AmmoHwachaRocket.ACCELERATION_FACTOR;
 		float zAcc = (float) (adjustedAccelerationVector.z / speed) * AmmoHwachaRocket.ACCELERATION_FACTOR;
-		adjustedAccelerationVector = new Vec3d(xAcc, yAcc, zAcc);
+		adjustedAccelerationVector = new Vector3d(xAcc, yAcc, zAcc);
 
 		while (y2 >= floorY) {
 			GL11.glVertex3d(x2, y2, z2);
@@ -116,25 +115,25 @@ public class RenderOverlayAdvanced {
 			y2 += adjustedAccelerationVector.y;
 			if (rocketBurnTime > 0) {
 				rocketBurnTime--;
-				adjustedAccelerationVector = adjustedAccelerationVector.addVector(xAcc, yAcc, zAcc);
+				adjustedAccelerationVector = adjustedAccelerationVector.add(xAcc, yAcc, zAcc);
 			} else {
-				adjustedAccelerationVector = adjustedAccelerationVector.addVector(0, -gravity, 0);
+				adjustedAccelerationVector = adjustedAccelerationVector.add(0, -gravity, 0);
 			}
 			GL11.glVertex3d(x2, y2, z2);
 		}
 	}
 
-	private static void drawNormalTrajectory(VehicleBase vehicle, EntityPlayer player, Vec3d renderOffset, double gravity, Vec3d accelerationVector) {
-		Vec3d offset = vehicle.getMissileOffset();
+	private static void drawNormalTrajectory(VehicleBase vehicle, EntityPlayer player, Vector3d renderOffset, double gravity, Vector3d accelerationVector) {
+		Vector3d offset = vehicle.getMissileOffset();
 		double x2 = renderOffset.x + offset.x;
 		double y2 = renderOffset.y + offset.y;
 		double z2 = renderOffset.z + offset.z;
 
 		double floorY = renderOffset.y;
 
-		Vec3d adjustedAccelerationVector = accelerationVector;
+		Vector3d adjustedAccelerationVector = accelerationVector;
 		if (vehicle.vehicleType.getMovementType() == VehicleMovementType.AIR1 || vehicle.vehicleType.getMovementType() == VehicleMovementType.AIR2) {
-			adjustedAccelerationVector = adjustedAccelerationVector.addVector(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
+			adjustedAccelerationVector = adjustedAccelerationVector.add(vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 			floorY = -player.posY;
 		}
 
@@ -143,7 +142,7 @@ public class RenderOverlayAdvanced {
 			x2 += adjustedAccelerationVector.x;
 			z2 += adjustedAccelerationVector.z;
 			y2 += adjustedAccelerationVector.y;
-			adjustedAccelerationVector = adjustedAccelerationVector.addVector(0, -gravity, 0);
+			adjustedAccelerationVector = adjustedAccelerationVector.add(0, -gravity, 0);
 			GL11.glVertex3d(x2, y2, z2);
 		}
 	}
@@ -170,19 +169,19 @@ public class RenderOverlayAdvanced {
 		GL11.glVertex3d(x2, y1 + 0.12d, z2);
 		GlStateManager.glEnd();
 
-		Vec3d offset = vehicle.getMissileOffset();
-		float bx = (float) (vehicle.posX + offset.x);
-		float by = (float) (vehicle.posY + offset.y);
-		float bz = (float) (vehicle.posZ + offset.z);
+		Vector3d offset = vehicle.getMissileOffset();
+		int bx = (int) (vehicle.posX + offset.x);
+		int by = (int) (vehicle.posY + offset.y);
+		int bz = (int) (vehicle.posZ + offset.z);
 		BlockPos blockHit = new BlockPos(bx, by, bz);
-		AxisAlignedBB bb = new AxisAlignedBB(blockHit.getX() - 1, blockHit.getY(), blockHit.getZ(), blockHit.getX() + 2, blockHit.getY() + 1,
+		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(blockHit.getX() - 1, blockHit.getY(), blockHit.getZ(), blockHit.getX() + 2, blockHit.getY() + 1,
 				blockHit.getZ() + 1);
 		bb = adjustBBForPlayerPos(bb, player, partialTick);
 		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
-		bb = new AxisAlignedBB(blockHit.getX(), blockHit.getY(), blockHit.getZ() - 1, blockHit.getX() + 1, blockHit.getY() + 1, blockHit.getZ() + 2);
+		bb = AxisAlignedBB.getBoundingBox(blockHit.getX(), blockHit.getY(), blockHit.getZ() - 1, blockHit.getX() + 1, blockHit.getY() + 1, blockHit.getZ() + 2);
 		bb = adjustBBForPlayerPos(bb, player, partialTick);
 		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
-		bb = new AxisAlignedBB(blockHit.getX(), blockHit.getY() - 1, blockHit.getZ(), blockHit.getX() + 1, blockHit.getY() + 2, blockHit.getZ() + 1);
+		bb = AxisAlignedBB.getBoundingBox(blockHit.getX(), blockHit.getY() - 1, blockHit.getZ(), blockHit.getX() + 1, blockHit.getY() + 2, blockHit.getZ() + 1);
 		bb = adjustBBForPlayerPos(bb, player, partialTick);
 		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
 		GlStateManager.popMatrix();
@@ -201,6 +200,6 @@ public class RenderOverlayAdvanced {
 	}
 
 	private interface IDynamicOverlayPartRenderer {
-		void render(Vec3d renderOffset, double speed, Vec3d accelerationVector, double gravity);
+		void render(Vector3d renderOffset, double speed, Vector3d accelerationVector, double gravity);
 	}
 }

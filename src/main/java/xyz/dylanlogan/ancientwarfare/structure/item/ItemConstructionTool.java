@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import xyz.dylanlogan.ancientwarfare.core.input.InputHandler;
 import xyz.dylanlogan.ancientwarfare.core.interfaces.IItemKeyInterface;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockPosition;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
@@ -58,7 +59,7 @@ public class ItemConstructionTool extends Item implements IItemKeyInterface, IBo
         text = keyText + " = " + StatCollector.translateToLocal("guistrings.construction.set_pos_2");
         list.add(text);
 
-        keyText = InputHandler.instance.getKeybindBinding(InputHandler.KEY_ALT_ITEM_USE_4);
+        keyText = InputHandler.instance.getKeybindBinding(InputHandler.ALT_ITEM_USE_5);
         text = keyText + " = " + StatCollector.translateToLocal("guistrings.construction.clear_positions");
         list.add(text);
     }

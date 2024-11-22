@@ -33,18 +33,8 @@ public class GuiVehicleInventory extends GuiContainerBase<ContainerVehicleInvent
 	public GuiVehicleInventory(ContainerBase container) {
 		super(container);
 		this.shouldCloseOnVanillaKeys = true;
-		this.ySize = this.getYSize();
-		this.xSize = this.getXSize();
-	}
-
-	@Override
-	public int getXSize() {
-		return 171 + 16 + 8;
-	}
-
-	@Override
-	public int getYSize() {
-		return getContainer() == null ? 240 : getContainer().playerY + 4 * 18 + 8 + 4;
+		this.ySize = getContainer() == null ? 240 : getContainer().playerY + 4 * 18 + 8 + 4;;
+		this.xSize = 171 + 16 + 8;
 	}
 
 	@Override
