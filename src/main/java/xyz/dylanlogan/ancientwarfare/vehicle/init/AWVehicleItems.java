@@ -18,6 +18,7 @@ public class AWVehicleItems {
 
 	public static final String PREFIX = "ancientwarfare:vehicle/";
 	public static final String AMMO_PREFIX = "ancientwarfare:vehicle/ammo/ammo_";
+	public static final String MISC_PREFIX = "ancientwarfare:vehicle/misc/";
 	public static final AWVehicleItems INSTANCE = new AWVehicleItems();
 
 	//public static final Item SPAWNER = new ItemSpawner();
@@ -31,23 +32,23 @@ public class AWVehicleItems {
 		AWItems.clayCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "clay_casing", AMMO_PREFIX);
 		AWItems.ironCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "iron_casing", AMMO_PREFIX);
 
-		AWItems.mobilityUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "mobility_unit", PREFIX);
-		AWItems.turretComponents = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "turret_components", PREFIX);
-		AWItems.torsionUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "torsion_unit", PREFIX);
-		AWItems.counterWeightUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "counter_weight_unit", PREFIX);
-		AWItems.powderCase = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "powder_case", PREFIX);
-		AWItems.equipmentBay = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "equipment_bay", PREFIX);
+		AWItems.mobilityUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "mobility_unit", MISC_PREFIX);
+		AWItems.turretComponents = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "turret_components", MISC_PREFIX);
+		AWItems.torsionUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "torsion_unit", MISC_PREFIX);
+		AWItems.counterWeightUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "counter_weight_unit", MISC_PREFIX);
+		AWItems.powderCase = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "powder_case", MISC_PREFIX);
+		AWItems.equipmentBay = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "equipment_bay", MISC_PREFIX);
 
-		AWItems.roughWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rough_wood", PREFIX);
-		AWItems.treatedWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "treated_wood", PREFIX);
-		AWItems.ironshodWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "ironshod_wood", PREFIX);
-		AWItems.ironCoreWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "iron_core_wood", PREFIX);
+		AWItems.roughWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_wood_1", MISC_PREFIX);
+		AWItems.treatedWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_wood_2", MISC_PREFIX);
+		AWItems.ironshodWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_wood_3", MISC_PREFIX);
+		AWItems.ironCoreWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_wood_4", MISC_PREFIX);
 
-		AWItems.roughIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rough_iron", PREFIX);
-		AWItems.fineIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "fine_iron", PREFIX);
-		AWItems.temperedIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "tempered_iron", PREFIX);
-		AWItems.minorAlloy = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "minor_alloy", PREFIX);
-		AWItems.majorAlloy = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "major_alloy", PREFIX);
+		AWItems.roughIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_iron_1", MISC_PREFIX);
+		AWItems.fineIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_iron_2", MISC_PREFIX);
+		AWItems.temperedIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_iron_3", MISC_PREFIX);
+		AWItems.minorAlloy = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_iron_4", MISC_PREFIX);
+		AWItems.majorAlloy = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "material_iron_5", MISC_PREFIX);
 	}
 
 

@@ -350,15 +350,15 @@ item.torsion_unit.name=Torsion Unit
 item.counter_weight_unit.name=Counterweight Unit
 item.powder_case.name=Powder Case
 item.equipment_bay.name=Equipment Bay
-item.rough_wood.name=Rough Wood
-item.treated_wood.name=Treated Wood
-item.ironshod_wood.name=Ironshod Wood
-item.iron_core_wood.name=Iron Core Wood
-item.rough_iron.name=Rough Iron
-item.fine_iron.name=Fine Iron
-item.tempered_iron.name=Tempered Iron
-item.minor_alloy.name=Minor Alloy
-item.major_alloy.name=Major Alloy
+item.material_wood_1.name=Rough Wood
+item.material_wood_2.name=Treated Wood
+item.material_wood_3.name=Ironshod Wood
+item.material_wood_4.name=Iron Core Wood
+item.material_iron_1.name=Rough Iron
+item.material_iron_2.name=Fine Iron
+item.material_iron_3.name=Tempered Iron
+item.material_iron_4.name=Minor Alloy
+item.material_iron_5.name=Major Alloy
 
 # vehicle upgrades
 item.vehicle_upgrade_tooltip=Vehicle Upgrade
