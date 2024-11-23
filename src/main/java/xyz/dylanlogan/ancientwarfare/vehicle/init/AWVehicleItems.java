@@ -16,21 +16,20 @@ import java.util.List;
 public class AWVehicleItems {
 	private AWVehicleItems() {}
 
-	public static final String PREFIX = "ancientwarfare:vehicles/";
+	public static final String PREFIX = "ancientwarfare:vehicle/";
+	public static final String AMMO_PREFIX = "ancientwarfare:vehicle/ammo/ammo_";
 	public static final AWVehicleItems INSTANCE = new AWVehicleItems();
-
-	public static final List<Item> ITEMS = new ArrayList<>();
 
 	//public static final Item SPAWNER = new ItemSpawner();
 
 	public void load() {
-		AWItems.flameCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "flame_charge", PREFIX);
-		AWItems.explosiveCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "explosive_charge", PREFIX);
-		AWItems.rocketCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rocket_charge", PREFIX);
-		AWItems.clusterCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "cluster_charge", PREFIX);
-		AWItems.napalmCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "napalm_charge", PREFIX);
-		AWItems.clayCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "clay_casing", PREFIX);
-		AWItems.ironCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "iron_casing", PREFIX);
+		AWItems.flameCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "flame_charge", AMMO_PREFIX);
+		AWItems.explosiveCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "explosive_charge", AMMO_PREFIX);
+		AWItems.rocketCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rocket_charge", AMMO_PREFIX);
+		AWItems.clusterCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "cluster_charge", AMMO_PREFIX);
+		AWItems.napalmCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "napalm_charge", AMMO_PREFIX);
+		AWItems.clayCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "clay_casing", AMMO_PREFIX);
+		AWItems.ironCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "iron_casing", AMMO_PREFIX);
 
 		AWItems.mobilityUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "mobility_unit", PREFIX);
 		AWItems.turretComponents = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "turret_components", PREFIX);
