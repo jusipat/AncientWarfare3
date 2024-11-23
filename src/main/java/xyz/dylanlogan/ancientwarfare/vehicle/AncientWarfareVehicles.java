@@ -44,7 +44,7 @@ public class AncientWarfareVehicles {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-		statics = new AWVehicleStatics("AncientWarfareVehicle");
+		statics = new AWVehicleStatics("ancientwarfarevehicle");
 
 		AWVehicleEntities.load();
 
