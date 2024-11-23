@@ -116,16 +116,16 @@ public final class NetworkHandler implements IGuiHandler {
         INSTANCE.channel.sendTo(pkt.getFMLPacket(), player);
     }
 
-    public static void sendToAllPlayers(PacketBase pkt) throws IOException {
+    public static void sendToAllPlayers(PacketBase pkt) {
         INSTANCE.channel.sendToAll(pkt.getFMLPacket());
     }
 
-    public static void sendToAllTracking(Entity e, PacketBase pkt) throws IOException {
+    public static void sendToAllTracking(Entity e, PacketBase pkt){
         WorldServer server = (WorldServer) e.worldObj;
         server.getEntityTracker().func_151247_a(e, pkt.getFMLPacket());
     }
 
-    public static void sendToAllNear(World world, int x, int y, int z, double range, PacketBase pkt) throws IOException {
+    public static void sendToAllNear(World world, int x, int y, int z, double range, PacketBase pkt) {
         INSTANCE.channel.sendToAllAround(pkt.getFMLPacket(), new TargetPoint(world.provider.dimensionId, x, y, z, range));
     }
 
@@ -136,7 +136,7 @@ public final class NetworkHandler implements IGuiHandler {
      * @param pkt   the packet
      */
     @SuppressWarnings("unchecked")
-    public static void sendToAllTrackingChunk(World world, int cx, int cz, PacketBase pkt) throws IOException {
+    public static void sendToAllTrackingChunk(World world, int cx, int cz, PacketBase pkt) {
         WorldServer server = (WorldServer) world;
         for (EntityPlayer p : (List<EntityPlayer>) server.playerEntities) {
             if (server.getPlayerManager().isPlayerWatchingChunk((EntityPlayerMP) p, cx, cz)) {

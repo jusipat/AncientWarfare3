@@ -28,13 +28,13 @@ public final class ResearchTracker {
      * SERVER ONLY
      */
     @SubscribeEvent
-    public void playerLogInEvent(PlayerEvent.PlayerLoggedInEvent evt) throws IOException {
+    public void playerLogInEvent(PlayerEvent.PlayerLoggedInEvent evt) {
         getResearchData(evt.player.worldObj).onPlayerLogin(evt.player);
         PacketResearchInit init = new PacketResearchInit(getResearchData(evt.player.worldObj));
         NetworkHandler.sendToPlayer((EntityPlayerMP) evt.player, init);
     }
 
-    public void clearResearch(World world, String playerName) throws IOException {
+    public void clearResearch(World world, String playerName) {
         if (world.isRemote) {
             clientData.clearResearchFor(playerName);
         } else {
@@ -44,7 +44,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void removeResearch(World world, String playerName, int research) throws IOException {
+    public void removeResearch(World world, String playerName, int research) {
         if (world.isRemote) {
             clientData.removeResearchFrom(playerName, research);
         } else {
@@ -54,7 +54,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void fillResearch(World world, String playerName) throws IOException {
+    public void fillResearch(World world, String playerName) {
         if (world.isRemote) {
             clientData.fillResearchFor(playerName);
         } else {

@@ -288,7 +288,7 @@ public abstract class TileTorqueBase extends TileEntity implements ITorqueTile, 
         return cell.getEnergy() - e;
     }
 
-    protected final void sendDataToClient(int type, int data) throws IOException {
+    protected final void sendDataToClient(int type, int data) {
         PacketBlockEvent pkt = new PacketBlockEvent();
         pkt.setParams(xCoord, yCoord, zCoord, getBlockType(), (short) type, (short) data);
         NetworkHandler.sendToAllTrackingChunk(worldObj, xCoord >> 4, zCoord >> 4, pkt);

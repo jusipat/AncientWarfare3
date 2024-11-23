@@ -71,7 +71,7 @@ public class ContainerBase extends Container {
     /**
      * server side method to send a data-packet to the client-side GUI attached to the client-side version of this container
      */
-    protected final void sendDataToGui(NBTTagCompound data) throws IOException {
+    protected final void sendDataToGui(NBTTagCompound data) {
         if (!player.worldObj.isRemote) {
             PacketGui pkt = new PacketGui();
             pkt.setTag("gui", data);

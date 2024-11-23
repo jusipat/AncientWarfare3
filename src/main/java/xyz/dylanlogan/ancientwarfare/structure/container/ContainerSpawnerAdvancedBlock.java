@@ -25,7 +25,7 @@ public class ContainerSpawnerAdvancedBlock extends ContainerSpawnerAdvancedBase 
     }
 
     @Override
-    public void sendInitData() throws IOException {
+    public void sendInitData() {
         if (!spawner.getWorldObj().isRemote) {
             NetworkHandler.sendToPlayer((EntityPlayerMP) player, getSettingPacket());
         }

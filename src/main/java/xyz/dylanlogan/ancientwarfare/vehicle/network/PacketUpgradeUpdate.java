@@ -1,6 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.network;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import net.minecraft.network.PacketBuffer;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 
@@ -19,16 +21,16 @@ public class PacketUpgradeUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) throws IOException {
+	protected void writeToStream(ByteBuf data) {
 		super.writeToStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
 		pb.writeInt(upgradeRegistryNames.length);
 		for (String upgrade : upgradeRegistryNames) {
-			pb.writeStringToBuffer(upgrade);
+			ByteBufUtils.writeUTF8String(pb, upgrade);
 		}
 		pb.writeInt(armorRegistryNames.length);
 		for (String armor : armorRegistryNames) {
-			pb.writeStringToBuffer(armor);
+			ByteBufUtils.writeUTF8String(pb, armor);
 		}
 	}
 
