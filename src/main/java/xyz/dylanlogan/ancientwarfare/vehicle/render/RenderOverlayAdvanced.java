@@ -1,8 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.render;
 
-import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -41,11 +41,11 @@ public class RenderOverlayAdvanced {
 	}
 
 	private static void renderOverlay(VehicleBase vehicle, EntityPlayer player, float partialTick, IDynamicOverlayPartRenderer dynamicRenderer) {
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.disableTexture2D();
-		GlStateManager.color(1, 1, 1, 0.6f);
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(1, 1, 1, 0.6f);
 
 		Vector3d renderOffset = new Vector3d(vehicle.posX - player.posX, vehicle.posY - player.posY, vehicle.posZ - player.posZ);
 
@@ -53,26 +53,26 @@ public class RenderOverlayAdvanced {
 
 		drawDynamicPart(vehicle, partialTick, renderOffset, dynamicRenderer);
 
-		GlStateManager.popMatrix();
-		GlStateManager.depthMask(true);
-		GlStateManager.disableBlend();
-		GlStateManager.enableTexture2D();
+		GL11.glPopMatrix();
+		GL11.glDepthMask(true);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
 	private static void drawStraightLine(VehicleBase vehicle, float partialTick, Vector3d renderOffset) {
 		double x2 = renderOffset.x - 20 * Trig.sinDegrees(vehicle.rotationYaw + partialTick * vehicle.moveHelper.getRotationSpeed());
 		double z2 = renderOffset.z - 20 * Trig.cosDegrees(vehicle.rotationYaw + partialTick * vehicle.moveHelper.getRotationSpeed());
-		GlStateManager.glLineWidth(3f);
-		GlStateManager.glBegin(GL11.GL_LINES);
+		GL11.glLineWidth(3f);
+		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex3d(renderOffset.x, renderOffset.y + 0.12d, renderOffset.z);
 		GL11.glVertex3d(x2, renderOffset.y + 0.12d, z2);
-		GlStateManager.glEnd();
+		GL11.glEnd();
 	}
 
 	private static void drawDynamicPart(VehicleBase vehicle, float partialTick, Vector3d renderOffset, IDynamicOverlayPartRenderer dynamicRenderer) {
-		GlStateManager.glLineWidth(4f);
-		GlStateManager.color(1.f, 0.4f, 0.4f, 0.4f);
-		GlStateManager.glBegin(GL11.GL_LINES);
+		GL11.glLineWidth(4f);
+		GL11.glColor4f(1.f, 0.4f, 0.4f, 0.4f);
+		GL11.glBegin(GL11.GL_LINES);
 
 		double gravity = 9.81d * 0.05d * 0.05d;
 		double speed = vehicle.localLaunchPower * 0.05d;
@@ -83,7 +83,7 @@ public class RenderOverlayAdvanced {
 		Vector3d accelerationVector = new Vector3d(Trig.sinDegrees((float) yaw) * vH, Trig.cosDegrees((float) angle) * speed, Trig.cosDegrees((float) yaw) * vH);
 
 		dynamicRenderer.render(renderOffset, speed, accelerationVector, gravity);
-		GlStateManager.glEnd();
+		GL11.glEnd();
 	}
 
 	private static void drawRocketFlightPath(VehicleBase vehicle, EntityPlayer player, Vector3d renderOffset, double speed, Vector3d accelerationVector,
@@ -148,49 +148,49 @@ public class RenderOverlayAdvanced {
 	}
 
 	private static void renderBatteringRamOverlay(VehicleBase vehicle, EntityPlayer player, float partialTick) {
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.disableTexture2D();
-		GlStateManager.color(1, 1, 1, 0.6f);
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(1, 1, 1, 0.6f);
 
 		double x1 = vehicle.posX - player.posX;
 		double y1 = vehicle.posY - player.posY;
 		double z1 = vehicle.posZ - player.posZ;
 
-		/*
-		 * vectors for a straight line
-		 */
+		// Vectors for a straight line
 		double x2 = x1 - 20 * Trig.sinDegrees(vehicle.rotationYaw);
 		double z2 = z1 - 20 * Trig.cosDegrees(vehicle.rotationYaw);
-		GlStateManager.glLineWidth(3f);
-		GlStateManager.glBegin(GL11.GL_LINES);
+		GL11.glLineWidth(3f);
+		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex3d(x1, y1 + 0.12d, z1);
 		GL11.glVertex3d(x2, y1 + 0.12d, z2);
-		GlStateManager.glEnd();
+		GL11.glEnd();
 
 		Vector3d offset = vehicle.getMissileOffset();
 		int bx = (int) (vehicle.posX + offset.x);
 		int by = (int) (vehicle.posY + offset.y);
 		int bz = (int) (vehicle.posZ + offset.z);
-		BlockPos blockHit = new BlockPos(bx, by, bz);
-		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(blockHit.getX() - 1, blockHit.getY(), blockHit.getZ(), blockHit.getX() + 2, blockHit.getY() + 1,
-				blockHit.getZ() + 1);
-		bb = adjustBBForPlayerPos(bb, player, partialTick);
-		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
-		bb = AxisAlignedBB.getBoundingBox(blockHit.getX(), blockHit.getY(), blockHit.getZ() - 1, blockHit.getX() + 1, blockHit.getY() + 1, blockHit.getZ() + 2);
-		bb = adjustBBForPlayerPos(bb, player, partialTick);
-		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
-		bb = AxisAlignedBB.getBoundingBox(blockHit.getX(), blockHit.getY() - 1, blockHit.getZ(), blockHit.getX() + 1, blockHit.getY() + 2, blockHit.getZ() + 1);
-		bb = adjustBBForPlayerPos(bb, player, partialTick);
-		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
-		GlStateManager.popMatrix();
 
-		GlStateManager.depthMask(true);
+		// Adjusted bounding box creation
+		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(bx - 1, by, bz, bx + 2, by + 1, bz + 1);
+		bb = adjustBBForPlayerPos(bb, player, partialTick);
+		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
 
-		GlStateManager.disableBlend();
-		GlStateManager.enableTexture2D();
+		bb = AxisAlignedBB.getBoundingBox(bx, by, bz - 1, bx + 1, by + 1, bz + 2);
+		bb = adjustBBForPlayerPos(bb, player, partialTick);
+		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
+
+		bb = AxisAlignedBB.getBoundingBox(bx, by - 1, bz, bx + 1, by + 2, bz + 1);
+		bb = adjustBBForPlayerPos(bb, player, partialTick);
+		RenderTools.drawOutlinedBoundingBox(bb, 1.f, 0.2f, 0.2f);
+
+		GL11.glPopMatrix();
+		GL11.glDepthMask(true);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
+
 
 	private static AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick) {
 		double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;

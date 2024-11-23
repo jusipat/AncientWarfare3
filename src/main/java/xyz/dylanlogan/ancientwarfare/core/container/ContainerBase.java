@@ -93,7 +93,7 @@ public class ContainerBase extends Container {
     /**
      * send data from server container to client container
      */
-    protected void sendDataToClient(NBTTagCompound data) throws IOException {
+    protected void sendDataToClient(NBTTagCompound data)  {
         if (!player.worldObj.isRemote) {
             PacketGui pkt = new PacketGui();
             pkt.setData(data);
@@ -119,7 +119,7 @@ public class ContainerBase extends Container {
      * This method is called immediately after the container has been constructed and set as the active container.
      * The data is received client-side immediately after the GUI has been constructed, initialized, and opened.
      */
-    public void sendInitData() throws IOException {
+    public void sendInitData() {
 
     }
 

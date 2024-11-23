@@ -19,7 +19,7 @@ public class PacketTurretAnglesUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) throws IOException {
+	protected void writeToStream(ByteBuf data) {
 		super.writeToStream(data);
 		data.writeFloat(pitch);
 		data.writeFloat(rotation);

@@ -112,7 +112,7 @@ public final class NetworkHandler implements IGuiHandler {
         INSTANCE.channel.sendToServer(pkt.getFMLPacket());
     }
 
-    public static void sendToPlayer(EntityPlayerMP player, PacketBase pkt) throws IOException {
+    public static void sendToPlayer(EntityPlayerMP player, PacketBase pkt) {
         INSTANCE.channel.sendTo(pkt.getFMLPacket(), player);
     }
 

@@ -35,6 +35,8 @@ import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.ITarget;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleMovementType;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.Ammo;
+import xyz.dylanlogan.ancientwarfare.vehicle.missiles.AmmoHwachaRocket;
 import xyz.dylanlogan.ancientwarfare.vehicle.missiles.IAmmo;
 import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAimUpdate;
@@ -309,7 +311,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		vehicle.vehicleType.playReloadSound(vehicle);
 	}
 
-	public void handleFireUpdate() throws IOException {
+	public void handleFireUpdate() {
 		if (reloadingTicks <= 0 || vehicle.worldObj.isRemote) {
 
 			boolean shouldFire = vehicle.ammoHelper.getCurrentAmmoCount() > 0 || vehicle.ammoHelper.doesntUseAmmo();
@@ -415,34 +417,36 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		float tz = (float) (target.zCoord - z);
 		float range = MathHelper.sqrt_float(tx * tx + tz * tz);
 		if (vehicle.canAimPitch()) {
-			Tuple angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
-			if (angles.getFirst().isNan() || angles.getSecond().isNaN()) {
-			} else if (Trig.isAngleBetween(angles.getSecond(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
-				if ((Math.abs(this.clientTurretPitch - angles.getSecond()) > 1e-5f)) {
-					this.clientTurretPitch = angles.getSecond();
+			Tuple angles = getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
+			float ang1 = (float) angles.getFirst();
+			float ang2 = (float) angles.getSecond();
+			if (Float.isNaN(ang1) || Float.isNaN(ang2)) {
+			} else if (Trig.isAngleBetween((float) angles.getSecond(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
+				if ((Math.abs(this.clientTurretPitch - (float)angles.getSecond()) > 1e-5f)) {
+					this.clientTurretPitch = (float) angles.getSecond();
 					updated = true;
 					updatePitch = true;
 				}
-			} else if (Trig.isAngleBetween(angles.getFirst(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
+			} else if (Trig.isAngleBetween((float)angles.getFirst(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
 
-				if ((Math.abs(this.clientTurretPitch - angles.getFirst()) > 1e-5f)) {
-					this.clientTurretPitch = angles.getFirst();
+				if ((Math.abs(this.clientTurretPitch - (float)angles.getFirst()) > 1e-5f)) {
+					this.clientTurretPitch = (float)angles.getFirst();
 					updated = true;
 					updatePitch = true;
 				}
 			}
 		} else if (vehicle.canAimPower()) {
-			float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch + vehicle.rotationPitch, TRAJECTORY_ITERATIONS_CLIENT,
+			float power = iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch + vehicle.rotationPitch, TRAJECTORY_ITERATIONS_CLIENT,
 					(vehicle.ammoHelper.getCurrentAmmoType() != null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));
-			if (!MathUtils.epsilonEquals(clientLaunchSpeed, power) && power < getAdjustedMaxMissileVelocity()) {
+			if (!epsilonEquals(clientLaunchSpeed, power) && power < getAdjustedMaxMissileVelocity()) {
 				this.clientLaunchSpeed = power;
 				updated = true;
 				updatePower = true;
 			}
 		}
 		if (vehicle.canAimRotate()) {
-			float yaw = getAimYaw(target.x, target.z);
-			if (!MathUtils.epsilonEquals(yaw, clientTurretYaw) && (vehicle.currentTurretRotationMax >= 180 || Trig
+			float yaw = getAimYaw(target.xCoord, target.zCoord);
+			if (!epsilonEquals(yaw, clientTurretYaw) && (vehicle.currentTurretRotationMax >= 180 || Trig
 					.isAngleBetween(yaw, vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax,
 							vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax))) {
 				if (Math.abs(yaw - clientTurretYaw) > 0.25f) {
@@ -452,6 +456,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 				}
 			}
 		}
+
 
 		if (updated) {
 			this.clientHitRange = range;
@@ -466,11 +471,16 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		return isAtTarget(0.35f);
 	}
 
+	private static boolean epsilonEquals(float a, float b) {
+		final float EPSILON = 1e-5f;
+		return Math.abs(a - b) < EPSILON;
+	}
+
 	private boolean isAtTarget(float range) {
 		float yaw = Trig.wrapTo360(vehicle.localTurretRotation);
 		float dest = Trig.wrapTo360(vehicle.localTurretDestRot);
 
-		return MathUtils.epsilonEquals(vehicle.localTurretDestPitch, vehicle.localTurretPitch) && Math.abs(yaw - dest) < range;
+		return epsilonEquals(vehicle.localTurretDestPitch, vehicle.localTurretPitch) && Math.abs(yaw - dest) < range;
 	}
 
 	public boolean isNearTarget() {
@@ -490,25 +500,27 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		float ty = (float) (targetY - y);
 		float tz = (float) (targetZ - z);
 		if (vehicle.canAimPitch()) {
-			Tuple<Float, Float> angles = Trig.getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
-			if (angles.getFirst().isNaN() || angles.getSecond().isNaN()) {
-			} else if (Trig.isAngleBetween(angles.getSecond(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
-				if (!MathUtils.epsilonEquals(vehicle.localTurretDestPitch, angles.getSecond())) {
-					vehicle.localTurretDestPitch = angles.getSecond();
+			Tuple angles = getLaunchAngleToHit(tx, ty, tz, vehicle.localLaunchPower);
+			float ang1 = (float) angles.getFirst();
+			float ang2 = (float) angles.getSecond();
+			if (Float.isNaN(ang1) || Float.isNaN(ang2)) {
+			} else if (Trig.isAngleBetween((float) angles.getSecond(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
+				if (!epsilonEquals(vehicle.localTurretDestPitch, (float) angles.getSecond())) {
+					vehicle.localTurretDestPitch = (float) angles.getSecond();
 					updated = true;
 					updatePitch = true;
 				}
-			} else if (Trig.isAngleBetween(angles.getFirst(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
-				if (!MathUtils.epsilonEquals(vehicle.localTurretDestPitch, angles.getFirst())) {
-					vehicle.localTurretDestPitch = angles.getFirst();
+			} else if (Trig.isAngleBetween((float) angles.getFirst(), vehicle.currentTurretPitchMin, vehicle.currentTurretPitchMax)) {
+				if (!epsilonEquals(vehicle.localTurretDestPitch, (float) angles.getFirst())) {
+					vehicle.localTurretDestPitch = (float) angles.getFirst();
 					updated = true;
 					updatePitch = true;
 				}
 			}
 		} else if (vehicle.canAimPower()) {
-			float power = Trig.iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch + vehicle.rotationPitch, TRAJECTORY_ITERATIONS_CLIENT,
+			float power = iterativeSpeedFinder(tx, ty, tz, vehicle.localTurretPitch + vehicle.rotationPitch, TRAJECTORY_ITERATIONS_CLIENT,
 					(vehicle.ammoHelper.getCurrentAmmoType() != null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));
-			if (!MathUtils.epsilonEquals(vehicle.localLaunchPower, power) && power < getAdjustedMaxMissileVelocity()) {
+			if (!epsilonEquals(vehicle.localLaunchPower, power) && power < getAdjustedMaxMissileVelocity()) {
 				this.vehicle.localLaunchPower = power;
 				updated = true;
 				updatePower = true;
@@ -516,7 +528,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		}
 		if (vehicle.canAimRotate()) {
 			float yaw = getAimYaw(targetX, targetZ);
-			if (!MathUtils.epsilonEquals(yaw, vehicle.localTurretDestRot) && (vehicle.currentTurretRotationMax >= 180 || Trig
+			if (!epsilonEquals(yaw, vehicle.localTurretDestRot) && (vehicle.currentTurretRotationMax >= 180 || Trig
 					.isAngleBetween(yaw, vehicle.localTurretRotationHome - vehicle.currentTurretRotationMax,
 							vehicle.localTurretRotationHome + vehicle.currentTurretRotationMax))) {
 				this.vehicle.localTurretDestRot = yaw;
@@ -571,10 +583,13 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		float targetY = (float) target.getBoundingBox().minY - (float) (vehicle.posY + offset.y);
 		float targetZ = (float) target.getBoundingBox().minZ - (float) (vehicle.posZ + offset.z);
 
-		Tuple<Float, Float> anglesMin = Trig.getLaunchAngleToHit(targetX, targetY, targetZ, vehicle.localLaunchPower);
+		Tuple anglesMin = getLaunchAngleToHit(targetX, targetY, targetZ, vehicle.localLaunchPower);
+		double angle1 = (Double) anglesMin.getFirst();
+		double angle2 = (Double) anglesMin.getSecond();
+		double turretPitch = vehicle.localTurretPitch;
 		//noinspection SimplifiableIfStatement
-		if (Math.abs(anglesMin.getSecond() - vehicle.localTurretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE || Math
-				.abs(anglesMin.getFirst() - vehicle.localTurretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE) {
+		if (Math.abs(angle2 - turretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE || Math
+				.abs(angle1 - turretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE) {
 			return true;
 		}
 
@@ -582,16 +597,21 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		targetY = (float) target.getBoundingBox().maxY - (float) (vehicle.posY + offset.y);
 		targetZ = (float) target.getBoundingBox().maxZ - (float) (vehicle.posZ + offset.z);
 
-		Tuple<Float, Float> anglesMax = Trig.getLaunchAngleToHit(targetX, targetY, targetZ, vehicle.localLaunchPower);
+		Tuple anglesMax = getLaunchAngleToHit(targetX, targetY, targetZ, vehicle.localLaunchPower);
+		angle1 = (Double) anglesMax.getFirst(); angle2 = (Double) anglesMax.getSecond();
 		//noinspection SimplifiableIfStatement
-		if (Math.abs(anglesMax.getSecond() - vehicle.localTurretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE || Math
-				.abs(anglesMax.getFirst() - vehicle.localTurretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE) {
+		if (Math.abs(angle2 - turretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE || Math
+				.abs(angle1 - turretPitch) < NEGLIGIBLE_ANGLE_DIFFERENCE) {
 			return true;
 		}
+            double angleMin1 = (Double) anglesMin.getFirst();
+            double angleMin2 = (Double) anglesMin.getSecond();
+            double angleMax1 = (Double) anglesMax.getFirst();
+            double angleMax2 = (Double) anglesMax.getSecond();
+            return Trig.isAngleBetween((float)turretPitch, (float)angleMin1, (float)angleMax1) ||
+                    Trig.isAngleBetween((float)turretPitch, (float)angleMin2, (float)angleMax2);
 
-		return Trig.isAngleBetween(vehicle.localTurretPitch, anglesMin.getFirst(), anglesMax.getFirst())
-				|| Trig.isAngleBetween(vehicle.localTurretPitch, anglesMin.getSecond(), anglesMax.getSecond());
-	}
+    }
 
 	private boolean isPowerSetToPointAt(ITarget target) {
 		if (!vehicle.canAimPower()) {
@@ -624,10 +644,68 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		return vehicle.localLaunchPower >= powerMin && vehicle.localLaunchPower <= powerMax;
 	}
 
-	private float getPowerFor(float distX, float distY, float distZ) {
-		return Trig.iterativeSpeedFinder(distX, distY, distZ, vehicle.localTurretPitch + vehicle.rotationPitch,
-						TRAJECTORY_ITERATIONS_CLIENT, (vehicle.ammoHelper.getCurrentAmmoType() != null && vehicle.ammoHelper.getCurrentAmmoType().isRocket()));
+	public static Tuple getLaunchAngleToHit(double targetX, double targetY, double targetZ, double launchPower) {
+		double gravity = 9.81d; // Adjust if your game uses different gravity
+		double dx = targetX; // Horizontal distance
+		double dy = targetY; // Vertical distance
+		double dz = targetZ; // Depth distance
+
+		double distance = Math.sqrt(dx * dx + dz * dz);
+		double velocitySquared = launchPower * launchPower;
+
+		double angle1, angle2;
+
+		// Solving for launch angles
+		double discriminant = velocitySquared * velocitySquared - gravity * (gravity * distance * distance + 2 * dy * velocitySquared);
+		if (discriminant < 0) {
+			return null; // No solution, target is out of range
+		}
+
+		angle1 = Math.toDegrees(Math.atan((velocitySquared - Math.sqrt(discriminant)) / (gravity * distance)));
+		angle2 = Math.toDegrees(Math.atan((velocitySquared + Math.sqrt(discriminant)) / (gravity * distance)));
+
+		return new Tuple(angle1, angle2);
 	}
+
+
+
+	private float getPowerFor(float distX, float distY, float distZ) {
+		float pitch = vehicle.localTurretPitch + vehicle.rotationPitch;
+		boolean isRocket = false;
+
+		if (vehicle.ammoHelper.getCurrentAmmoType() != null) {
+			Object ammoType = vehicle.ammoHelper.getCurrentAmmoType();
+			if (ammoType instanceof Ammo) {
+				isRocket = ((AmmoHwachaRocket) ammoType).isRocket();
+			}
+		}
+
+		return iterativeSpeedFinder(distX, distY, distZ, pitch, TRAJECTORY_ITERATIONS_CLIENT, isRocket);
+	}
+
+	public static float iterativeSpeedFinder(float distX, float distY, float distZ, float pitch, int iterations, boolean isRocket) {
+		final float gravity = 9.81f * 0.05f; // Gravity in the game world, scaled
+		float targetDistance = (float) Math.sqrt(distX * distX + distZ * distZ); // Horizontal distance
+		float speed = 1.0f; // Initial guess for speed
+
+		for (int i = 0; i < iterations; i++) {
+			float time = targetDistance / (speed * (float) Math.cos(Math.toRadians(pitch))); // Time to hit horizontal target
+			float predictedY = (speed * (float) Math.sin(Math.toRadians(pitch)) * time) - (0.5f * gravity * time * time); // Vertical displacement
+
+			if (Math.abs(predictedY - distY) < 0.1f) { // Close enough
+				break;
+			}
+
+			if (predictedY < distY) {
+				speed += 0.1f;
+			} else {
+				speed -= 0.1f;
+			}
+		}
+		return speed;
+	}
+
+
 
 	public float getAimYaw(ITarget target) {
 		return getAimYaw(target.getX(), target.getZ());

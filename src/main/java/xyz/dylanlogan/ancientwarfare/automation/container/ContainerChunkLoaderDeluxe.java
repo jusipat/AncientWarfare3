@@ -57,7 +57,7 @@ public class ContainerChunkLoaderDeluxe extends ContainerTileBase<TileChunkLoade
         sendChunkList();
     }
 
-    private void sendChunkList() throws IOException {
+    private void sendChunkList() {
         NBTTagCompound tag = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
         NBTTagCompound ccipTag;

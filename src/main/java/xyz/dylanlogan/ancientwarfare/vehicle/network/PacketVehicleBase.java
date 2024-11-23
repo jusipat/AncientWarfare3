@@ -22,7 +22,7 @@ public abstract class PacketVehicleBase extends PacketBase {
 	}
 
 	@Override
-	protected void writeToStream(ByteBuf data) throws IOException {
+	protected void writeToStream(ByteBuf data) {
 		data.writeInt(entityID);
 	}
 

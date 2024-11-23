@@ -47,7 +47,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 	/**
 	 * SERVER ONLY relays changes to clients to update a single ammo type, also handles updating underlying inventory...
 	 */
-	void decreaseCurrentAmmo() throws IOException {
+	void decreaseCurrentAmmo() {
 		if (vehicle.worldObj.isRemote) {
 			return;
 		}
