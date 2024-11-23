@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import xyz.dylanlogan.ancientwarfare.core.api.AWItems;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.armors.IVehicleArmor;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IVehicleType;
@@ -336,7 +337,7 @@ public abstract class VehicleType implements IVehicleType {
 
 	@Override
 	public ItemStack getStackForLevel(int level) {
-		ItemStack stack = new ItemStack(AWVehicleItems.SPAWNER, 1, this.getGlobalVehicleType());
+		ItemStack stack = new ItemStack(AWItems.npcSpawner, 1, this.getGlobalVehicleType());
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setInteger("level", level);
 		stack.setTagInfo("spawnData", tag);
@@ -406,7 +407,7 @@ public abstract class VehicleType implements IVehicleType {
 				continue;
 			}
 			for (int i = 0; i < type.getMaterialType().getNumOfLevels(); i++) {
-				stack = new ItemStack(AWVehicleItems.SPAWNER, 1, type.getGlobalVehicleType());
+				stack = new ItemStack(AWItems.npcSpawner, 1, type.getGlobalVehicleType());
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setInteger("level", i);
 				stack.setTagInfo("spawnData", tag);

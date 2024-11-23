@@ -40,6 +40,34 @@ public class AWItems {
     public static ItemBase worksiteUpgrade;
 
     /**
-     * STRUCTURE module
+     * VEHICLES module
      */
+    public static Item flameCharge;
+    public static Item explosiveCharge;
+    public static Item rocketCharge;
+    public static Item clusterCharge;
+    public static Item napalmCharge;
+    public static Item clayCasing;
+    public static Item ironCasing;
+
+    // Vehicle components
+    public static Item mobilityUnit;
+    public static Item turretComponents;
+    public static Item torsionUnit;
+    public static Item counterWeightUnit;
+    public static Item powderCase;
+    public static Item equipmentBay;
+
+    // Materials
+    public static Item roughWood;
+    public static Item treatedWood;
+    public static Item ironshodWood;
+    public static Item ironCoreWood;
+
+    // Additional vehicle components
+    public static Item roughIron;
+    public static Item fineIron;
+    public static Item temperedIron;
+    public static Item minorAlloy;
+    public static Item majorAlloy;
 }

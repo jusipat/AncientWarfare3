@@ -11,6 +11,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.container.ContainerVehicle;
 import xyz.dylanlogan.ancientwarfare.vehicle.container.ContainerVehicleInventory;
 import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleEntities;
+import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleItems;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAimUpdate;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAmmoSelect;
 import xyz.dylanlogan.ancientwarfare.vehicle.network.PacketAmmoUpdate;
@@ -46,7 +47,8 @@ public class AncientWarfareVehicles {
 	public void preInit(FMLPreInitializationEvent evt) {
 		statics = new AWVehicleStatics("ancientwarfarevehicle");
 
-		AWVehicleEntities.load();
+		AWVehicleItems.INSTANCE.load();
+		//AWVehicleEntities.INSTANCE.load();
 
 //		PacketBase.registerPacketType(NetworkHandler.PACKET_AIM_UPDATE, PacketAimUpdate.class, PacketAimUpdate::new);
 //		PacketBase.registerPacketType(NetworkHandler.PACKET_AMMO_SELECT, PacketAmmoSelect.class, PacketAmmoSelect::new);

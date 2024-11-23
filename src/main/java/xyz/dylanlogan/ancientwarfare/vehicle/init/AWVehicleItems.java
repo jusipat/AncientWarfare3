@@ -1,6 +1,8 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.init;
 
 import net.minecraft.item.Item;
+import xyz.dylanlogan.ancientwarfare.core.api.AWItems;
+import xyz.dylanlogan.ancientwarfare.core.block.AWCoreBlockLoader;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemMisc;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemSpawner;
 import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
@@ -14,42 +16,47 @@ import java.util.List;
 public class AWVehicleItems {
 	private AWVehicleItems() {}
 
+	public static final String PREFIX = "ancientwarfare:vehicles/";
+	public static final AWVehicleItems INSTANCE = new AWVehicleItems();
+
 	public static final List<Item> ITEMS = new ArrayList<>();
 
-	public static final Item SPAWNER = new ItemSpawner();
+	//public static final Item SPAWNER = new ItemSpawner();
 
-	public static void registerItems() {
-		registerItem(SPAWNER, "spawner");
+	public void load() {
+		AWItems.flameCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "flame_charge", PREFIX);
+		AWItems.explosiveCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "explosive_charge", PREFIX);
+		AWItems.rocketCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rocket_charge", PREFIX);
+		AWItems.clusterCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "cluster_charge", PREFIX);
+		AWItems.napalmCharge = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "napalm_charge", PREFIX);
+		AWItems.clayCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "clay_casing", PREFIX);
+		AWItems.ironCasing = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "iron_casing", PREFIX);
 
-		// Ammo materials
-		registerItem(new ItemMisc("flame_charge", ItemMisc.VehicleItemType.AMMO_MATERIAL), "flame_charge");
-		registerItem(new ItemMisc("explosive_charge", ItemMisc.VehicleItemType.AMMO_MATERIAL), "explosive_charge");
-		registerItem(new ItemMisc("rocket_charge", ItemMisc.VehicleItemType.AMMO_MATERIAL), "rocket_charge");
-		registerItem(new ItemMisc("cluster_charge", ItemMisc.VehicleItemType.AMMO_MATERIAL), "cluster_charge");
-		registerItem(new ItemMisc("napalm_charge", ItemMisc.VehicleItemType.AMMO_MATERIAL), "napalm_charge");
-		registerItem(new ItemMisc("clay_casing", ItemMisc.VehicleItemType.AMMO_MATERIAL), "clay_casing");
-		registerItem(new ItemMisc("iron_casing", ItemMisc.VehicleItemType.AMMO_MATERIAL), "iron_casing");
+		AWItems.mobilityUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "mobility_unit", PREFIX);
+		AWItems.turretComponents = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "turret_components", PREFIX);
+		AWItems.torsionUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "torsion_unit", PREFIX);
+		AWItems.counterWeightUnit = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "counter_weight_unit", PREFIX);
+		AWItems.powderCase = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "powder_case", PREFIX);
+		AWItems.equipmentBay = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "equipment_bay", PREFIX);
 
-		// Vehicle components
-		registerItem(new ItemMisc("mobility_unit", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "mobility_unit");
-		registerItem(new ItemMisc("turret_components", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "turret_components");
-		registerItem(new ItemMisc("torsion_unit", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "torsion_unit");
-		registerItem(new ItemMisc("counter_weight_unit", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "counter_weight_unit");
-		registerItem(new ItemMisc("powder_case", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "powder_case");
-		registerItem(new ItemMisc("equipment_bay", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "equipment_bay");
+		AWItems.roughWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rough_wood", PREFIX);
+		AWItems.treatedWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "treated_wood", PREFIX);
+		AWItems.ironshodWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "ironshod_wood", PREFIX);
+		AWItems.ironCoreWood = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "iron_core_wood", PREFIX);
 
-		// Materials
-		registerItem(new ItemMisc("rough_wood", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "rough_wood");
-		registerItem(new ItemMisc("treated_wood", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "treated_wood");
-		registerItem(new ItemMisc("ironshod_wood", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "ironshod_wood");
-		registerItem(new ItemMisc("iron_core_wood", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "iron_core_wood");
+		AWItems.roughIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "rough_iron", PREFIX);
+		AWItems.fineIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "fine_iron", PREFIX);
+		AWItems.temperedIron = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "tempered_iron", PREFIX);
+		AWItems.minorAlloy = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "minor_alloy", PREFIX);
+		AWItems.majorAlloy = register(new Item().setCreativeTab(AWCoreBlockLoader.coreTab), "major_alloy", PREFIX);
+	}
 
-		// Additional vehicle components
-		registerItem(new ItemMisc("rough_iron", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "rough_iron");
-		registerItem(new ItemMisc("fine_iron", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "fine_iron");
-		registerItem(new ItemMisc("tempered_iron", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "tempered_iron");
-		registerItem(new ItemMisc("minor_alloy", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "minor_alloy");
-		registerItem(new ItemMisc("major_alloy", ItemMisc.VehicleItemType.VEHICLE_COMPONENT), "major_alloy");
+
+
+
+		public static void registerItems() {
+		//registerItem(SPAWNER, "spawner");
+
 
 		// Call other registries
 		AmmoRegistry.registerAmmo();
@@ -58,9 +65,14 @@ public class AWVehicleItems {
 		VehicleRegistry.registerVehicles();
 	}
 
-	private static void registerItem(Item item, String name) {
+	public Item register(Item item, String name) {
 		item.setUnlocalizedName(name);
 		GameRegistry.registerItem(item, name);
-		ITEMS.add(item);
+		return item;
+	}
+
+	public Item register(Item item, String name, String textPrefix) {
+		item.setTextureName(textPrefix + name);
+		return register(item, name);
 	}
 }
