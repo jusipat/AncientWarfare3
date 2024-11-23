@@ -110,7 +110,7 @@ public abstract class NpcBase extends EntityCreature implements IEntityAdditiona
         }
     }
 
-    public void setCustomTexRef(String customTexRef) throws IOException {
+    public void setCustomTexRef(String customTexRef) {
         if (customTexRef == null) {
             customTexRef = "";
         }
@@ -792,7 +792,7 @@ public abstract class NpcBase extends EntityCreature implements IEntityAdditiona
         setOwnerName(player.getCommandSenderName());
     }
 
-    public void setOwnerName(String name) throws IOException {
+    public void setOwnerName(String name) {
         if (name == null) {
             name = "";
         }

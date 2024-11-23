@@ -36,7 +36,7 @@ public class PacketAimUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		super.readFromStream(data);
 		pitch = data.readBoolean() ? Optional.of(data.readFloat()) : Optional.empty();
 		yaw = data.readBoolean() ? Optional.of(data.readFloat()) : Optional.empty();

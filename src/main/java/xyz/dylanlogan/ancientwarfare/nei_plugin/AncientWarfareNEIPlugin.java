@@ -9,9 +9,9 @@ import xyz.dylanlogan.ancientwarfare.core.config.AWLog;
 @Mod
         (
                 name = "Ancient Warfare NEI Plugin",
-                modid = "AncientWarfareNEIPlugin",
+                modid = "ancientwarfareneiplugin",
                 version = "@VERSION@",
-                dependencies = "required-after:AncientWarfare;after:NotEnoughItems"
+                dependencies = "required-after:ancientwarfare;after:NotEnoughItems"
         )
 public class AncientWarfareNEIPlugin {
 

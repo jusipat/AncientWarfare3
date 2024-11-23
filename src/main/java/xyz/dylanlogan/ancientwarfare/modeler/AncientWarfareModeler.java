@@ -18,14 +18,14 @@ import xyz.dylanlogan.ancientwarfare.modeler.proxy.CommonProxyModeler;
 @Mod
         (
                 name = "Ancient Warfare Model Editor",
-                modid = "AncientWarfareModeler",
+                modid = "ancientwarfaremodeler",
                 version = "@VERSION@",
-                dependencies = "required-after:AncientWarfare"
+                dependencies = "required-after:ancientwarfare"
         )
 
 public class AncientWarfareModeler {
 
-    @Instance(value = "AncientWarfareModeler")
+    @Instance(value = "ancientwarfaremodeler")
     public static AncientWarfareModeler instance;
 
     @SidedProxy
@@ -45,7 +45,7 @@ public class AncientWarfareModeler {
     public void preInit(FMLPreInitializationEvent evt) {
         ModuleStatus.modelerLoaded = true;
         log = AncientWarfareCore.log;
-        config = AWCoreStatics.getConfigFor("AncientWarfareModeler");
+        config = AWCoreStatics.getConfigFor("ancientwarfaremodeler");
 
         /**
          * internal registry

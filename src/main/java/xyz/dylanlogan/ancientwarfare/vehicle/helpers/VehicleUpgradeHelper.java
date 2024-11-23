@@ -45,7 +45,7 @@ public class VehicleUpgradeHelper implements IExtendedEntityProperties {
 	/**
 	 * SERVER ONLY
 	 */
-	public void updateUpgrades() throws IOException {
+	public void updateUpgrades() {
 		if (vehicle.worldObj.isRemote) {
 			return;
 		}

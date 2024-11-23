@@ -27,7 +27,7 @@ public class PacketVehicleInput extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		super.readFromStream(data);
 		forwardInput = data.readByte();
 		turnInput = data.readByte();

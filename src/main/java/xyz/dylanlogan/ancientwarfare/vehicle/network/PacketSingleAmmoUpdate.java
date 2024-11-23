@@ -1,5 +1,6 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.network;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketBuffer;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.VehicleBase;
@@ -22,15 +23,15 @@ public class PacketSingleAmmoUpdate extends PacketVehicleBase {
 	protected void writeToStream(ByteBuf data) {
 		super.writeToStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
-		pb.writeStringToBuffer(ammoRegistryName);
+		ByteBufUtils.writeUTF8String(pb, ammoRegistryName);
 		pb.writeInt(count);
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		super.readFromStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
-		ammoRegistryName = pb.readStringFromBuffer(64);
+		ammoRegistryName = ByteBufUtils.readUTF8String(pb);
 		count = pb.readInt();
 	}
 

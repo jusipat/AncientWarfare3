@@ -1,6 +1,6 @@
 [
 {
-  "modid": "AncientWarfare",
+  "modid": "ancientwarfare",
   "name": "Ancient Warfare Core",
   "description": "Ancient Warfare 3 mod for Minecraft 1.7.10",
   "version": "${modVersion}",
@@ -12,7 +12,7 @@
   "dependencies": []
 },
 {
-  "modid": "AncientWarfareVehicle",
+  "modid": "ancientwarfarevehicles",
   "name": "Ancient Warfare Vehicles",
   "description": "Ancient Warfare 3 Vehicles for Minecraft 1.7.10",
   "version": "${modVersion}",
@@ -21,11 +21,11 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "parent":"AncientWarfare",
-  "dependencies": ["AncientWarfare"]
+  "parent":"ancientwarfare",
+  "dependencies": ["ancientwarfare"]
 },
 {
-  "modid": "AncientWarfareStructure",
+  "modid": "ancientwarfarestructures",
   "name": "Ancient Warfare Structures",
   "description": "Ancient Warfare Structures for Minecraft 1.7.10",
   "version": "${modVersion}",
@@ -34,11 +34,11 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "parent":"AncientWarfare",
-  "dependencies": ["AncientWarfare"]
+  "parent":"ancientwarfare",
+  "dependencies": ["ancientwarfare"]
 },
 {
-  "modid": "AncientWarfareModeler",
+  "modid": "ancientwarfaremodeler",
   "name": "Ancient Warfare Model Editor",
   "description": "Ancient Warfare Model Editor for Minecraft 1.7.10",
   "version": "${modVersion}",
@@ -47,11 +47,11 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "parent":"AncientWarfare",
-  "dependencies": ["AncientWarfare"]
+  "parent":"ancientwarfare",
+  "dependencies": ["ancientwarfare"]
 },
 {
-  "modid": "AncientWarfareAutomation",
+  "modid": "ancientwarfareautomation",
   "name": "Ancient Warfare Automation",
   "description": "Ancient Warfare 3 Automation Module for Minecraft 1.7.10",
   "version": "${modVersion}",
@@ -60,11 +60,11 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "parent":"AncientWarfare",
-  "dependencies": ["AncientWarfare"]
+  "parent":"ancientwarfare",
+  "dependencies": ["ancientwarfare"]
 },
 {
-  "modid": "AncientWarfareNpc",
+  "modid": "ancientwarfarenpc",
   "name": "Ancient Warfare NPCs",
   "description": "Ancient Warfare 3 NPCs for Minecraft 1.7.10",
   "version": "${modVersion}",
@@ -73,7 +73,7 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "parent":"AncientWarfare",
-  "dependencies": ["AncientWarfare"]
+  "parent":"ancientwarfare",
+  "dependencies": ["ancientwarfare"]
 }
 ]

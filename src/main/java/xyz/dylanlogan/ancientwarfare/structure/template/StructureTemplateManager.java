@@ -23,7 +23,7 @@ public class StructureTemplateManager {
 
     public static final StructureTemplateManager INSTANCE = new StructureTemplateManager();
 
-    public void addTemplate(StructureTemplate template) throws IOException {
+    public void addTemplate(StructureTemplate template) {
         if (template.getValidationSettings() == null) {
             return;
         }
@@ -44,7 +44,7 @@ public class StructureTemplateManager {
         }
     }
 
-    public void onPlayerConnect(EntityPlayerMP player) throws IOException {
+    public void onPlayerConnect(EntityPlayerMP player) {
         NBTTagList list = new NBTTagList();
         for (StructureTemplateClient cl : clientTemplates.values()) {
             NBTTagCompound tag = new NBTTagCompound();
@@ -59,7 +59,7 @@ public class StructureTemplateManager {
 //  NetworkHandler.sendToPlayer(player, pkt2);
     }
 
-    public boolean removeTemplate(String name) throws IOException {
+    public boolean removeTemplate(String name) {
         if (this.loadedTemplates.containsKey(name)) {
             this.loadedTemplates.remove(name);
             this.clientTemplates.remove(name);

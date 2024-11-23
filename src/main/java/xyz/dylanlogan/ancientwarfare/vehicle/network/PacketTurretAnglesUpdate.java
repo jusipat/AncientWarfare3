@@ -26,7 +26,7 @@ public class PacketTurretAnglesUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		super.readFromStream(data);
 		pitch = data.readFloat();
 		rotation = data.readFloat();

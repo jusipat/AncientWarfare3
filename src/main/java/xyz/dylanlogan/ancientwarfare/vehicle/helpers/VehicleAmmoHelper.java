@@ -138,7 +138,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		NetworkHandler.sendToServer(new PacketAmmoSelect(vehicle, ammoRegistryName.toString()));
 	}
 
-	public void updateSelectedAmmo(String ammoRegistryName) throws IOException {
+	public void updateSelectedAmmo(String ammoRegistryName) {
 		if (!ammoRegistryName.equals(currentAmmoType == null ? "" : currentAmmoType.toString())) {
 			this.currentAmmoType = new ResourceLocation(ammoRegistryName);
 			if (!vehicle.worldObj.isRemote) {
@@ -167,7 +167,7 @@ public class VehicleAmmoHelper implements IExtendedEntityProperties {
 		}
 	}
 
-	public void updateAmmoCounts() throws IOException {
+	public void updateAmmoCounts() {
 		if (vehicle.worldObj.isRemote) {
 			return;
 		}

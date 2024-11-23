@@ -27,7 +27,7 @@ public abstract class PacketVehicleBase extends PacketBase {
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		entityID = data.readInt();
 	}
 

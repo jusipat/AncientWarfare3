@@ -32,7 +32,7 @@ import xyz.dylanlogan.ancientwarfare.core.research.ResearchTracker;
 
 public class AncientWarfareCore {
 
-    public static final String modID = "AncientWarfare";
+    public static final String modID = "ancientwarfare";
 
     @Instance(value = AncientWarfareCore.modID)
     public static AncientWarfareCore instance;
@@ -54,7 +54,7 @@ public class AncientWarfareCore {
          * setup config file and logger
          */
         log = evt.getModLog();
-        statics = new AWCoreStatics("AncientWarfare");
+        statics = new AWCoreStatics("ancientwarfare");
 
         /**
          * register blocks, items, tile entities, and entities

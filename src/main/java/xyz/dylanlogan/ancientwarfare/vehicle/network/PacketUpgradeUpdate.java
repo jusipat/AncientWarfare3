@@ -35,16 +35,16 @@ public class PacketUpgradeUpdate extends PacketVehicleBase {
 	}
 
 	@Override
-	protected void readFromStream(ByteBuf data) throws IOException {
+	protected void readFromStream(ByteBuf data) {
 		super.readFromStream(data);
 		PacketBuffer pb = new PacketBuffer(data);
 		upgradeRegistryNames = new String[pb.readInt()];
 		for (int i = 0; i < upgradeRegistryNames.length; i++) {
-			upgradeRegistryNames[i] = pb.readStringFromBuffer(64);
+			upgradeRegistryNames[i] = ByteBufUtils.readUTF8String(pb);
 		}
 		armorRegistryNames = new String[pb.readInt()];
 		for (int i = 0; i < armorRegistryNames.length; i++) {
-			armorRegistryNames[i] = pb.readStringFromBuffer(64);
+			armorRegistryNames[i] = ByteBufUtils.readUTF8String(pb);
 		}
 	}
 

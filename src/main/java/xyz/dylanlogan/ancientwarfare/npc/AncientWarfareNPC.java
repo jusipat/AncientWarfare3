@@ -35,14 +35,14 @@ import xyz.dylanlogan.ancientwarfare.npc.proxy.NpcCommonProxy;
 @Mod
         (
                 name = "Ancient Warfare NPCs",
-                modid = "AncientWarfareNpc",
+                modid = "ancientwarfarenpc",
                 version = "@VERSION@",
-                dependencies = "required-after:AncientWarfare"
+                dependencies = "required-after:ancientwarfare"
         )
 
 public class AncientWarfareNPC {
 
-    @Instance(value = "AncientWarfareNpc")
+    @Instance(value = "ancientwarfarenpc")
     public static AncientWarfareNPC instance;
 
     @SidedProxy
@@ -61,7 +61,7 @@ public class AncientWarfareNPC {
         /**
          * setup module-owned config file and config-access class
          */
-        statics = new AWNPCStatics("AncientWarfareNpc");
+        statics = new AWNPCStatics("ancientwarfarenpc");
         proxy.registerClient();//must be loaded after configs
         FMLCommonHandler.instance().bus().register(FactionTracker.INSTANCE);
         FMLCommonHandler.instance().bus().register(this);

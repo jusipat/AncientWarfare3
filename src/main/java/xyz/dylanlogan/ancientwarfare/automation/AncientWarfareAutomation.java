@@ -28,13 +28,13 @@ import xyz.dylanlogan.ancientwarfare.core.proxy.CommonProxyBase;
 @Mod
         (
                 name = "Ancient Warfare Automation",
-                modid = "AncientWarfareAutomation",
+                modid = "ancientwarfareautomation",
                 version = "@VERSION@",
-                dependencies = "required-after:AncientWarfare;after:CoFHCore;after:BuildCraft|Core"
+                dependencies = "required-after:ancientwarfare;after:CoFHCore;after:BuildCraft|Core"
         )
 public class AncientWarfareAutomation {
 
-    @Instance(value = "AncientWarfareAutomation")
+    @Instance(value = "ancientwarfareautomation")
     public static AncientWarfareAutomation instance;
 
     @SidedProxy
@@ -62,7 +62,7 @@ public class AncientWarfareAutomation {
         /**
          * setup module-owned config file and config-access class
          */
-        statics = new AWAutomationStatics("AncientWarfareAutomation");
+        statics = new AWAutomationStatics("ancientwarfareautomation");
 
         /**
          * load items and blocks

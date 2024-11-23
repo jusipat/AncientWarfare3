@@ -326,7 +326,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 	}
 
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public void updateAim(Optional<Float> pitch, Optional<Float> yaw, Optional<Float> power) throws IOException {
+	public void updateAim(Optional<Float> pitch, Optional<Float> yaw, Optional<Float> power) {
 		boolean sendReply = false;
 		if (pitch.isPresent()) {
 			sendReply = true;
@@ -345,7 +345,7 @@ public class VehicleFiringHelper implements IExtendedEntityProperties {
 		}
 	}
 
-	public void handleFireInput() throws IOException {
+	public void handleFireInput() {
 		if (isReadyToFire()) {
 			NetworkHandler.sendToServer(new PacketFireUpdate(vehicle));
 		}

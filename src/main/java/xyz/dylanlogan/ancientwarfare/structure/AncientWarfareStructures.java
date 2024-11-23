@@ -36,9 +36,9 @@ import xyz.dylanlogan.ancientwarfare.structure.world_gen.WorldStructureGenerator
 @Mod
         (
                 name = "Ancient Warfare Structures",
-                modid = "AncientWarfareStructure",
+                modid = "ancientwarfarestructures",
                 version = "@VERSION@",
-                dependencies = "required-after:AncientWarfare"
+                dependencies = "required-after:ancientwarfare"
         )
 
 public class AncientWarfareStructures {
@@ -58,7 +58,7 @@ public class AncientWarfareStructures {
     @EventHandler
     public void preInit(FMLPreInitializationEvent evt) {
         ModuleStatus.structuresLoaded = true;
-        statics = new AWStructureStatics("AncientWarfareStructures");
+        statics = new AWStructureStatics("ancientwarfarestructures");
 
         /**
          * Forge/FML registry

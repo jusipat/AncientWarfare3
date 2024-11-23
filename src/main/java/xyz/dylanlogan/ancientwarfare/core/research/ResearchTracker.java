@@ -11,7 +11,6 @@ import xyz.dylanlogan.ancientwarfare.core.network.PacketResearchInit;
 import xyz.dylanlogan.ancientwarfare.core.network.PacketResearchStart;
 import xyz.dylanlogan.ancientwarfare.core.network.PacketResearchUpdate;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +63,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void addResearch(World world, String playerName, int research) throws IOException {
+    public void addResearch(World world, String playerName, int research) {
         if (world.isRemote) {
             clientData.addResearchTo(playerName, research);
         } else {
@@ -170,7 +169,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void removeQueuedGoal(World world, String playerName, int goal) throws IOException {
+    public void removeQueuedGoal(World world, String playerName, int goal) {
         if (world.isRemote) {
             clientData.removeQueuedResearch(playerName, goal);
         } else {
@@ -180,7 +179,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void addQueuedGoal(World world, String playerName, int goal) throws IOException {
+    public void addQueuedGoal(World world, String playerName, int goal) {
         if (world.isRemote) {
             clientData.addQueuedResearch(playerName, goal);
         } else {
@@ -190,7 +189,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void startResearch(World world, String playerName, int goal) throws IOException {
+    public void startResearch(World world, String playerName, int goal) {
         if (world.isRemote) {
             clientData.startResearch(playerName, goal);
         } else {
@@ -200,7 +199,7 @@ public final class ResearchTracker {
         }
     }
 
-    public void finishResearch(World world, String playerName, int goal) throws IOException {
+    public void finishResearch(World world, String playerName, int goal) {
         if (world.isRemote) {
             clientData.finishResearch(playerName, goal);
         } else {

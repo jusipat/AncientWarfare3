@@ -150,7 +150,7 @@ public class EntityGate extends Entity implements IEntityAdditionalSpawnData, IE
         return this.health;
     }
 
-    public void setHealth(int val) throws IOException {
+    public void setHealth(int val) {
         if (val < 0) {
             val = 0;
         }

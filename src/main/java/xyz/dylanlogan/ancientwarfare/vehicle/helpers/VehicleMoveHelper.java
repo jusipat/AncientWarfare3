@@ -149,7 +149,7 @@ public class VehicleMoveHelper implements IExtendedEntityProperties {
 		//this.vehicle.move(MoverType.SELF, vehicle.motionX, vehicle.motionY, vehicle.motionZ);
 	}
 
-	protected void onUpdateServer() throws IOException {
+	protected void onUpdateServer() {
 		VehicleMovementType move = vehicle.vehicleType.getMovementType();
 		switch (move) {
 			case GROUND:

@@ -34,7 +34,7 @@ public class CommonProxyBase {
             }
             return FakePlayerFactory.get((WorldServer) world, new GameProfile(id, name));
         }
-        return FakePlayerFactory.get((WorldServer) world, new GameProfile(id, "AncientWarfare"));
+        return FakePlayerFactory.get((WorldServer) world, new GameProfile(id, "ancientwarfare"));
     }
 
     public boolean isKeyPressed(String keyName) {

@@ -42,7 +42,7 @@ public class ContainerSpawnerAdvancedInventoryBlock extends ContainerSpawnerAdva
         }
     }
 
-    private void sendSettingsToClient() throws IOException {
+    private void sendSettingsToClient() {
         NBTTagCompound tag = new NBTTagCompound();
         settings.writeToNBT(tag);
 

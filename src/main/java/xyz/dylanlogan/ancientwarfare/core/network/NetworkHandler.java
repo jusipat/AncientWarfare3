@@ -13,7 +13,6 @@ import net.minecraft.world.WorldServer;
 import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 import xyz.dylanlogan.ancientwarfare.core.container.ContainerBase;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 

@@ -77,7 +77,7 @@ public class FactionTracker {
         }
     }
 
-    private void sendFactionEntry(EntityPlayer player, FactionData data) throws IOException {
+    private void sendFactionEntry(EntityPlayer player, FactionData data) {
         FactionEntry entry = data.getEntryFor(player.getCommandSenderName());
         NBTTagCompound tag = new NBTTagCompound();
         NBTTagCompound initTag = entry.writeToNBT(new NBTTagCompound());
@@ -86,7 +86,7 @@ public class FactionTracker {
         NetworkHandler.sendToPlayer((EntityPlayerMP) player, pkt);
     }
 
-    private void sendFactionUpdate(World world, String playerName, String factionName, FactionData data) throws IOException {
+    private void sendFactionUpdate(World world, String playerName, String factionName, FactionData data) {
         EntityPlayer player = world.getPlayerEntityByName(playerName);
         if (player != null && player instanceof EntityPlayerMP) {
             int standing = data.getStandingFor(playerName, factionName);
