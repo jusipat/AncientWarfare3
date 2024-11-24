@@ -97,10 +97,12 @@ public class AmmoRegistry {
 		ammoExplosive15 = registerWeightedAmmoType(new AmmoExplosiveShot(15, false), "ammo_explosive");
 		ammoExplosive30 = registerWeightedAmmoType(new AmmoExplosiveShot(30, false), "ammo_explosive");
 		ammoExplosive45 = registerWeightedAmmoType(new AmmoExplosiveShot(45, false), "ammo_explosive");
+
 		ammoHE10 = registerAmmoType(new AmmoExplosiveShot(10, true), "ammo_explosive_10_big"); // this sucks
 		ammoHE15 = registerAmmoType(new AmmoExplosiveShot(15, true), "ammo_explosive_15_big");
 		ammoHE30 = registerAmmoType(new AmmoExplosiveShot(30, true), "ammo_explosive_30_big");
 		ammoHE45 = registerAmmoType(new AmmoExplosiveShot(45, true), "ammo_explosive_45_big");
+
 		ammoNapalm10 = registerWeightedAmmoType(new AmmoNapalmShot(10), "ammo_napalm");
 		ammoNapalm15 = registerWeightedAmmoType(new AmmoNapalmShot(15), "ammo_napalm");
 		ammoNapalm30 = registerWeightedAmmoType(new AmmoNapalmShot(30), "ammo_napalm");
