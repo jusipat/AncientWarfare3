@@ -1,8 +1,10 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.registry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.item.ItemAmmo;
 import xyz.dylanlogan.ancientwarfare.vehicle.missiles.*;
@@ -80,69 +82,100 @@ public class AmmoRegistry {
 	private static Map<ResourceLocation, ItemAmmo> ammoItemInstances = new HashMap<>();
 
 	public static void registerAmmo() {
-		// Register each ammo type with a unique registry name
-		ammoBallShot = registerAmmoType(new AmmoBallShot(), "ancientwarfare:ammo_ball_shot");
-		ammoBallIronShot = registerAmmoType(new AmmoIronBallShot(), "ancientwarfare:ammo_ball_iron_shot");
-		ammoStoneShot10 = registerAmmoType(new AmmoStoneShot(10), "ancientwarfare:ammo_stone_shot_10");
-		ammoStoneShot15 = registerAmmoType(new AmmoStoneShot(15), "ancientwarfare:ammo_stone_shot_15");
-		ammoStoneShot30 = registerAmmoType(new AmmoStoneShot(30), "ancientwarfare:ammo_stone_shot_30");
-		ammoStoneShot45 = registerAmmoType(new AmmoStoneShot(45), "ancientwarfare:ammo_stone_shot_45");
-		ammoFireShot10 = registerAmmoType(new AmmoFlameShot(10), "ancientwarfare:ammo_fire_shot_10");
-		ammoFireShot15 = registerAmmoType(new AmmoFlameShot(15), "ancientwarfare:ammo_fire_shot_15");
-		ammoFireShot30 = registerAmmoType(new AmmoFlameShot(30), "ancientwarfare:ammo_fire_shot_30");
-		ammoFireShot45 = registerAmmoType(new AmmoFlameShot(45), "ancientwarfare:ammo_fire_shot_45");
-		ammoExplosive10 = registerAmmoType(new AmmoExplosiveShot(10, false), "ancientwarfare:ammo_explosive_10");
-		ammoExplosive15 = registerAmmoType(new AmmoExplosiveShot(15, false), "ancientwarfare:ammo_explosive_15");
-		ammoExplosive30 = registerAmmoType(new AmmoExplosiveShot(30, false), "ancientwarfare:ammo_explosive_30");
-		ammoExplosive45 = registerAmmoType(new AmmoExplosiveShot(45, false), "ancientwarfare:ammo_explosive_45");
-		ammoHE10 = registerAmmoType(new AmmoExplosiveShot(10, true), "ancientwarfare:ammo_he_10");
-		ammoHE15 = registerAmmoType(new AmmoExplosiveShot(15, true), "ancientwarfare:ammo_he_15");
-		ammoHE30 = registerAmmoType(new AmmoExplosiveShot(30, true), "ancientwarfare:ammo_he_30");
-		ammoHE45 = registerAmmoType(new AmmoExplosiveShot(45, true), "ancientwarfare:ammo_he_45");
-		ammoNapalm10 = registerAmmoType(new AmmoNapalmShot(10), "ancientwarfare:ammo_napalm_10");
-		ammoNapalm15 = registerAmmoType(new AmmoNapalmShot(15), "ancientwarfare:ammo_napalm_15");
-		ammoNapalm30 = registerAmmoType(new AmmoNapalmShot(30), "ancientwarfare:ammo_napalm_30");
-		ammoNapalm45 = registerAmmoType(new AmmoNapalmShot(45), "ancientwarfare:ammo_napalm_45");
-		ammoClusterShot10 = registerAmmoType(new AmmoClusterShot(10), "ancientwarfare:ammo_cluster_shot_10");
-		ammoClusterShot15 = registerAmmoType(new AmmoClusterShot(15), "ancientwarfare:ammo_cluster_shot_15");
-		ammoClusterShot30 = registerAmmoType(new AmmoClusterShot(30), "ancientwarfare:ammo_cluster_shot_30");
-		ammoClusterShot45 = registerAmmoType(new AmmoClusterShot(45), "ancientwarfare:ammo_cluster_shot_45");
-		ammoPebbleShot10 = registerAmmoType(new AmmoPebbleShot(10), "ancientwarfare:ammo_pebble_shot_10");
-		ammoPebbleShot15 = registerAmmoType(new AmmoPebbleShot(15), "ancientwarfare:ammo_pebble_shot_15");
-		ammoPebbleShot30 = registerAmmoType(new AmmoPebbleShot(30), "ancientwarfare:ammo_pebble_shot_30");
-		ammoPebbleShot45 = registerAmmoType(new AmmoPebbleShot(45), "ancientwarfare:ammo_pebble_shot_45");
-		ammoIronShot5 = registerAmmoType(new AmmoIronShot(5, AWVehicleStatics.vehicleStats.ammoCannonBall5kgDamage), "ancientwarfare:ammo_iron_shot_5");
-		ammoIronShot10 = registerAmmoType(new AmmoIronShot(10, AWVehicleStatics.vehicleStats.ammoCannonBall10kgDamage), "ancientwarfare:ammo_iron_shot_10");
-		ammoIronShot15 = registerAmmoType(new AmmoIronShot(15, AWVehicleStatics.vehicleStats.ammoCannonBall15kgDamage), "ancientwarfare:ammo_iron_shot_15");
-		ammoIronShot25 = registerAmmoType(new AmmoIronShot(25, AWVehicleStatics.vehicleStats.ammoCannonBall25kgDamage), "ancientwarfare:ammo_iron_shot_25");
-		ammoCanisterShot5 = registerAmmoType(new AmmoCanisterShot(5), "ancientwarfare:ammo_canister_shot_5");
-		ammoCanisterShot10 = registerAmmoType(new AmmoCanisterShot(10), "ancientwarfare:ammo_canister_shot_10");
-		ammoCanisterShot15 = registerAmmoType(new AmmoCanisterShot(15), "ancientwarfare:ammo_canister_shot_15");
-		ammoCanisterShot25 = registerAmmoType(new AmmoCanisterShot(25), "ancientwarfare:ammo_canister_shot_25");
-		ammoGrapeShot5 = registerAmmoType(new AmmoGrapeShot(5), "ancientwarfare:ammo_grape_shot_5");
-		ammoGrapeShot10 = registerAmmoType(new AmmoGrapeShot(10), "ancientwarfare:ammo_grape_shot_10");
-		ammoGrapeShot15 = registerAmmoType(new AmmoGrapeShot(15), "ancientwarfare:ammo_grape_shot_15");
-		ammoGrapeShot25 = registerAmmoType(new AmmoGrapeShot(25), "ancientwarfare:ammo_grape_shot_25");
-		ammoArrow = registerAmmoType(new AmmoArrow(), "ancientwarfare:ammo_arrow");
-		ammoBallistaBolt = registerAmmoType(new AmmoBallistaBolt(), "ancientwarfare:ammo_ballista_bolt");
-		ammoBallistaBoltFlame = registerAmmoType(new AmmoBallistaBoltFlame(), "ancientwarfare:ammo_ballista_bolt_flame");
-		ammoBallistaBoltExplosive = registerAmmoType(new AmmoBallistaBoltExplosive(), "ancientwarfare:ammo_ballista_bolt_explosive");
-		ammoBallistaBoltIron = registerAmmoType(new AmmoBallistaBoltIron(), "ancientwarfare:ammo_ballista_bolt_iron");
-		ammoRocket = registerAmmoType(new AmmoHwachaRocket(), "ancientwarfare:ammo_rocket");
-		ammoHwachaRocketFlame = registerAmmoType(new AmmoHwachaRocketFlame(), "ancientwarfare:ammo_hwacha_rocket_flame");
-		ammoHwachaRocketExplosive = registerAmmoType(new AmmoHwachaRocketExplosive(), "ancientwarfare:ammo_hwacha_rocket_explosive");
-		ammoHwachaRocketAirburst = registerAmmoType(new AmmoHwachaRocketAirburst(), "ancientwarfare:ammo_hwacha_rocket_airburst");
+		ammoBallShot = registerAmmoType(new AmmoBallShot(), "ammo_ball_shot");
+		ammoBallIronShot = registerAmmoType(new AmmoIronBallShot(), "ammo_iron_ball_shot");
+
+		ammoStoneShot10 = registerWeightedAmmoType(new AmmoStoneShot(10), "ammo_stone");
+		ammoStoneShot15 = registerWeightedAmmoType(new AmmoStoneShot(15),"ammo_stone");
+		ammoStoneShot30 = registerWeightedAmmoType(new AmmoStoneShot(30), "ammo_stone");
+		ammoStoneShot45 = registerWeightedAmmoType(new AmmoStoneShot(45), "ammo_stone");
+		ammoFireShot10 = registerWeightedAmmoType(new AmmoFlameShot(10), "ammo_flame");
+		ammoFireShot15 = registerWeightedAmmoType(new AmmoFlameShot(15), "ammo_flame");
+		ammoFireShot30 = registerWeightedAmmoType(new AmmoFlameShot(30), "ammo_flame");
+		ammoFireShot45 = registerWeightedAmmoType(new AmmoFlameShot(45), "ammo_flame");
+		ammoExplosive10 = registerWeightedAmmoType(new AmmoExplosiveShot(10, false), "ammo_explosive");
+		ammoExplosive15 = registerWeightedAmmoType(new AmmoExplosiveShot(15, false), "ammo_explosive");
+		ammoExplosive30 = registerWeightedAmmoType(new AmmoExplosiveShot(30, false), "ammo_explosive");
+		ammoExplosive45 = registerWeightedAmmoType(new AmmoExplosiveShot(45, false), "ammo_explosive");
+		ammoHE10 = registerAmmoType(new AmmoExplosiveShot(10, true), "ammo_explosive_10_big"); // this sucks
+		ammoHE15 = registerAmmoType(new AmmoExplosiveShot(15, true), "ammo_explosive_15_big");
+		ammoHE30 = registerAmmoType(new AmmoExplosiveShot(30, true), "ammo_explosive_30_big");
+		ammoHE45 = registerAmmoType(new AmmoExplosiveShot(45, true), "ammo_explosive_45_big");
+		ammoNapalm10 = registerWeightedAmmoType(new AmmoNapalmShot(10), "ammo_napalm");
+		ammoNapalm15 = registerWeightedAmmoType(new AmmoNapalmShot(15), "ammo_napalm");
+		ammoNapalm30 = registerWeightedAmmoType(new AmmoNapalmShot(30), "ammo_napalm");
+		ammoNapalm45 = registerWeightedAmmoType(new AmmoNapalmShot(45), "ammo_napalm");
+		ammoClusterShot10 = registerWeightedAmmoType(new AmmoClusterShot(10), "ammo_cluster");
+		ammoClusterShot15 = registerWeightedAmmoType(new AmmoClusterShot(15), "ammo_cluster");
+		ammoClusterShot30 = registerWeightedAmmoType(new AmmoClusterShot(30), "ammo_cluster");
+		ammoClusterShot45 = registerWeightedAmmoType(new AmmoClusterShot(45), "ammo_cluster");
+		ammoPebbleShot10 = registerWeightedAmmoType(new AmmoPebbleShot(10), "ammo_pebble");
+		ammoPebbleShot15 = registerWeightedAmmoType(new AmmoPebbleShot(15), "ammo_pebble");
+		ammoPebbleShot30 = registerWeightedAmmoType(new AmmoPebbleShot(30), "ammo_pebble");
+		ammoPebbleShot45 = registerWeightedAmmoType(new AmmoPebbleShot(45), "ammo_pebble");
+		ammoIronShot5 = registerWeightedAmmoType(new AmmoIronShot(5, AWVehicleStatics.vehicleStats.ammoCannonBall5kgDamage), "ammo_iron_shot");
+		ammoIronShot10 = registerWeightedAmmoType(new AmmoIronShot(10, AWVehicleStatics.vehicleStats.ammoCannonBall10kgDamage), "ammo_iron_shot");
+		ammoIronShot15 = registerWeightedAmmoType(new AmmoIronShot(15, AWVehicleStatics.vehicleStats.ammoCannonBall15kgDamage), "ammo_iron_shot");
+		ammoIronShot25 = registerWeightedAmmoType(new AmmoIronShot(25, AWVehicleStatics.vehicleStats.ammoCannonBall25kgDamage), "ammo_iron_shot");
+		ammoCanisterShot5 = registerWeightedAmmoType(new AmmoCanisterShot(5), "ammo_canister_shot");
+		ammoCanisterShot10 = registerWeightedAmmoType(new AmmoCanisterShot(10), "ammo_canister_shot");
+		ammoCanisterShot15 = registerWeightedAmmoType(new AmmoCanisterShot(15), "ammo_canister_shot");
+		ammoCanisterShot25 = registerWeightedAmmoType(new AmmoCanisterShot(25), "ammo_canister_shot");
+		ammoGrapeShot5 = registerWeightedAmmoType(new AmmoGrapeShot(5), "ammo_grape");
+		ammoGrapeShot10 = registerWeightedAmmoType(new AmmoGrapeShot(10), "ammo_grape");
+		ammoGrapeShot15 = registerWeightedAmmoType(new AmmoGrapeShot(15), "ammo_grape");
+		ammoGrapeShot25 = registerWeightedAmmoType(new AmmoGrapeShot(25), "ammo_grape");
+		ammoArrow = registerAmmoType(new AmmoArrow(), "ammo_arrow");
+		ammoBallistaBolt = registerAmmoType(new AmmoBallistaBolt(), "ammo_bolt");
+		ammoBallistaBoltFlame = registerAmmoType(new AmmoBallistaBoltFlame(), "ammo_bolt_flame");
+		ammoBallistaBoltExplosive = registerAmmoType(new AmmoBallistaBoltExplosive(), "ammo_bolt_explosive");
+		ammoBallistaBoltIron = registerAmmoType(new AmmoBallistaBoltIron(), "ammo_bolt_iron");
+		ammoRocket = registerAmmoType(new AmmoHwachaRocket(), "ammo_rocket");
+		ammoHwachaRocketFlame = registerAmmoType(new AmmoHwachaRocketFlame(), "ammo_rocket_flame");
+		ammoHwachaRocketExplosive = registerAmmoType(new AmmoHwachaRocketExplosive(), "ammo_rocket_explosive");
+		ammoHwachaRocketAirburst = registerAmmoType(new AmmoHwachaRocketAirburst(), "ammo_rocket_airburst");
 	}
 
-
-	private static IAmmo registerAmmoType(IAmmo ammo, String registryName) {
-		ResourceLocation resourceLocation = new ResourceLocation(registryName);
-		ammoInstances.put(resourceLocation, ammo);
-		ItemAmmo item = new ItemAmmo(resourceLocation, ammo);
-		ammoItemInstances.put(resourceLocation, item);
-		GameRegistry.registerItem(item, resourceLocation.getResourcePath());
+	private static IAmmo registerAmmoType(IAmmo ammo, String name) {
+		ammoInstances.put(ammo.getRegistryName(), ammo);
+		ResourceLocation res = new ResourceLocation(AncientWarfareVehicles.MOD_ID, name);
+		ItemAmmo item = new ItemAmmo(res);
+		String loc = "ancientwarfare:vehicle/ammo/" + name;
+		item.setTextureName(loc);
+		item.setUnlocalizedName(name);
+		GameRegistry.registerItem(item, name);
+		ammoItemInstances.put(ammo.getRegistryName(), item);
 		return ammo;
 	}
+
+	private static IAmmo registerWeightedAmmoType(IAmmo ammo, String baseName) {
+		// Create a weight-based suffix by truncating decimals
+		String weightSuffix = String.valueOf((int) ammo.getAmmoWeight());
+		String weightName = baseName + "_" + weightSuffix;
+
+		// ResourceLocation uses the formatted weightName
+		ResourceLocation res = new ResourceLocation(AncientWarfareVehicles.MOD_ID, weightName);
+
+		// Register the ammo instance
+		ammoInstances.put(ammo.getRegistryName(), ammo);
+
+		// Create and configure the item for this ammo type
+		ItemAmmo item = new ItemAmmo(res);
+		String texturePath = "ancientwarfare:vehicle/ammo/" + baseName;
+		item.setTextureName(texturePath);
+
+		// Debugging output
+		System.err.println("WEIGHTNAME: " + weightName);
+
+		// Register the item in the game
+		GameRegistry.registerItem(item, weightName);
+
+		// Map the ammo's ResourceLocation to the item
+		ammoItemInstances.put(ammo.getRegistryName(), item);
+
+		return ammo;
+	}
+
 
 	public static Optional<IAmmo> getAmmoForStack(ItemStack stack) {
 		return Optional.ofNullable(ammoInstances.get(stack.getItem().getUnlocalizedName(stack)));

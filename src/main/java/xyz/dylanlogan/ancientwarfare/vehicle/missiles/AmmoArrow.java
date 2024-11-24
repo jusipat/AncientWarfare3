@@ -9,7 +9,7 @@ import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 public class AmmoArrow extends Ammo {
 
 	public AmmoArrow() {
-		super("ammo_arrow");
+		super();
 		ammoWeight = 1.f;
 		renderScale = 0.2f;
 		vehicleDamage = 8;

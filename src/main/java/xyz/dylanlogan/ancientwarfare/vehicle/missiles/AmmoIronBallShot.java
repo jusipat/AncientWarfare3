@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 public class AmmoIronBallShot extends Ammo {
 
 	public AmmoIronBallShot() {
-		super("ammo_iron_ball_shot");
+		super();
 		renderScale = 0.05f;
 		ammoWeight = 1.f;
 		entityDamage = 8;

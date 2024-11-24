@@ -1,6 +1,7 @@
 package xyz.dylanlogan.ancientwarfare.vehicle.missiles;
 
 import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -9,9 +10,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import org.joml.Vector3d;
-import org.joml.Vector3i;
-import xyz.dylanlogan.ancientwarfare.core.owner.Owner;
 import xyz.dylanlogan.ancientwarfare.core.util.BlockTools;
 import xyz.dylanlogan.ancientwarfare.npc.entity.NpcBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
@@ -42,9 +40,7 @@ public abstract class Ammo implements IAmmo {
 
 	private ResourceLocation registryName;
 
-	public Ammo(String regName) {
-		registryName = new ResourceLocation(AncientWarfareVehicles.MOD_ID, regName);
-	}
+	public Ammo() {}
 
 	@Override
 	public ResourceLocation getRegistryName() {
@@ -209,7 +205,7 @@ public abstract class Ammo implements IAmmo {
 				//return !npc.getOwner().isOwnerOrSameTeamOrFriend(world, entity.getUniqueID(), ((EntityPlayer) entity).getDisplayName());
 			}
 		}
-		return true;
+		return false;
 	}
 
 	protected void setBlockToLava(World world, int x, int y, int z, int maxSearch) {

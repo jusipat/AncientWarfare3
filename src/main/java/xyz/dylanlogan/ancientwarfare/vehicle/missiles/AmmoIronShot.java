@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 public class AmmoIronShot extends Ammo {
 
 	public AmmoIronShot(int weight, int damage) {
-		super("ammo_iron_shot_" + weight);
+		super();
 		ammoWeight = weight;
 		entityDamage = damage;
 		vehicleDamage = damage;

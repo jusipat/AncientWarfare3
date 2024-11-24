@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 public class AmmoHwachaRocketFlame extends Ammo {
 
 	public AmmoHwachaRocketFlame() {
-		super("ammo_hwacha_rocket_flame");
+		super();
 		this.entityDamage = AWVehicleStatics.vehicleStats.ammoHwachaRocketFlameDamage;
 		this.vehicleDamage = AWVehicleStatics.vehicleStats.ammoHwachaRocketFlameDamage;
 		this.isArrow = true;

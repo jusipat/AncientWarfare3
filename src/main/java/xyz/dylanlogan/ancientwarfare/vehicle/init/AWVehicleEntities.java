@@ -9,19 +9,20 @@ import xyz.dylanlogan.ancientwarfare.vehicle.missiles.MissileBase;
 
 public class AWVehicleEntities {
 
+	public static final AWVehicleEntities INSTANCE = new AWVehicleEntities();
 	private static int nextID = 0;
 
 	public static void load() {
-		EntityDeclaration reg = new VehiculeDeclaration(VehicleBase.class, AWEntityRegistry.VEHICLE);
+		EntityDeclaration reg = new VehicleDeclaration(VehicleBase.class, AWEntityRegistry.VEHICLE);
 		AWEntityRegistry.registerEntity(reg);
 
-		reg = new VehiculeDeclaration(MissileBase.class, AWEntityRegistry.MISSILE);
+		reg = new VehicleDeclaration(MissileBase.class, AWEntityRegistry.MISSILE);
 		AWEntityRegistry.registerEntity(reg);
 	}
 
-	private static class VehiculeDeclaration extends EntityDeclaration {
+	private static class VehicleDeclaration extends EntityDeclaration {
 
-		public VehiculeDeclaration(Class<? extends Entity> entityClass, String entityName) {
+		public VehicleDeclaration(Class<? extends Entity> entityClass, String entityName) {
 			super(entityClass, entityName, nextID++);
 		}
 

@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 public class AmmoPebbleShot extends Ammo {
 
 	public AmmoPebbleShot(int weight) {
-		super("ammo_pebble_shot_" + weight);
+		super();
 		this.isPersistent = false;
 		this.isArrow = false;
 		this.isRocket = false;

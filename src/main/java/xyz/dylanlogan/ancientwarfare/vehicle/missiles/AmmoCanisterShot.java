@@ -11,7 +11,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 public class AmmoCanisterShot extends Ammo {
 
 	public AmmoCanisterShot(int weight) {
-		super("ammo_canister_shot_" + weight);
+		super();
 		this.ammoWeight = weight;
 		float scaleFactor = weight + 45.f;
 		this.renderScale = (weight / scaleFactor) * 2;

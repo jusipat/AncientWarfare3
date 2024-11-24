@@ -12,7 +12,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.init.AWVehicleSounds;
 public class AmmoBallistaBolt extends Ammo {
 
 	public AmmoBallistaBolt() {
-		super("ammo_ballista_bolt");
+		super();
 		ammoWeight = 2.f;
 		renderScale = 0.3f;
 		vehicleDamage = AWVehicleStatics.vehicleStats.ammoBallistaBoltDamage;

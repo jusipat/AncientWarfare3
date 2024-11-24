@@ -4,7 +4,11 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import xyz.dylanlogan.ancientwarfare.core.api.AWItems;
 import xyz.dylanlogan.ancientwarfare.core.network.NetworkHandler;
 import xyz.dylanlogan.ancientwarfare.core.network.PacketBase;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
@@ -31,7 +35,13 @@ import org.apache.logging.log4j.Logger;
 public class AncientWarfareVehicles {
 	public static final String MOD_ID = "ancientwarfarevehicle";
 
-	public static final CreativeTabs TAB = new AWVehicleTab();
+	public static final CreativeTabs TAB = new CreativeTabs("tabs.awcore") {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem() {
+			return AWItems.roughWood;
+		}
+	};
 
 	@Mod.Instance(value = MOD_ID)
 	public static AncientWarfareVehicles instance;
@@ -48,7 +58,7 @@ public class AncientWarfareVehicles {
 		statics = new AWVehicleStatics("ancientwarfarevehicle");
 
 		AWVehicleItems.INSTANCE.load();
-		//AWVehicleEntities.INSTANCE.load();
+		AWVehicleEntities.INSTANCE.load();
 
 //		PacketBase.registerPacketType(NetworkHandler.PACKET_AIM_UPDATE, PacketAimUpdate.class, PacketAimUpdate::new);
 //		PacketBase.registerPacketType(NetworkHandler.PACKET_AMMO_SELECT, PacketAmmoSelect.class, PacketAmmoSelect::new);

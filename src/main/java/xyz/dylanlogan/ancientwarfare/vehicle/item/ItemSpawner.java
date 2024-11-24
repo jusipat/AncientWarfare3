@@ -9,7 +9,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import org.joml.Vector3i;
 import xyz.dylanlogan.ancientwarfare.vehicle.AncientWarfareVehicles;
 import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 import xyz.dylanlogan.ancientwarfare.vehicle.entity.IVehicleType;
@@ -25,7 +24,7 @@ public class ItemSpawner extends ItemBaseVehicle {
 	private static final String SPAWN_DATA_TAG = "spawnData";
 
 	public ItemSpawner() {
-		super("spawner");
+		super();
 		setHasSubtypes(true);
 		maxStackSize = 1;
 	}
@@ -51,7 +50,7 @@ public class ItemSpawner extends ItemBaseVehicle {
 		int level = tag.getInteger(LEVEL_TAG);
 		Optional<VehicleBase> v = VehicleType.getVehicleForType(world, stack.getItemDamage(), level);
 		if (!v.isPresent()) {
-			return true;
+			return false;
 		}
 		VehicleBase vehicle = v.get();
 		if (tag.hasKey(HEALTH_TAG)) {
@@ -114,7 +113,7 @@ public class ItemSpawner extends ItemBaseVehicle {
 			if (vehicle.isPresent()) {
 				List<String> tooltip = vehicle.get().vehicleType.getDisplayTooltip();
 				for (String line : tooltip) {
-					list.add(StatCollector.translateToLocal(line)); // Replace `I18n.format` with `StatCollector.translateToLocal`
+					list.add(StatCollector.translateToLocal(line));
 				}
 			}
 		}

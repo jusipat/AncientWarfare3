@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 public class AmmoNapalmShot extends Ammo {
 
 	public AmmoNapalmShot(int weight) {
-		super("ammo_napalm_shot_" + weight);
+		super();
 		this.ammoWeight = weight;
 		this.entityDamage = weight;
 		this.vehicleDamage = weight;

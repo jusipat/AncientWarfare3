@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 public class AmmoHwachaRocketAirburst extends Ammo {
 
 	public AmmoHwachaRocketAirburst() {
-		super("ammo_hwacha_rocket_airburst");
+		super();
 		this.entityDamage = 0;
 		this.vehicleDamage = 0;
 		this.isArrow = true;

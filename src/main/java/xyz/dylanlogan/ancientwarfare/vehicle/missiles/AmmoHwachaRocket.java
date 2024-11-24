@@ -13,7 +13,7 @@ public class AmmoHwachaRocket extends Ammo {
 	public static final float ACCELERATION_FACTOR = 0.01f;
 
 	public AmmoHwachaRocket() {
-		super("ammo_hwacha_rocket");
+		super();
 		this.entityDamage = AWVehicleStatics.vehicleStats.ammoHwachaRocketDamage;
 		this.vehicleDamage = AWVehicleStatics.vehicleStats.ammoHwachaRocketDamage;
 		this.isArrow = true;

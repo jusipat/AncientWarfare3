@@ -38,9 +38,9 @@ public class ArmourRegistry {
 	private static IVehicleArmor registerArmorType(IVehicleArmor armor, String registryName) {
 		armorInstances.put(registryName, armor);
 		ResourceLocation loc = new ResourceLocation(registryName);
-		ItemArmor item = new ItemArmor(loc); // Pass the registry name directly
+		ItemArmor item = new ItemArmor(loc);
 		item.setUnlocalizedName(registryName);
-		GameRegistry.registerItem(item, registryName); // Register the item in 1.7.10 style
+		GameRegistry.registerItem(item, registryName);
 
 		return armor;
 	}

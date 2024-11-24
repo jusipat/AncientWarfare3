@@ -14,7 +14,7 @@ public class AmmoExplosiveShot extends Ammo {
 	private boolean bigExplosion;
 
 	public AmmoExplosiveShot(int weight, boolean bigExplosion) {
-		super("ammo_explosive_shot_" + weight + (bigExplosion ? "_big" : ""));
+		super();
 		this.ammoWeight = weight;
 		this.bigExplosion = bigExplosion;
 		this.entityDamage = weight;

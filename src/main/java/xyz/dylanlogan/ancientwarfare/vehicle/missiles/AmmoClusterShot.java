@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 public class AmmoClusterShot extends Ammo {
 
 	public AmmoClusterShot(int weight) {
-		super("ammo_cluster_shot_" + weight);
+		super();
 		this.ammoWeight = weight;
 		float scaleFactor = weight + 45.f;
 		this.renderScale = (weight / scaleFactor) * 2;

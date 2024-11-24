@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.registry.AmmoRegistry;
 public class AmmoGrapeShot extends Ammo {
 
 	public AmmoGrapeShot(int weight) {
-		super("ammo_grape_shot_" + weight);
+		super();
 		this.ammoWeight = weight;
 		this.secondaryAmmoCount = weight;
 		float scaleFactor = weight + 45.f;

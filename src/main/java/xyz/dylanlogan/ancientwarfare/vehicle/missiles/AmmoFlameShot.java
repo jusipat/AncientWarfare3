@@ -9,7 +9,7 @@ import xyz.dylanlogan.ancientwarfare.core.AncientWarfareCore;
 public class AmmoFlameShot extends Ammo {
 
 	public AmmoFlameShot(int weight) {
-		super("ammo_flame_shot_" + weight);
+		super();
 		this.isPersistent = false;
 		this.isArrow = false;
 		this.isRocket = false;

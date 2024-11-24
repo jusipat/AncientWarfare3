@@ -10,7 +10,7 @@ import xyz.dylanlogan.ancientwarfare.vehicle.config.AWVehicleStatics;
 public class AmmoBallistaBoltFlame extends Ammo {
 
 	public AmmoBallistaBoltFlame() {
-		super("ammo_ballista_bolt_flame");
+		super();
 		ammoWeight = 2.2f;
 		renderScale = 0.3f;
 		vehicleDamage = AWVehicleStatics.vehicleStats.ammoBallistaBoltFlameDamage;
