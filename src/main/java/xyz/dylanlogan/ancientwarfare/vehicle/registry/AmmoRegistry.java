@@ -82,8 +82,8 @@ public class AmmoRegistry {
 	private static Map<ResourceLocation, ItemAmmo> ammoItemInstances = new HashMap<>();
 
 	public static void registerAmmo() {
-		ammoBallShot = registerAmmoType(new AmmoBallShot(), "ammo_ball_shot");
-		ammoBallIronShot = registerAmmoType(new AmmoIronBallShot(), "ammo_iron_ball_shot");
+		//ammoBallShot = registerAmmoType(new AmmoBallShot(), "ammo_ball_shot"); todo: unused?
+		//ammoBallIronShot = registerAmmoType(new AmmoIronBallShot(), "ammo_iron_ball_shot");
 
 		ammoStoneShot10 = registerWeightedAmmoType(new AmmoStoneShot(10), "ammo_stone");
 		ammoStoneShot15 = registerWeightedAmmoType(new AmmoStoneShot(15),"ammo_stone");
@@ -115,14 +115,16 @@ public class AmmoRegistry {
 		ammoPebbleShot15 = registerWeightedAmmoType(new AmmoPebbleShot(15), "ammo_pebble");
 		ammoPebbleShot30 = registerWeightedAmmoType(new AmmoPebbleShot(30), "ammo_pebble");
 		ammoPebbleShot45 = registerWeightedAmmoType(new AmmoPebbleShot(45), "ammo_pebble");
-		ammoIronShot5 = registerWeightedAmmoType(new AmmoIronShot(5, AWVehicleStatics.vehicleStats.ammoCannonBall5kgDamage), "ammo_iron_shot");
-		ammoIronShot10 = registerWeightedAmmoType(new AmmoIronShot(10, AWVehicleStatics.vehicleStats.ammoCannonBall10kgDamage), "ammo_iron_shot");
-		ammoIronShot15 = registerWeightedAmmoType(new AmmoIronShot(15, AWVehicleStatics.vehicleStats.ammoCannonBall15kgDamage), "ammo_iron_shot");
-		ammoIronShot25 = registerWeightedAmmoType(new AmmoIronShot(25, AWVehicleStatics.vehicleStats.ammoCannonBall25kgDamage), "ammo_iron_shot");
-		ammoCanisterShot5 = registerWeightedAmmoType(new AmmoCanisterShot(5), "ammo_canister_shot");
-		ammoCanisterShot10 = registerWeightedAmmoType(new AmmoCanisterShot(10), "ammo_canister_shot");
-		ammoCanisterShot15 = registerWeightedAmmoType(new AmmoCanisterShot(15), "ammo_canister_shot");
-		ammoCanisterShot25 = registerWeightedAmmoType(new AmmoCanisterShot(25), "ammo_canister_shot");
+		ammoIronShot5 = registerWeightedAmmoType(new AmmoIronShot(5, AWVehicleStatics.vehicleStats.ammoCannonBall5kgDamage), "ammo_iron");
+		ammoIronShot10 = registerWeightedAmmoType(new AmmoIronShot(10, AWVehicleStatics.vehicleStats.ammoCannonBall10kgDamage), "ammo_iron");
+		ammoIronShot15 = registerWeightedAmmoType(new AmmoIronShot(15, AWVehicleStatics.vehicleStats.ammoCannonBall15kgDamage), "ammo_iron");
+		ammoIronShot25 = registerWeightedAmmoType(new AmmoIronShot(25, AWVehicleStatics.vehicleStats.ammoCannonBall25kgDamage), "ammo_iron");
+
+		ammoCanisterShot5 = registerWeightedAmmoType(new AmmoCanisterShot(5), "ammo_canister");
+		ammoCanisterShot10 = registerWeightedAmmoType(new AmmoCanisterShot(10), "ammo_canister");
+		ammoCanisterShot15 = registerWeightedAmmoType(new AmmoCanisterShot(15), "ammo_canister");
+		ammoCanisterShot25 = registerWeightedAmmoType(new AmmoCanisterShot(25), "ammo_canister");
+
 		ammoGrapeShot5 = registerWeightedAmmoType(new AmmoGrapeShot(5), "ammo_grape");
 		ammoGrapeShot10 = registerWeightedAmmoType(new AmmoGrapeShot(10), "ammo_grape");
 		ammoGrapeShot15 = registerWeightedAmmoType(new AmmoGrapeShot(15), "ammo_grape");
@@ -151,25 +153,18 @@ public class AmmoRegistry {
 	}
 
 	private static IAmmo registerWeightedAmmoType(IAmmo ammo, String baseName) {
-		// Create a weight-based suffix by truncating decimals
 		String weightSuffix = String.valueOf((int) ammo.getAmmoWeight());
 		String weightName = baseName + "_" + weightSuffix;
 
-		// ResourceLocation uses the formatted weightName
 		ResourceLocation res = new ResourceLocation(AncientWarfareVehicles.MOD_ID, weightName);
 
-		// Register the ammo instance
 		ammoInstances.put(ammo.getRegistryName(), ammo);
 
 		// Create and configure the item for this ammo type
 		ItemAmmo item = new ItemAmmo(res);
-		String texturePath = "ancientwarfare:vehicle/ammo/" + baseName;
+		String texturePath = "ancientwarfare:vehicle/ammo/" + weightName;
 		item.setTextureName(texturePath);
-
-		// Debugging output
-		System.err.println("WEIGHTNAME: " + weightName);
-
-		// Register the item in the game
+		item.setUnlocalizedName(weightName);
 		GameRegistry.registerItem(item, weightName);
 
 		// Map the ammo's ResourceLocation to the item
